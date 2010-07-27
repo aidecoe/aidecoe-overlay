@@ -1,0 +1,21 @@
+# ChangeLog for sys-boot/plymouth
+# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*plymouth-0.8.3-r2 (16 Aug 2010)
+
+  16 Aug 2010; Amadeusz Żołnowski <aidecoe@aidecoe.org> +metadata.xml,
+  +plymouth-0.8.3-r2.ebuild, +files/0.8.3-gentoo-fb.patch:
+  Ebuild from bug #274065.  0.8.3-r2 brings my fix for amd64.
+
+  Thanks to following people who worked on Plymouth ebuilds and patches:
+  Christoph Brill <egore@gmx.de>
+    plymouth-0.7.2.ebuild 
+    0001-Gentoo-does-not-have-dev-fb-but-dev-fb0-at-least-on-.patch
+  jcat <jcat@nysasounds.co.uk>
+    plymouth-0.7.2-r1.ebuild 
+  Martin Benz <benson@gmx.ch>
+    plymouth-0.8.3.ebuild 
+    0001-Gentoo-does-not-have-dev-fb-but-dev-fb0-at-least-on-.patch
+  Anton Bolshakov <anton.bugs@gmail.com>
+    plymouth-0.8.3-r1.ebuild (QA bugfixes)

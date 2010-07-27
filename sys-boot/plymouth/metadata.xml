@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<herd>no-herd</herd>
+	<maintainer>
+		<email>aidecoe@aidecoe.name</email>
+		<name>Amadeusz Żołnowski</name>
+	</maintainer>
+	<use>
+		<flag name="gdm">Enable smooth transition to GDM</flag>
+		<flag name="pango">Adds support for x11-libs/pango which provides text
+			prompts during boot, e.g. password prompt</flag>
+	</use>
+	<longdescription lang="en">
+		Plymouth is a splash screen which provides a graphical boot animation
+		and logger
+	</longdescription>
+</pkgmetadata>
