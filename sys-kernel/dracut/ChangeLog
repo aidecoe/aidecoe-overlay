@@ -1,0 +1,21 @@
+# ChangeLog for sys-kernel/dracut
+# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*dracut-9999 (27 Jul 2010)
+*dracut-006-r1 (27 Jul 2010)
+*dracut-006 (27 Jul 2010)
+
+  27 Jul 2010; Amadeusz Żołnowski <aidecoe@aidecoe.org> +dracut-006.ebuild,
+  +files/dracut-006-dhcp6.patch, +files/dracut-006-lc-all-c.patch,
+  +dracut-006-r1.ebuild, +files/dracut-006-dm-udev-rules.patch,
+  +files/dracut-006-console_init-not-necessary.patch, +dracut-9999.ebuild,
+  +metadata.xml:
+  Ebuilds moved from my local overlay. Version 006 is slightly updated
+  dracut-004.ebuild maintained by Lance Albertson. Later 006-r1 is refactorized
+  of the previous and includes new patches. Version 9999 is customized to my
+  fork of Dracut on GitHub. Version 006 (bug #324705) is already in official
+  Portage tree.  006-r1 is included in bug #329003 and waits for Ramereth's
+  acceptance.
+
+  See ChangeLog in Portage tree for full history of Dracut ebuilds.
