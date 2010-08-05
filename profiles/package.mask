@@ -1,0 +1,5 @@
+# $Header: $
+
+# Amadeusz Żołnowski <aidecoe@aidecoe.name> (05 Aug 2010)
+# git ebuild using aidecoe's fork of dracut (branch gentoo)
+=sys-kernel/dracut-9999
