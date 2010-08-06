@@ -21,13 +21,13 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-COMMON_IUSE="btrfs debug fips lvm mdraid multipath plymouth selinux syslog uswsusp xen"
+COMMON_IUSE="bootchart btrfs debug fips lvm mdraid multipath selinux syslog
+uswsusp xen"
 NETWORK_IUSE="iscsi nbd nfs"
 DM_IUSE="crypt dmraid dmsquash-live"
 IUSE="${COMMON_IUSE} ${DM_IUSE} ${NETWORK_IUSE}"
 
-NETWORK_DEPS="net-misc/bridge-utils >=net-misc/dhcp-4.0 sys-apps/iproute2
-sys-auth/nss-mdns"
+NETWORK_DEPS="net-misc/bridge-utils >=net-misc/dhcp-4.0 sys-apps/iproute2"
 DM_DEPS="|| ( sys-fs/device-mapper >=sys-fs/lvm2-2.02.33 )"
 
 RDEPEND="
@@ -37,6 +37,8 @@ RDEPEND="
 	>=sys-apps/sysvinit-2.87-r3
 	>=sys-apps/util-linux-2.16
 	>=sys-fs/udev-149
+	
+	bootchart? ( app-benchmarks/bootchart )
 	btrfs? ( sys-fs/btrfs-progs )
 	crypt? ( sys-fs/cryptsetup ${DM_DEPS} )
 	debug? ( dev-util/strace )
@@ -49,13 +51,16 @@ RDEPEND="
 	multipath? ( sys-fs/multipath-tools )
 	nbd? ( sys-block/nbd ${NETWORK_DEPS} )
 	nfs? ( net-fs/nfs-utils net-nds/rpcbind ${NETWORK_DEPS} )
-	plymouth? ( >=sys-boot/plymouth-0.8.3 )
 	selinux? ( sys-libs/libselinux sys-libs/libsepol )
 	syslog? ( || ( app-admin/syslog-ng app-admin/rsyslog ) )
 	uswsusp? ( sys-power/suspend )
 	xen? ( app-emulation/xen )
 	"
-DEPEND="${RDEPEND}"
+DEPEND="
+	>=dev-libs/libxslt-1.1.26
+	app-text/docbook-xml-dtd:4.5
+	>=app-text/docbook-xsl-stylesheets-1.75.2
+	"
 
 
 #
@@ -122,7 +127,7 @@ src_install() {
 	dodir /boot/dracut /var/lib/dracut/overlay /etc/dracut.conf.d
 	dodoc HACKING TODO AUTHORS NEWS README*
 
-	case `base_sys_maj_ver` in
+	case "$(base_sys_maj_ver)" in
 		1) gen2conf=gentoo.conf ;;
 		2) gen2conf=gentoo-openrc.conf ;;
 		*) die "Expected ver. 1 or 2 of Gentoo Base System (/etc/gentoo-release)."
@@ -156,16 +161,26 @@ src_install() {
 
 pkg_postinst() {
 	elog 'To generate the initramfs:'
-	elog ' # mount /boot (if necessary)'
-	elog ' # dracut "" <kernel-version>'
+	elog '    # mount /boot (if necessary)'
+	elog '    # dracut "" <kernel-version>'
 	elog ''
-	elog 'For command line documentation see dracut manpage.'
+	elog 'For command line documentation see man 7 dracut.kernel.'
 	elog ''
 	elog 'Simple example to select root and resume partition:'
-	elog ' root=/dev/sda1 resume=/dev/sda2'
+	elog '    root=/dev/sda1 resume=/dev/sda2'
 	elog ''
-	elog 'Configuration is in /etc/dracut.conf.'
-	elog 'The default config is very minimal and is highly recommended you'
-	elog 'adjust based on your needs. To include only drivers for this system,'
-	elog 'use the "-H" option.'
+	elog 'The default config (in /etc/dracut.conf) is very minimal and is highly'
+	elog 'recommended you adjust based on your needs. To include only dracut'
+	elog 'modules and kernel drivers for this system, use the "-H" option.'
+	elog 'Some modules need to be explicitly added with "-a" option even if'
+	elog 'required tools are installed.'
+
+	[[ $(base_sys_maj_ver) = 1 ]] && {
+		elog ''
+		ewarn 'You might encounter following problem during boot time when using'
+		ewarn 'baselayout1:'
+		ewarn '    devpts is already mounted or /dev/pts is busy'
+		ewarn 'See discussion on the Gentoo Forums:'
+		ewarn 'http://forums.gentoo.org/viewtopic-p-6377431.html'
+	}
 }
