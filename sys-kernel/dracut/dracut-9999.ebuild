@@ -19,7 +19,7 @@ fi
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 
 COMMON_IUSE="bootchart btrfs debug fips lvm mdraid multipath selinux syslog
 uswsusp xen"
