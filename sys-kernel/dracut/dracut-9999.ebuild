@@ -21,8 +21,8 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
 
-COMMON_IUSE="bootchart btrfs debug fips lvm mdraid multipath selinux syslog
-uswsusp xen"
+COMMON_IUSE="bootchart btrfs debug fips gensplash lvm mdraid multipath selinux
+syslog uswsusp xen"
 NETWORK_IUSE="iscsi nbd nfs"
 DM_IUSE="crypt dmraid dmsquash-live"
 IUSE="${COMMON_IUSE} ${DM_IUSE} ${NETWORK_IUSE}"
@@ -45,6 +45,7 @@ RDEPEND="
 	dmraid? ( sys-fs/dmraid sys-fs/multipath-tools ${DM_DEPS} )
 	dmsquash-live? ( sys-apps/eject ${DM_DEPS} )
 	fips? ( app-crypt/hmaccalc )
+	gensplash? ( media-gfx/splashutils )
 	iscsi? ( sys-block/open-iscsi[utils] ${NETWORK_DEPS} )
 	lvm? ( >=sys-fs/lvm2-2.02.33 )
 	mdraid? ( sys-fs/mdadm )
