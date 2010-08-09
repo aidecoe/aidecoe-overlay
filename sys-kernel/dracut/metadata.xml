@@ -7,21 +7,22 @@
 		<name>Amadeusz Żołnowski</name>
 	</maintainer>
 	<use>
-		<flag name="btrfs">Add support for Btrfs</flag>
-		<flag name="crypt">Add support for cryptsetup/LUKS</flag>
+		<flag name="bootchart">Add support for bootchart (app-benchmarks/bootchart)</flag>
+		<flag name="btrfs">Add support for root on Btrfs</flag>
+		<flag name="crypt">Add support for encrypted partitions with cryptsetup/LUKS</flag>
 		<flag name="debug">Module installing additional tools like strace, file editor, ssh and more</flag>
 		<flag name="dmraid">Add support for dmraid devices, also known as ATA-RAID, or Fake RAID.</flag>
-		<!--flag name="dmsquash-live"> </flag-->
-		<!--flag name="fips"> </flag-->
+		<flag name="dmsquash-live">Module which might be used for Live CDs</flag>
+		<flag name="fips">Add support for FIPS 200 (see Cryptographic API &gt; FIPS 200 compliance in Linux menuconfig)</flag>
+		<flag name="gensplash">Add support for framebuffer splash at boot-time</flag>
 		<flag name="iscsi">Add support for iSCSI</flag>
 		<flag name="lvm">Add support for the Logical Volume Manager (sys-apps/lvm2)</flag>
-		<flag name="mdraid">Add support for MD devices, also known as software raid devices</flag>
-		<!--flag name="multipath"> </flag-->
+		<flag name="mdraid">Add support for MD devices, also known as software RAID devices</flag>
+		<flag name="multipath">Add support for Device Mapper multipathing</flag>
 		<flag name="nbd">Add support for network block devices</flag>
 		<flag name="nfs">Add support for NFS</flag>
-		<flag name="plymouth">Add support for Plymouth Boot Splash</flag>
 		<flag name="uswsusp">Add support for uswsusp (sys-power/suspend)</flag>
-		<!--flag name="xen"> </flag-->
+		<flag name="xen">Add support for Xen</flag>
 	</use>
 	<longdescription lang="en">
 	Generic, modular initramfs generation tool that can be used across various
