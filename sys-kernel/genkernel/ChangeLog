@@ -1,0 +1,18 @@
+# ChangeLog for sys-kernel/genkernel
+# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  11 Aug 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name>
+  +genkernel-9999.ebuild, +files/genkernel.bash:
+  Ebuild is copied from the main Portage tree and completely rewritten by me.
+
+  Shortly:
+    - use my fork of Genkernel
+    - depend on >=dracut-007
+    - install bash-completion script only if bash-completion USE flag is
+      enabled
+    - removed download of additional packages since Dracut takes required
+      things from the system
+    - using ebuild functions instead of cp
+
+  See ChangeLog in Portage tree for full history of Genkernel ebuilds.
