@@ -20,7 +20,6 @@ fi
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
-RESTRICT=""
 IUSE="bash-completion ibm selinux"
 
 RDEPEND="${DEPEND}
@@ -35,17 +34,10 @@ DEPEND="
 # ebuild functions
 #
 
-src_unpack() {
-	if [[ ${PV} == 9999* ]]; then
-		git_src_unpack
-	else
-		unpack ${P}.tar.bz2
-	fi
-	use selinux && sed -i 's/###//g' "${S}"/gen_compile.sh
-}
-
 src_install() {
 	local docs="AUTHORS BUGS ChangeLog HACKING README TODO"
+
+	use selinux && sed -i 's/###//g' "${S}"/gen_compile.sh
 
 	dodoc ${docs} || die "dodoc"
 	doman genkernel.8 || die "doman"
