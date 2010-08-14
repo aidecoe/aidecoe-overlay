@@ -2,6 +2,11 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  14 Aug 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name>
+  genkernel-9999.ebuild:
+  - Put 'dosed' in pkg_preinst instead of 'sed -i' in src_install.
+  - Info about bug report in pkg_postinst.
+
   12 Aug 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name> +metadata.xml,
   genkernel-9999.ebuild:
   Removed src_unpack and moved the relevant line into src_install.

@@ -37,8 +37,6 @@ DEPEND="
 src_install() {
 	local docs="AUTHORS BUGS ChangeLog HACKING README TODO"
 
-	use selinux && sed -i 's/###//g' "${S}"/gen_compile.sh
-
 	dodoc ${docs} || die "dodoc"
 	doman genkernel.8 || die "doman"
 	insinto /etc; doins genkernel.conf || die "doins etc"
@@ -57,9 +55,13 @@ src_install() {
 	use bash-completion && dobashcompletion "${FILESDIR}"/genkernel.bash
 }
 
+pkg_preinst() {
+	use selinux && dosed 's/###//' usr/share/genkernel/gen_compile.sh
+}
+
 pkg_postinst() {
 	echo
-	elog 'Documentation is available in the genkernel manual page'
+	elog 'Documentation is available in the Genkernel manual page'
 	elog 'as well as the following URL:'
 	elog ''
 	elog 'http://www.gentoo.org/doc/en/genkernel.xml'
@@ -71,5 +73,9 @@ pkg_postinst() {
 	ewarn "Don't use internal initramfs generation tool as it's beining removed"
 	ewarn "at the moment."
 	echo
-	use bash-completion && bash-completion_pkg_postinst
+	elog 'Do NOT report kernel bugs as Genkernel bugs unless your bug is about'
+	elog 'the default Genkernel configuration...'
+	elog 'Make sure you have the latest Genkernel before reporting bugs.'
+
+	use bash-completion && echo && bash-completion_pkg_postinst
 }
