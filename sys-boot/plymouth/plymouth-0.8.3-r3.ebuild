@@ -1,4 +1,4 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -25,7 +25,7 @@ RDEPEND="${DEPEND}
 	"
 
 src_prepare() {
-	epatch ${FILESDIR}/${PV}-gentoo-fb.patch
+	epatch "${FILESDIR}"/${PV}-gentoo-fb.patch
 	eautoreconf || die "eautoreconf failed"
 }
 
@@ -36,11 +36,11 @@ src_configure() {
 src_install() {
 	emake install DESTDIR="${D}" || die "install failed"
 
-	cd ${S}/scripts
-	mkdir -p ${D}/boot
+	cd "${S}"/scripts
+	mkdir -p "${D}"/boot
 	chmod a+x ./plymouth-generate-initrd
 	PLYMOUTH_DESTDIR="${D}/boot" ./plymouth-generate-initrd
-	cd ${S}
+	cd "${S}"
 
 	#work around qa warning
 	find "${D}" -type f -name '*.la' -exec rm -rf '{}' '+' || die "la removal failed"

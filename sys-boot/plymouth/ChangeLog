@@ -2,6 +2,13 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*plymouth-0.8.3-r3 (16 Aug 2010)
+
+  16 Aug 2010; Amadeusz Żołnowski <aidecoe@aidecoe.org>
+  +plymouth-0.8.3-r3.ebuild, -plymouth-0.8.3-r2.ebuild:
+  Ebuild from bug #274065.  0.8.3-r3 fixes QA warnings.  Removed ebuild with QA
+  warnings.
+
 *plymouth-0.8.3-r2 (16 Aug 2010)
 
   16 Aug 2010; Amadeusz Żołnowski <aidecoe@aidecoe.org> +metadata.xml,
