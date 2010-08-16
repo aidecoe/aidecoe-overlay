@@ -24,9 +24,11 @@ IUSE="bash-completion ibm selinux"
 
 RDEPEND="${DEPEND}
 	>=sys-kernel/dracut-007
+	selinux? ( sys-libs/libselinux )
 	"
 DEPEND="
-	selinux? ( sys-libs/libselinux )
+	>=dev-libs/libxslt-1.1.26
+	>=app-text/docbook-xsl-ns-stylesheets-1.75.2
 	"
 
 
