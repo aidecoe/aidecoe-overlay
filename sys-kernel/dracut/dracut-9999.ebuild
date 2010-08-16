@@ -21,8 +21,8 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
 
-COMMON_IUSE="bootchart btrfs debug fips gensplash lvm mdraid multipath selinux
-syslog uswsusp xen"
+COMMON_IUSE="bootchart btrfs debug fips gensplash lvm mdraid multipath plymouth
+selinux syslog uswsusp xen"
 NETWORK_IUSE="iscsi nbd nfs"
 DM_IUSE="crypt dmraid dmsquash-live"
 IUSE="${COMMON_IUSE} ${DM_IUSE} ${NETWORK_IUSE}"
@@ -50,6 +50,7 @@ RDEPEND="
 	lvm? ( >=sys-fs/lvm2-2.02.33 )
 	mdraid? ( sys-fs/mdadm )
 	multipath? ( sys-fs/multipath-tools )
+	plymouth? ( >=sys-boot/plymouth-0.8.3-r3 )
 	nbd? ( sys-block/nbd ${NETWORK_DEPS} )
 	nfs? ( net-fs/nfs-utils net-nds/rpcbind ${NETWORK_DEPS} )
 	selinux? ( sys-libs/libselinux sys-libs/libsepol )
