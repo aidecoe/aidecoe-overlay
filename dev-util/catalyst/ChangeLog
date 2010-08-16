@@ -2,6 +2,8 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*catalyst-9999 (14 Aug 2010)
+
   14 Aug 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name> +catalyst-9999.ebuild,
   +metadata.xml:
   Ebuild is copied from the main Portage tree. Only Git URI was changed to my
