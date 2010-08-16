@@ -3,6 +3,9 @@
 # $Header: $
 
   16 Aug 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name> genkernel-9999.ebuild:
+  Minor QA fix.
+
+  16 Aug 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name> genkernel-9999.ebuild:
   Added dependencies required to convert DocBook documents to the Unix man page
   format.  The selinux dependency was moved to runtime ones.
 

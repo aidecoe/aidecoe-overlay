@@ -31,7 +31,6 @@ DEPEND="
 	>=app-text/docbook-xsl-ns-stylesheets-1.75.2
 	"
 
-
 #
 # ebuild functions
 #
