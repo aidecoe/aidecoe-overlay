@@ -2,6 +2,16 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*dracut-007-r1 (16 Aug 2010)
+*dracut-006-r2 (16 Aug 2010)
+
+  16 Aug 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name> +dracut-007-r1.ebuild,
+  +dracut-006-r2.ebuild, -dracut-006-r1.ebuild, -dracut-007.ebuild,
+  dracut-9999.ebuild:
+  Removed masked dependencies in release ebuilds and fixed other QA warnings
+  in all ebuilds.  Added warning about dhcp-4 not working with QEMU.  Ebuilds
+  with QA warnings (except of 9999) were removed.
+
 *dracut-007 (09 Aug 2010)
 
   09 Aug 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name> +dracut-007.ebuild,

@@ -14,13 +14,13 @@ LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
-COMMON_IUSE="bootchart btrfs debug fips gensplash lvm mdraid multipath selinux
-syslog uswsusp xen"
+COMMON_IUSE="btrfs debug lvm mdraid multipath selinux syslog uswsusp xen"
 NETWORK_IUSE="iscsi nbd nfs"
 DM_IUSE="crypt dmraid dmsquash-live"
 IUSE="${COMMON_IUSE} ${DM_IUSE} ${NETWORK_IUSE}"
 
-NETWORK_DEPS="net-misc/bridge-utils >=net-misc/dhcp-4.0 sys-apps/iproute2"
+# common networking deps
+NETWORK_DEPS="net-misc/bridge-utils >=net-misc/dhcp-3.1.2_p1 sys-apps/iproute2"
 DM_DEPS="|| ( sys-fs/device-mapper >=sys-fs/lvm2-2.02.33 )"
 
 RDEPEND="
@@ -30,15 +30,11 @@ RDEPEND="
 	>=sys-apps/sysvinit-2.87-r3
 	>=sys-apps/util-linux-2.16
 	>=sys-fs/udev-149
-
-	bootchart? ( app-benchmarks/bootchart )
 	btrfs? ( sys-fs/btrfs-progs )
 	crypt? ( sys-fs/cryptsetup ${DM_DEPS} )
 	debug? ( dev-util/strace )
 	dmraid? ( sys-fs/dmraid sys-fs/multipath-tools ${DM_DEPS} )
 	dmsquash-live? ( sys-apps/eject ${DM_DEPS} )
-	fips? ( app-crypt/hmaccalc )
-	gensplash? ( media-gfx/splashutils )
 	iscsi? ( sys-block/open-iscsi[utils] ${NETWORK_DEPS} )
 	lvm? ( >=sys-fs/lvm2-2.02.33 )
 	mdraid? ( sys-fs/mdadm )
@@ -50,12 +46,7 @@ RDEPEND="
 	uswsusp? ( sys-power/suspend )
 	xen? ( app-emulation/xen )
 	"
-DEPEND="
-	>=dev-libs/libxslt-1.1.26
-	app-text/docbook-xml-dtd:4.5
-	>=app-text/docbook-xsl-stylesheets-1.75.2
-	"
-
+DEPEND="${RDEPEND}"
 
 #
 # Helper functions
@@ -93,23 +84,15 @@ rm_module() {
 	done
 }
 
-# Displays Gentoo Base System major release number
-base_sys_maj_ver() {
-	local line
-
-	read line < /etc/gentoo-release
-	line=${line##* }
-	echo "${line%%.*}"
-}
-
-
 #
 # ebuild functions
 #
 
 src_prepare() {
-	epatch "${FILESDIR}/${P}-multipath-udev-rules.patch"
+	epatch "${FILESDIR}/${P}-dhcp6.patch"
+	epatch "${FILESDIR}/${P}-lc-all-c.patch"
 	epatch "${FILESDIR}/${P}-dm-udev-rules.patch"
+	epatch "${FILESDIR}/${P}-console_init-not-necessary.patch"
 }
 
 src_compile() {
@@ -121,25 +104,14 @@ src_install() {
 		prefix=/usr sysconfdir=/etc \
 		DESTDIR="${D}" install || die "emake install failed"
 
-	local gen2conf
-
-	dodir /boot/dracut /var/lib/dracut/overlay /etc/dracut.conf.d
+	dodir /boot/dracut /var/lib/dracut/overlay
 	dodoc HACKING TODO AUTHORS NEWS README*
-
-	case "$(base_sys_maj_ver)" in
-		1) gen2conf=gentoo.conf ;;
-		2) gen2conf=gentoo-openrc.conf ;;
-		*) die "Expected ver. 1 or 2 of Gentoo Base System (/etc/gentoo-release)."
-	esac
-
-	insinto /etc/dracut.conf.d
-	newins dracut.conf.d/${gen2conf}.example ${gen2conf}
 
 	#
 	# Modules
 	#
 	local module
-	modules_dir="${D}/usr/share/dracut/modules.d" 
+	modules_dir="${D}/usr/share/dracut/modules.d"
 
 	echo "${PF}" > "${modules_dir}"/10rpmversion/dracut-version
 
@@ -155,31 +127,26 @@ src_install() {
 	rm_module 95dasd 95dasd_mod 95zfcp 95znet
 
 	# Disable modules which won't work for sure
-	rm_module 95fcoe # no tools
+	rm_module 01fips 10redhat-i18n 95fcoe
 }
 
 pkg_postinst() {
 	elog 'To generate the initramfs:'
-	elog '    # mount /boot (if necessary)'
-	elog '    # dracut "" <kernel-version>'
+	elog ' # mount /boot (if necessary)'
+	elog ' # dracut "" <kernel-version>'
 	elog ''
-	elog 'For command line documentation see man 7 dracut.kernel.'
+	elog 'For command line documentation, see:'
+	elog 'http://sourceforge.net/apps/trac/dracut/wiki/commandline'
 	elog ''
 	elog 'Simple example to select root and resume partition:'
-	elog '    root=/dev/sda1 resume=/dev/sda2'
+	elog ' root=/dev/???? resume=/dev/????'
 	elog ''
-	elog 'The default config (in /etc/dracut.conf) is very minimal and is highly'
-	elog 'recommended you adjust based on your needs. To include only dracut'
-	elog 'modules and kernel drivers for this system, use the "-H" option.'
-	elog 'Some modules need to be explicitly added with "-a" option even if'
-	elog 'required tools are installed.'
+	elog 'Configuration is in /etc/dracut.conf.'
+	elog 'The default config is very minimal and is highly recommended you'
+	elog 'adjust based on your needs. To include only drivers for this system,'
+	elog 'use the "-H" option.'
 
-	[[ $(base_sys_maj_ver) = 1 ]] && {
-		elog ''
-		ewarn 'You might encounter following problem during boot time when using'
-		ewarn 'baselayout1:'
-		ewarn '    devpts is already mounted or /dev/pts is busy'
-		ewarn 'See discussion on the Gentoo Forums:'
-		ewarn 'http://forums.gentoo.org/viewtopic-p-6377431.html'
-	}
+	echo
+	ewarn 'dhcp-3 is known to not work with QEMU. You will need dhcp-4 or'
+	ewarn 'later for it.'
 }

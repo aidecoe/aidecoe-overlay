@@ -37,7 +37,7 @@ RDEPEND="
 	>=sys-apps/sysvinit-2.87-r3
 	>=sys-apps/util-linux-2.16
 	>=sys-fs/udev-149
-	
+
 	bootchart? ( app-benchmarks/bootchart )
 	btrfs? ( sys-fs/btrfs-progs )
 	crypt? ( sys-fs/cryptsetup ${DM_DEPS} )
@@ -62,7 +62,6 @@ DEPEND="
 	app-text/docbook-xml-dtd:4.5
 	>=app-text/docbook-xsl-stylesheets-1.75.2
 	"
-
 
 #
 # Helper functions
@@ -109,7 +108,6 @@ base_sys_maj_ver() {
 	echo "${line%%.*}"
 }
 
-
 #
 # ebuild functions
 #
@@ -141,7 +139,7 @@ src_install() {
 	# Modules
 	#
 	local module
-	modules_dir="${D}/usr/share/dracut/modules.d" 
+	modules_dir="${D}/usr/share/dracut/modules.d"
 
 	echo "${PF}" > "${modules_dir}"/10rpmversion/dracut-version
 
@@ -184,4 +182,8 @@ pkg_postinst() {
 		ewarn 'See discussion on the Gentoo Forums:'
 		ewarn 'http://forums.gentoo.org/viewtopic-p-6377431.html'
 	}
+
+	echo
+	ewarn 'dhcp-3 is known to not work with QEMU. You will need dhcp-4 or'
+	ewarn 'later for it.'
 }
