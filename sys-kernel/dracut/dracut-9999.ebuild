@@ -20,11 +20,12 @@ fi
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
+RESTRICT="test"
 
-COMMON_IUSE="bootchart btrfs debug fips gensplash lvm mdraid multipath plymouth
+COMMON_IUSE="bootchart btrfs debug fips gensplash mdraid multipath plymouth
 selinux syslog uswsusp xen"
 NETWORK_IUSE="iscsi nbd nfs"
-DM_IUSE="crypt dmraid dmsquash-live"
+DM_IUSE="crypt dmraid dmsquash-live lvm"
 IUSE="${COMMON_IUSE} ${DM_IUSE} ${NETWORK_IUSE}"
 
 NETWORK_DEPS="net-misc/bridge-utils >=net-misc/dhcp-4.0 sys-apps/iproute2"

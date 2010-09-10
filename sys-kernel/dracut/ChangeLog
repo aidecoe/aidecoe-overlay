@@ -2,6 +2,10 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  10 Sep 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name> dracut-9999.ebuild:
+  Latest changes in dracut-007-r1 ported to dracut-9999. Moreover it closes
+  bug #298014 by restricting test.
+
   10 Sep 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name> dracut-007-r1.ebuild:
   Fixes bug #334347 (dm related dependencies) - thanks to Akos Szalkai
   <szalkai@szalkai.net> for report and patch.
