@@ -2,6 +2,15 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  10 Sep 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name> -dracut-006-r2.ebuild,
+  -dracut-007-r1.ebuild, -files/dracut-006-console_init-not-necessary.patch,
+  -files/dracut-006-dhcp6.patch, -files/dracut-006-dm-udev-rules.patch,
+  -files/dracut-006-lc-all-c.patch, -files/dracut-007-dm-udev-rules.patch,
+  -files/dracut-007-multipath-udev-rules.patch:
+  Removed ebuilds (with corresponding patches) already committed to Portage
+  tree.  dracut-006-r2 is committed as dracut-006-r1 and dracut-007-r1 is
+  committed as dracut-007.
+
   10 Sep 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name> dracut-9999.ebuild:
   Latest changes in dracut-007-r1 ported to dracut-9999. Moreover it closes
   bug #298014 by restricting test.
