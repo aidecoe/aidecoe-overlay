@@ -12,7 +12,7 @@ HOMEPAGE="http://sourceforge.net/projects/dracut/"
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="git://github.com/aidecoe/${PN}.git"
 	EGIT_BRANCH="gentoo"
-	inherit git autotools
+	inherit git
 else
 	SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
 fi
@@ -28,16 +28,17 @@ NETWORK_IUSE="iscsi nbd nfs"
 DM_IUSE="crypt dmraid dmsquash-live lvm"
 IUSE="${COMMON_IUSE} ${DM_IUSE} ${NETWORK_IUSE}"
 
-NETWORK_DEPS="net-misc/bridge-utils >=net-misc/dhcp-4.0 sys-apps/iproute2"
+NETWORK_DEPS="net-misc/bridge-utils net-misc/dhcp sys-apps/iproute2"
 DM_DEPS="|| ( sys-fs/device-mapper >=sys-fs/lvm2-2.02.33 )"
 
 RDEPEND="
+	>=sys-apps/baselayout-1.12.13-r1
 	>=app-shells/bash-4.0
-	>=app-shells/dash-0.5.4.11
-	>=sys-apps/module-init-tools-3.5
-	>=sys-apps/sysvinit-2.87-r3
+	app-shells/dash
+	sys-apps/module-init-tools
+	sys-apps/sysvinit
 	>=sys-apps/util-linux-2.16
-	>=sys-fs/udev-149
+	sys-fs/udev
 
 	bootchart? ( app-benchmarks/bootchart )
 	btrfs? ( sys-fs/btrfs-progs )
@@ -60,7 +61,7 @@ RDEPEND="
 	xen? ( app-emulation/xen )
 	"
 DEPEND="
-	>=dev-libs/libxslt-1.1.26
+	dev-libs/libxslt
 	app-text/docbook-xml-dtd:4.5
 	>=app-text/docbook-xsl-stylesheets-1.75.2
 	"
@@ -175,16 +176,6 @@ pkg_postinst() {
 	elog 'modules and kernel drivers for this system, use the "-H" option.'
 	elog 'Some modules need to be explicitly added with "-a" option even if'
 	elog 'required tools are installed.'
-
-	[[ $(base_sys_maj_ver) = 1 ]] && {
-		elog ''
-		ewarn 'You might encounter following problem during boot time when using'
-		ewarn 'baselayout1:'
-		ewarn '    devpts is already mounted or /dev/pts is busy'
-		ewarn 'See discussion on the Gentoo Forums:'
-		ewarn 'http://forums.gentoo.org/viewtopic-p-6377431.html'
-	}
-
 	echo
 	ewarn 'dhcp-3 is known to not work with QEMU. You will need dhcp-4 or'
 	ewarn 'later for it.'
