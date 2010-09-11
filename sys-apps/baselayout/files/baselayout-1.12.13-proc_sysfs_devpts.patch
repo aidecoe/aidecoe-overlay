@@ -1,0 +1,139 @@
+diff -ur baselayout-1.12.13.old/sbin/functions.sh baselayout-1.12.13/sbin/functions.sh
+--- baselayout-1.12.13.old/sbin/functions.sh	2009-10-11 03:36:26.000000000 +0200
++++ baselayout-1.12.13/sbin/functions.sh	2010-09-11 13:59:31.025236357 +0200
+@@ -784,6 +784,55 @@
+     echo "${result# *}"
+ }
+ 
++# bool is_clean(dir)
++#
++# Returns 0 if given directory has no files or has only dot-prefixed files.
++#
++# EXAMPLE: if is_clean /proc; then ...
++is_clean() {
++	for f in $1/*; do
++		[[ -e $f || -L $f ]] && return 1
++	done
++	return 0
++}
++
++# bool is_mounted(mount point, device)
++#
++#   'device' is optional.
++#
++#   If no 'device' is specified, returns 0 if 'mount point' is really a mount
++#   point or 1 if it's not.
++#
++#   If 'device' is specified returns 0 if the exact 'device' is mounted under
++#   'mount point'.  The check is done in /proc/mounts (for /proc there's check
++#   for existence of /proc/mounts). Otherwise returns 2.
++#
++#   EXAMPLE: if is_mounted /dev/pts devpts; then ...
++is_mounted() {
++	local mnt_point="$1" dev="$2"
++
++	mountpoint -q "${mnt_point}" || return 1
++
++	# Check if under $mnt_point really $dev is mounted
++	if [[ ${dev} ]]; then
++		if [[ ${dev} =~ ^/?proc$ ]]; then
++			[[ -f /proc/mounts ]] || {
++				eerror "Something else than 'procfs' is mounted under '/proc'!"
++				return 2
++			}
++		else
++			[[ -f /proc/mounts ]] || eerror "No '/proc/mounts'.  '/proc' have to be mounted!"
++
++			while read; do
++				[[ ${REPLY} =~ ^/?${dev}\ .*${mnt_point}\  ]] && return 0
++			done < /proc/mounts
++
++			eerror "Another device is mounted under '${mnt_point}' where '${dev}' was expected!"
++			return 2
++		fi
++	fi
++}
++
+ ##############################################################################
+ #                                                                            #
+ # This should be the last code in here, please add all functions above!!     #
+diff -ur baselayout-1.12.13.old/sbin/rc baselayout-1.12.13/sbin/rc
+--- baselayout-1.12.13.old/sbin/rc	2009-10-11 03:07:55.000000000 +0200
++++ baselayout-1.12.13/sbin/rc	2010-09-11 13:59:31.561222115 +0200
+@@ -216,7 +216,15 @@
+     fi
+ 	check_statedir /proc
+ 
+-	if [[ ! -e /proc/uptime ]] ; then
++	# make sure /proc/ isn't full of crap #291916
++	do_mnt=1
++	if is_mounted /proc proc; then
++		do_mnt=0
++	elif ! is_clean /proc; then
++		ewarn "You have crap in your /proc/; please clean it; see #291916"
++	fi
++
++	if [[ ${do_mnt} == 1 ]] ; then
+ 		ebegin "Mounting proc at /proc"
+ 		if [[ ${RC_USE_FSTAB} = "yes" ]] ; then
+ 			mntcmd=$(get_mount_fstab /proc)
+@@ -226,7 +234,7 @@
+ 		try mount -n ${mntcmd:--t proc proc /proc -o noexec,nosuid,nodev}
+ 		eend $?
+ 	else
+-		einfo "Skipping mount of /proc as /proc/uptime exists"
++		einfo "Skipping mount of /proc as /proc/mounts exists"
+ 	fi
+ 
+ 	# Start profiling init now we have /proc
+@@ -239,7 +247,15 @@
+ 
+ 	if [ "$(get_KV)" -ge "$(KV_to_int '2.6.0')" ] ; then
+ 		if [[ -d /sys ]] ; then
+-			if [[ ! -d /sys/kernel ]] ; then
++			# make sure /sys/ isn't full of crap #291916
++			do_mnt=1
++			if is_mounted /sys sys; then
++				do_mnt=0
++			elif ! is_clean /sys; then
++				ewarn "You have crap in your /sys/; please clean it; see #291916"
++			fi
++
++			if [[ ${do_mnt} == 1 ]] ; then
+ 				ebegin "Mounting sysfs at /sys"
+ 				if [[ ${RC_USE_FSTAB} = "yes" ]] ; then
+ 					mntcmd=$(get_mount_fstab /sys)
+@@ -249,7 +265,7 @@
+ 				try mount -n ${mntcmd:--t sysfs sysfs /sys -o noexec,nosuid,nodev}
+ 				eend $?
+ 			else
+-				einfo "Skipping mount of /sys as /sys/kernel exists"
++				einfo "Skipping mount of /sys as it's already mounted"
+ 			fi
+ 		else
+ 			ewarn "No /sys to mount sysfs needed in 2.6 and later kernels!"
+@@ -367,14 +383,18 @@
+ 			fi
+ 
+ 			if [[ -d /dev/pts ]] ; then
+-				ebegin "Mounting devpts at /dev/pts"
+-				if [[ ${RC_USE_FSTAB} = "yes" ]] ; then
+-					mntcmd=$(get_mount_fstab /dev/pts)
++				if ! is_mounted /dev/pts devpts; then
++					ebegin "Mounting devpts at /dev/pts"
++					if [[ ${RC_USE_FSTAB} = "yes" ]] ; then
++						mntcmd=$(get_mount_fstab /dev/pts)
++					else
++						unset mntcmd
++					fi
++					try mount -n ${mntcmd:--t devpts devpts /dev/pts -o gid=5,mode=0620,noexec,nosuid}
++					eend $?
+ 				else
+-					unset mntcmd
++					einfo "Skipping mount of /dev/pts as it's already mounted"
+ 				fi
+-				try mount -n ${mntcmd:--t devpts devpts /dev/pts -o gid=5,mode=0620,noexec,nosuid}
+-				eend $?
+ 			fi
+ 		fi
+ 	fi

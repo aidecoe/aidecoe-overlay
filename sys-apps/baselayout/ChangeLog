@@ -1,0 +1,17 @@
+# ChangeLog for sys-apps/baselayout
+# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*baselayout-1.12.13-r1 (11 Sep 2010)
+
+  11 Sep 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name>
+  +baselayout-1.12.13-r1.ebuild,
+  +files/baselayout-1.12.13-proc_sysfs_devpts.patch:
+  In short: this updated enables Dracut to run on baselayout-1.
+
+  Ebuild is copied from original Portage tree.  I've removed obsolete SRC_URI's
+  and applied my patch.  With the patch 'rc' script checks first if /proc, /sys
+  and devpts are already mounted and skips mount if they're are.  Before mount
+  script checks if directories are clean.
+
+  For details see bug #291916, #336723 and #336726.

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<herd>base-system</herd>
+	<maintainer>
+		<email>aidecoe@aidecoe.name</email>
+		<name>Amadeusz Żołnowski</name>
+	</maintainer>
+	<longdescription lang="en">
+		Filesystem baselayout and init scripts
+	</longdescription>
+</pkgmetadata>
