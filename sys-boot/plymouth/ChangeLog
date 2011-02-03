@@ -1,6 +1,34 @@
 # ChangeLog for sys-boot/plymouth
-# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+*plymouth-0.8.3-r4 (03 Feb 2011)
+
+  03 Feb 2011; Amadeusz Żołnowski <aidecoe@aidecoe.name>
+  +files/0.8.3-drm-reduce-minimum-build-requirements.patch,
+  +files/0.8.3-gentoo-fb-path.patch,
+  +files/0.8.3-image-replace-deprecated-libpng-function.patch,
+  +files/gentoo_ply.png, +files/plymouth.initd, -files/0.8.3-gentoo-fb.patch,
+  plymouth-0.8.3-r3.ebuild, +plymouth-0.8.3-r4.ebuild:
+  0.8.3-r4:
+  - libdrm_intel, libdrm_nouveau and libdrm_radeon are optional and controlled
+    by USE flags (Lucian Muresan)
+  - branding (Favero Francesco)
+  - initd script (Favero Francesco, but slightly modified)
+  - dropped dracut dependency (it's not required)
+  - mounting /boot is not necessary
+  - works with libpng-1.4.x
+  - static libraries are disabled
+  - *.la files handled by autotools-utils eclass
+  - EAPI changed to 3
+  - more informative postint message
+
+  0.8.3-r3:
+  - cosmetic changes
+
+  See bug #274065[0] for details.  Thanks to all contributors.
+
+  [0] https://bugs.gentoo.org/show_bug.cgi?id=274065
 
 *plymouth-0.8.3-r3 (16 Aug 2010)
 
