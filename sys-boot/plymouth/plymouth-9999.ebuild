@@ -24,7 +24,8 @@ DEPEND=">=media-libs/libpng-1.2.16
 	video_cards_radeon? ( x11-libs/libdrm[video_cards_radeon] )
 	"
 RDEPEND="${DEPEND}
-	>=sys-kernel/dracut-007"
+	>=sys-kernel/dracut-007
+	"
 
 EGIT_REPO_URI="git://anongit.freedesktop.org/plymouth"
 EGIT_PATCHES=("${FILESDIR}"/${PV}-gentoo-fb-path.patch)
@@ -49,13 +50,14 @@ src_configure() {
 src_install() {
 	autotools-utils_src_install
 
-	mv "${D}/$(get_libdir)"/libply{,-splash-core}.la "${D}/usr/${get_libdir}"/
+	mv "${D}/$(get_libdir)"/libply{,-splash-core}.la \
+		"${D}/usr/${get_libdir}"/ || die 'mv *.la files failed'
 
-	newinitd "${FILESDIR}"/plymouth.initd plymouth
+	newinitd "${FILESDIR}"/plymouth.initd plymouth || die 'initd failed'
 
 	if use branding ; then
 		insinto /usr/share/plymouth
-		newins "${FILESDIR}"/gentoo_ply.png bizcom.png
+		newins "${FILESDIR}"/gentoo_ply.png bizcom.png || die 'branding failed'
 	fi
 }
 

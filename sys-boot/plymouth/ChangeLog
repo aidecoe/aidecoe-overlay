@@ -4,6 +4,10 @@
 
   04 Feb 2011; Amadeusz Żołnowski <aidecoe@aidecoe.name>
   plymouth-0.8.3-r5.ebuild, plymouth-9999.ebuild:
+  Lacked 'die' for ins commands.
+
+  04 Feb 2011; Amadeusz Żołnowski <aidecoe@aidecoe.name>
+  plymouth-0.8.3-r5.ebuild, plymouth-9999.ebuild:
   Added link in postinst message to instructions on how to setup Plymouth.
 
   04 Feb 2011; Amadeusz Żołnowski <aidecoe@aidecoe.name>
