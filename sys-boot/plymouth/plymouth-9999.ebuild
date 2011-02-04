@@ -4,21 +4,20 @@
 
 EAPI="3"
 
-inherit autotools-utils
+inherit autotools-utils git
 
 DESCRIPTION="Graphical boot animation (splash) and logger"
 HOMEPAGE="http://cgit.freedesktop.org/plymouth/"
-SRC_URI="http://cgit.freedesktop.org/${PN}/snapshot/${P}.tar.bz2"
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
-RESTRICT="mirror"
+KEYWORDS=""
 
 IUSE_VIDEO_CARDS="video_cards_intel video_cards_nouveau video_cards_radeon"
-IUSE="${IUSE_VIDEO_CARDS} branding gdm +pango"
+IUSE="${IUSE_VIDEO_CARDS} branding gdm +libkms +pango"
 
 DEPEND=">=media-libs/libpng-1.2.16
 	>=x11-libs/gtk+-2.12
+	libkms? ( x11-libs/libdrm[libkms] )
 	pango? ( >=x11-libs/pango-1.21 )
 	video_cards_intel? ( x11-libs/libdrm[video_cards_intel] )
 	video_cards_nouveau? ( x11-libs/libdrm[video_cards_nouveau] )
@@ -26,20 +25,18 @@ DEPEND=">=media-libs/libpng-1.2.16
 	"
 RDEPEND="${DEPEND}"
 
-PATCHES=(
-	"${FILESDIR}"/${PV}-drm-reduce-minimum-build-requirements.patch
-	"${FILESDIR}"/${PV}-image-replace-deprecated-libpng-function.patch
-	"${FILESDIR}"/${PV}-gentoo-fb-path.patch
-	)
+EGIT_REPO_URI="git://anongit.freedesktop.org/plymouth"
+EGIT_PATCHES=("${FILESDIR}"/${PV}-gentoo-fb-path.patch)
 
 src_prepare() {
-	autotools-utils_src_prepare
+	git_src_prepare
 	eautoreconf || die "eautoreconf failed"
 }
 
 src_configure() {
 	econf \
 		--enable-static=no \
+		$(use_enable libkms) \
 		$(use_enable pango) \
 		$(use_enable gdm gdm-transition) \
 		$(use_enable video_cards_intel libdrm_intel) \

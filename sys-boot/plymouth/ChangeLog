@@ -2,6 +2,17 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*plymouth-9999 (04 Feb 2011)
+
+  04 Feb 2011; aidecoe <aidecoe@gentoo.org> +files/9999-gentoo-fb-path.patch,
+  plymouth-0.8.3-r4.ebuild, +plymouth-9999.ebuild, metadata.xml:
+  9999: Live ebuild imported from bug #274065 (attachment #261479 by Lucian
+  Muresan) and stripped from conditions to be git-only and simpler.
+
+  0.8.3-r4: Using PATCHES array instead of manually specifying epatch commands.
+
+  metdata.xml: Better flags' descriptions and package's long description.
+
 *plymouth-0.8.3-r4 (03 Feb 2011)
 
   03 Feb 2011; Amadeusz Żołnowski <aidecoe@aidecoe.name>
