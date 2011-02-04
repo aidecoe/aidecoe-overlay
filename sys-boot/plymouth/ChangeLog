@@ -2,10 +2,16 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  04 Feb 2011; Amadeusz Żołnowski <aidecoe@aidecoe.name>
+  plymouth-0.8.3-r4.ebuild, plymouth-9999.ebuild:
+  plymouth initramfs generation scripts requires dracut-functions, therefore
+  >=sys-kernel/dracut-007 dependency is needed.
+
 *plymouth-9999 (04 Feb 2011)
 
-  04 Feb 2011; aidecoe <aidecoe@gentoo.org> +files/9999-gentoo-fb-path.patch,
-  plymouth-0.8.3-r4.ebuild, +plymouth-9999.ebuild, metadata.xml:
+  04 Feb 2011; Amadeusz Żołnowski <aidecoe@aidecoe.name>
+  +files/9999-gentoo-fb-path.patch, plymouth-0.8.3-r4.ebuild,
+  +plymouth-9999.ebuild, metadata.xml:
   9999: Live ebuild imported from bug #274065 (attachment #261479 by Lucian
   Muresan) and stripped from conditions to be git-only and simpler.
 

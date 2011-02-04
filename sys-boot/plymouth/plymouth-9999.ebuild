@@ -23,7 +23,8 @@ DEPEND=">=media-libs/libpng-1.2.16
 	video_cards_nouveau? ( x11-libs/libdrm[video_cards_nouveau] )
 	video_cards_radeon? ( x11-libs/libdrm[video_cards_radeon] )
 	"
-RDEPEND="${DEPEND}"
+RDEPEND="${DEPEND}
+	>=sys-kernel/dracut-007"
 
 EGIT_REPO_URI="git://anongit.freedesktop.org/plymouth"
 EGIT_PATCHES=("${FILESDIR}"/${PV}-gentoo-fb-path.patch)

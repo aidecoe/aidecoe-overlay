@@ -24,7 +24,8 @@ DEPEND=">=media-libs/libpng-1.2.16
 	video_cards_nouveau? ( x11-libs/libdrm[video_cards_nouveau] )
 	video_cards_radeon? ( x11-libs/libdrm[video_cards_radeon] )
 	"
-RDEPEND="${DEPEND}"
+RDEPEND="${DEPEND}
+	>=sys-kernel/dracut-007"
 
 PATCHES=(
 	"${FILESDIR}"/${PV}-drm-reduce-minimum-build-requirements.patch
