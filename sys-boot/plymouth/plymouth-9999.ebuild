@@ -63,7 +63,6 @@ pkg_postinst() {
 	elog "Plymouth initramfs utilities scripts are located in"
 	elog "/usr/libexec/plymouth"
 	elog ""
-	elog "Use /usr/libexec/plymouth/plymouth-generate-initrd to generate"
-	elog "initramfs image required for starting plymouth at boot time."
-	elog "Although it is recommended to use sys-kernel/dracut instead."
+	elog "Follow instructions on <http://en.gentoo-wiki.com/wiki/Plymouth> to"
+	elog "setup Plymouth."
 }
