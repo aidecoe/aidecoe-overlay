@@ -8,6 +8,8 @@ inherit autotools-utils git
 
 DESCRIPTION="Graphical boot animation (splash) and logger"
 HOMEPAGE="http://cgit.freedesktop.org/plymouth/"
+SRC_URI="
+	http://dev.gentoo.org/~aidecoe/distfiles/${CATEGORY}/${PN}/gentoo-logo.png"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
@@ -57,7 +59,7 @@ src_install() {
 
 	if use branding ; then
 		insinto /usr/share/plymouth
-		newins "${FILESDIR}"/gentoo_ply.png bizcom.png || die 'branding failed'
+		newins "${DISTDIR}"/gentoo-logo.png bizcom.png || die 'branding failed'
 	fi
 }
 
@@ -67,4 +69,8 @@ pkg_postinst() {
 	elog ""
 	elog "Follow instructions on <http://en.gentoo-wiki.com/wiki/Plymouth> to"
 	elog "setup Plymouth."
+	echo
+	ewarn "You need to disable 'interactive' feature either in /etc/conf.d/rc"
+	ewarn "(baselayout-1) or /etc/rc.conf (OpenRC) to make Plymouth work"
+	ewarn "properly with init system."
 }
