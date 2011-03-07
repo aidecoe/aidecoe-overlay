@@ -10,8 +10,8 @@ DESCRIPTION="Gentoo automatic kernel building scripts"
 HOMEPAGE="http://www.gentoo.org"
 
 if [[ ${PV} == 9999 ]]; then
-	EGIT_REPO_URI="git://github.com/aidecoe/${PN}.git"
-	EGIT_BRANCH="gsoc2010"
+	EGIT_REPO_URI="git://git.overlays.gentoo.org/proj/genkernel.git"
+	EGIT_BRANCH="dracut"
 	inherit git autotools
 else
 	SRC_URI="mirror://gentoo/${P}.tar.bz2"

@@ -1,6 +1,11 @@
 # ChangeLog for sys-kernel/dracut
-# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  07 Mar 2011; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild,
+  +files/dracut-9999-multipath-udev-rules.patch, metadata.xml:
+  Updated according to changes in dracut-008-r1 in the main tree. Getting
+  source from original dracut repo, branch - master.
 
   11 Sep 2010; Amadeusz Żołnowski <aidecoe@aidecoe.name> dracut-9999.ebuild:
   Depend on >=baselayout-1.12.13-r1 (only in my overlay at this time).  System
