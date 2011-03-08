@@ -1,7 +1,0 @@
-# $Header: $
-
-# Amadeusz Żołnowski <aidecoe@aidecoe.name> (05 Aug 2010)
-# git ebuilds using aidecoe's forks on github
-=sys-kernel/dracut-9999
-=sys-kernel/genkernel-9999
-=dev-util/catalyst-9999
