@@ -4,6 +4,10 @@
 
   10 Aug 2011; Amadeusz Żołnowski <aidecoe@gentoo.org>
   genkernel-999999.ebuild:
+  Added missing installation of genkernel.conf.
+
+  10 Aug 2011; Amadeusz Żołnowski <aidecoe@gentoo.org>
+  genkernel-999999.ebuild:
   Synced with genkernel-9999.ebuild from Portage.
 
   dracut dependency has been bumped to 010.

@@ -93,6 +93,8 @@ src_install() {
 	dodoc AUTHORS ChangeLog README TODO || die "dodoc"
 
 	dobin genkernel || die "dobin genkernel"
+	insinto /etc
+	doins genkernel.conf || die "doins genkernel.conf"
 
 	rm -f genkernel genkernel.8 AUTHORS ChangeLog README TODO genkernel.conf
 
