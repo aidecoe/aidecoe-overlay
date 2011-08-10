@@ -4,18 +4,21 @@
 
 EAPI=2
 
-inherit eutils git
+inherit eutils git-2
 
 DESCRIPTION="Generic initramfs generation tool"
-HOMEPAGE="http://sourceforge.net/projects/dracut/"
-EGIT_REPO_URI="git://${PN}.git.sourceforge.net/gitroot/${PN}/${PN}"
+HOMEPAGE="http://dracut.wiki.kernel.org"
+EGIT_REPO_URI="git://git.kernel.org/pub/scm/boot/${PN}/${PN}.git"
 
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
 
 COMMON_MODULES="
+	dracut_modules_biosdevname
 	dracut_modules_btrfs
+	dracut_modules_caps
+	dracut_modules_crypt-gpg
 	dracut_modules_gensplash
 	dracut_modules_mdraid
 	dracut_modules_multipath
@@ -36,27 +39,32 @@ DM_MODULES="
 	"
 IUSE_DRACUT_MODULES="${COMMON_MODULES} ${DM_MODULES} ${NETWORK_MODULES}"
 IUSE="debug selinux ${IUSE_DRACUT_MODULES}"
+RESTRICT="test"
 
-NETWORK_DEPS="net-misc/bridge-utils >=net-misc/dhcp-3.1.2_p1 sys-apps/iproute2"
+NETWORK_DEPS="net-misc/bridge-utils >=net-misc/dhcp-4.2.1-r1 sys-apps/iproute2
+	net-misc/ifenslave"
 DM_DEPS="|| ( sys-fs/device-mapper >=sys-fs/lvm2-2.02.33 )"
 
 RDEPEND="
 	>=app-shells/bash-4.0
 	>=app-shells/dash-0.5.4.11
 	>=sys-apps/baselayout-1.12.14-r1
-	>=sys-apps/module-init-tools-3.5
+	>=sys-apps/module-init-tools-3.8
 	>=sys-apps/sysvinit-2.87-r3
 	>=sys-apps/util-linux-2.16
-	>=sys-fs/udev-149
+	>=sys-fs/udev-168
 
 	debug? ( dev-util/strace )
 	selinux? ( sys-libs/libselinux sys-libs/libsepol )
+	dracut_modules_biosdevname? ( sys-apps/biosdevname )
 	dracut_modules_btrfs? ( sys-fs/btrfs-progs )
+	dracut_modules_caps? ( sys-libs/libcap )
 	dracut_modules_crypt? ( sys-fs/cryptsetup ${DM_DEPS} )
+	dracut_modules_crypt-gpg? ( app-crypt/gnupg )
 	dracut_modules_dmraid? ( sys-fs/dmraid sys-fs/multipath-tools ${DM_DEPS} )
-	dracut_modules_dmsquash-live? ( sys-apps/eject ${DM_DEPS} )
+	dracut_modules_dmsquash-live? ( virtual/eject ${DM_DEPS} )
 	dracut_modules_gensplash? ( media-gfx/splashutils )
-	dracut_modules_iscsi? ( sys-block/open-iscsi[utils] ${NETWORK_DEPS} )
+	dracut_modules_iscsi? ( >=sys-block/open-iscsi-2.0.871.3 ${NETWORK_DEPS} )
 	dracut_modules_lvm? ( >=sys-fs/lvm2-2.02.33 )
 	dracut_modules_mdraid? ( sys-fs/mdadm )
 	dracut_modules_multipath? ( sys-fs/multipath-tools )
@@ -71,8 +79,6 @@ DEPEND="
 	app-text/docbook-xml-dtd:4.5
 	>=app-text/docbook-xsl-stylesheets-1.75.2
 	"
-
-EGIT_PATCHES=("${FILESDIR}/${P}-multipath-udev-rules.patch")
 
 #
 # Helper functions
@@ -123,6 +129,10 @@ base_sys_maj_ver() {
 # ebuild functions
 #
 
+src_prepare() {
+	epatch "${FILESDIR}/${P}-multipath-udev-rules.patch"
+}
+
 src_compile() {
 	emake WITH_SWITCH_ROOT=0 || die "emake failed"
 }
@@ -146,6 +156,9 @@ src_install() {
 	insinto /etc/dracut.conf.d
 	newins dracut.conf.d/${gen2conf}.example ${gen2conf} \
 		|| die 'gen2conf ins failed'
+
+	insinto /etc/logrotate.d
+	newins dracut.logrotate dracut || die 'dracut.logrotate ins failed'
 
 	#
 	# Modules
@@ -174,10 +187,13 @@ src_install() {
 
 	# Remove modules which won't work for sure
 	rm_module 00bootchart 05busybox # broken
-	rm_module 95fcoe 97biosdevname # no tools
+	rm_module 95fcoe # no tools
 
 	# fips module depends on masked app-crypt/hmaccalc
 	rm_module 01fips
+
+	# Not yet checked
+	rm_module 97masterkey 98ecryptfs 98integrity
 }
 
 pkg_postinst() {
@@ -196,10 +212,7 @@ pkg_postinst() {
 	elog 'Some modules need to be explicitly added with "-a" option even if'
 	elog 'required tools are installed.'
 	echo
-	ewarn 'dhcp-3 is known to not work with QEMU. You will need dhcp-4 or'
-	ewarn 'later for it.'
-	echo
-	elog 'Options (documented in dracut.kernel(7)) have new format since this'
-	elog 'version. Old format is preserved, but will be removed in future.'
+	elog 'Options (documented in dracut.kernel(7)) have new format since'
+	elog 'version 008. Old format is preserved, but will be removed in future.'
 	elog 'Please migrate to the new one.'
 }

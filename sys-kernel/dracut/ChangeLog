@@ -2,6 +2,13 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  10 Aug 2011; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild:
+  Updated to changes after 011 release:
+  - adding/removing modules
+  - repo has been moved from sf.net to kernel.org
+
+  Moreover ebuild has been migrated to git-2 eclass.
+
   07 Mar 2011; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild,
   +files/dracut-9999-multipath-udev-rules.patch, metadata.xml:
   Updated according to changes in dracut-008-r1 in the main tree. Getting
