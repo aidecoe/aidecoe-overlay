@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -9,7 +9,7 @@ inherit bash-completion eutils
 DESCRIPTION="Gentoo automatic kernel building scripts"
 HOMEPAGE="http://www.gentoo.org"
 
-if [[ ${PV} == 9999 ]]; then
+if [[ ${PV} == 999999 ]]; then
 	EGIT_REPO_URI="git://git.overlays.gentoo.org/proj/genkernel.git"
 	EGIT_BRANCH="dracut"
 	inherit git autotools
