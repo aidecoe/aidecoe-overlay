@@ -4,9 +4,9 @@
 
 EAPI=4
 
-PYTHON_DEPEND="python? 2:2.5"
+PYTHON_DEPEND="python? 2:2.6"
 SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="2.4 3.*"
+RESTRICT_PYTHON_ABIS="2.[45] 3.*"
 RUBY="/usr/bin/ruby18"
 RDOC="/usr/bin/rdoc18"
 
@@ -37,7 +37,7 @@ CDEPEND="
 	"
 DEPEND="${CDEPEND}
 	dev-util/pkgconfig
-	test? ( sys-devel/gdb )
+	test? ( app-misc/dtach sys-devel/gdb )
 	"
 RDEPEND="${CDEPEND}
 	crypt? ( app-crypt/gnupg )
@@ -66,6 +66,14 @@ pkg_setup() {
 src_prepare() {
 	autotools-utils_src_prepare
 	bindings python distutils_src_prepare
+
+	r_fix() {
+		local pattern="\(find_library('notmuch', '[^']*', '\)\([^']*\)\(')\)"
+		local replace="\1${WORKDIR}/${PF}_build/lib\3"
+
+		sed -i "s|$pattern|$replace|" extconf.rb || die
+	}
+	bindings ruby r_fix
 }
 
 src_configure() {
@@ -79,17 +87,17 @@ src_configure() {
 		$(use_with zsh-completion)
 	)
 	autotools-utils_src_configure
-
-	r_conf() {
-		${RUBY} extconf.rb || die
-	}
-	bindings ruby r_conf
 }
 
 src_compile() {
 	autotools-utils_src_compile
 	bindings python distutils_src_compile
-	bindings ruby emake
+
+	r_make() {
+		${RUBY} extconf.rb || die
+		emake
+	}
+	bindings ruby r_make
 
 	if use doc; then
 		pydocs() {
@@ -103,7 +111,7 @@ src_compile() {
 			${RDOC} --main 'Notmuch' --title 'Notmuch Ruby API' --op ruby *.c
 		}
 
-		bindings python pydocs
+		LD_LIBRARY_PATH="${WORKDIR}/${PF}_build/lib" bindings python pydocs
 		bindings ruby rdocs
 	fi
 }
