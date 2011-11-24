@@ -2,6 +2,11 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  24 Nov 2011; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild:
+  Reverted URI to git.kernel.org.
+
+  Removed no-herd btw.
+
   22 Sep 2011; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild:
   Changed git.kernel.org URL temporary to upstream's mirror for kernel.org
   down-time.

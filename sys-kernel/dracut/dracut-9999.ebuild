@@ -8,9 +8,7 @@ inherit eutils git-2
 
 DESCRIPTION="Generic initramfs generation tool"
 HOMEPAGE="http://dracut.wiki.kernel.org"
-#EGIT_REPO_URI="git://git.kernel.org/pub/scm/boot/${PN}/${PN}.git"
-# Temporary for kernel.org down-time
-EGIT_REPO_URI="git://git.surfsite.org/pub/git/${PN}.git"
+EGIT_REPO_URI="git://git.kernel.org/pub/scm/boot/${PN}/${PN}.git"
 
 LICENSE="GPL-2"
 SLOT="0"
