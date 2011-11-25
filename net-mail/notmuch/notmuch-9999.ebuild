@@ -143,7 +143,7 @@ pkg_postinst() {
 
 	if use python; then
 		echo
-		elog "Python API documentation is also online available at:"
+		elog "Python API documentation is also available online at:"
 		elog "  http://packages.python.org/notmuch/"
 	fi
 }

@@ -2,6 +2,9 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  25 Nov 2011; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
+  Corrected postinst message.
+
   24 Nov 2011; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
   Synced with net-mail/notmuch-0.10 ebuild in Portage Tree.
 
