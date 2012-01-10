@@ -11,7 +11,7 @@ RUBY="/usr/bin/ruby18"
 RDOC="/usr/bin/rdoc18"
 
 inherit elisp-common distutils
-inherit autotools-utils git-2
+inherit git-2
 
 DESCRIPTION="The mail indexer"
 HOMEPAGE="http://notmuchmail.org/"
@@ -64,7 +64,6 @@ pkg_setup() {
 }
 
 src_prepare() {
-	autotools-utils_src_prepare
 	bindings python distutils_src_prepare
 
 	r_fix() {
@@ -86,11 +85,11 @@ src_configure() {
 		$(use_with emacs)
 		$(use_with zsh-completion)
 	)
-	autotools-utils_src_configure
+	econf ${myeconfargs[@]}
 }
 
 src_compile() {
-	autotools-utils_src_compile
+	emake
 	bindings python distutils_src_compile
 
 	r_make() {
@@ -117,7 +116,7 @@ src_compile() {
 }
 
 src_install() {
-	autotools-utils_src_install
+	emake DESTDIR="${D}" install
 
 	if use emacs; then
 		elisp-site-file-install "${FILESDIR}/${SITEFILE}" || die
