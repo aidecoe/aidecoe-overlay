@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -13,6 +13,9 @@ EGIT_REPO_URI="git://git.kernel.org/pub/scm/boot/${PN}/${PN}.git"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
+REQUIRED_USE="dracut_modules_livenet? ( dracut_modules_dmsquash-live )
+	dracut_modules_crypt-gpg? ( dracut_modules_crypt )
+	"
 
 COMMON_MODULES="
 	dracut_modules_biosdevname
@@ -24,10 +27,10 @@ COMMON_MODULES="
 	dracut_modules_multipath
 	dracut_modules_plymouth
 	dracut_modules_syslog
-	dracut_modules_xen
 	"
 NETWORK_MODULES="
 	dracut_modules_iscsi
+	dracut_modules_livenet
 	dracut_modules_nbd
 	dracut_modules_nfs
 	"
@@ -35,6 +38,7 @@ DM_MODULES="
 	dracut_modules_crypt
 	dracut_modules_dmraid
 	dracut_modules_dmsquash-live
+	dracut_modules_livenet
 	dracut_modules_lvm
 	"
 IUSE_DRACUT_MODULES="${COMMON_MODULES} ${DM_MODULES} ${NETWORK_MODULES}"
@@ -52,6 +56,7 @@ RDEPEND="
 	>=sys-apps/sysvinit-2.87-r3
 	>=sys-apps/util-linux-2.16
 	>=sys-fs/udev-164
+	app-arch/cpio
 
 	debug? ( dev-util/strace )
 	selinux? ( sys-libs/libselinux sys-libs/libsepol )
@@ -71,7 +76,6 @@ RDEPEND="
 	dracut_modules_nfs? ( net-fs/nfs-utils net-nds/rpcbind ${NETWORK_DEPS} )
 	dracut_modules_plymouth? ( >=sys-boot/plymouth-0.8.3-r1 )
 	dracut_modules_syslog? ( || ( app-admin/syslog-ng app-admin/rsyslog ) )
-	dracut_modules_xen? ( app-emulation/xen )
 	"
 DEPEND="
 	>=dev-libs/libxslt-1.1.26
@@ -162,7 +166,7 @@ src_install() {
 	# Modules
 	#
 	local module
-	modules_dir="${D}/usr/share/dracut/modules.d"
+	modules_dir="${D}/usr/lib/dracut/modules.d"
 
 	echo "${PF}" > "${modules_dir}"/10rpmversion/dracut-version \
 		|| die 'dracut-version failed'
@@ -186,7 +190,7 @@ src_install() {
 	# Remove modules which won't work for sure
 	rm_module 95fcoe # no tools
 	# fips module depends on masked app-crypt/hmaccalc
-	rm_module 01fips
+	rm_module 01fips 02fips-aesni
 
 	# Remove extra modules which go to future dracut-extras
 	rm_module 00bootchart 05busybox 97masterkey 98ecryptfs 98integrity

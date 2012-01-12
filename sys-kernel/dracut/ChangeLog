@@ -1,6 +1,9 @@
 # ChangeLog for sys-kernel/dracut
-# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  12 Jan 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild:
+  Synced with sys-kernel/dracut-014 in Portage tree.
 
   24 Nov 2011; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild:
   Reverted URI to git.kernel.org.
