@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/net-mail/notmuch/notmuch-0.9-r2.ebuild,v 1.3 2011/11/07 15:25:25 aidecoe Exp $
 
@@ -10,8 +10,7 @@ RESTRICT_PYTHON_ABIS="2.[45] 3.*"
 RUBY="/usr/bin/ruby18"
 RDOC="/usr/bin/rdoc18"
 
-inherit elisp-common distutils
-inherit autotools-utils git-2
+inherit elisp-common distutils git-2
 
 DESCRIPTION="The mail indexer"
 HOMEPAGE="http://notmuchmail.org/"
@@ -44,7 +43,7 @@ RDEPEND="${CDEPEND}
 	zsh-completion? ( app-shells/zsh )
 	"
 
-DOCS=( AUTHORS NEWS README TODO )
+DOCS=( AUTHORS NEWS README )
 SITEFILE="50${PN}-gentoo.el"
 
 bindings() {
@@ -64,7 +63,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	autotools-utils_src_prepare
+	default
 	bindings python distutils_src_prepare
 
 	r_fix() {
@@ -86,11 +85,11 @@ src_configure() {
 		$(use_with emacs)
 		$(use_with zsh-completion)
 	)
-	autotools-utils_src_configure
+	econf "${myeconfargs[@]}"
 }
 
 src_compile() {
-	autotools-utils_src_compile
+	default
 	bindings python distutils_src_compile
 
 	r_make() {
@@ -117,7 +116,7 @@ src_compile() {
 }
 
 src_install() {
-	autotools-utils_src_install
+	default
 
 	if use emacs; then
 		elisp-site-file-install "${FILESDIR}/${SITEFILE}" || die
