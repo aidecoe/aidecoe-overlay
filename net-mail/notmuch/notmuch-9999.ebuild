@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/net-mail/notmuch/notmuch-0.9-r2.ebuild,v 1.3 2011/11/07 15:25:25 aidecoe Exp $
+# $Header: $
 
 EAPI=4
 
@@ -20,7 +20,8 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
 REQUIRED_USE="test? ( crypt emacs )"
-IUSE="bash-completion crypt debug doc emacs python ruby test vim zsh-completion"
+IUSE="bash-completion crypt debug doc emacs nmbug python ruby test vim
+	zsh-completion"
 
 CDEPEND="
 	>=dev-libs/glib-2.14
@@ -40,6 +41,7 @@ DEPEND="${CDEPEND}
 	"
 RDEPEND="${CDEPEND}
 	crypt? ( app-crypt/gnupg )
+	nmbug? ( dev-vcs/git virtual/perl-File-Temp virtual/perl-PodParser )
 	zsh-completion? ( app-shells/zsh )
 	"
 
@@ -120,6 +122,10 @@ src_install() {
 
 	if use emacs; then
 		elisp-site-file-install "${FILESDIR}/${SITEFILE}" || die
+	fi
+
+	if use nmbug; then
+		dobin contrib/nmbug
 	fi
 
 	if use vim; then
