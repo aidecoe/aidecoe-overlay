@@ -2,6 +2,10 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  02 Mar 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
+  Synced with net-mail/notmuch-0.11.1-r2:gentoo and allowed dev-libs/gmime:2.6
+  dependency.
+
   21 Feb 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild,
   metadata.xml:
   Added 'nmbug' USE flag.
