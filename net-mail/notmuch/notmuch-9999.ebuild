@@ -4,9 +4,9 @@
 
 EAPI=4
 
-PYTHON_DEPEND="python? 2:2.6"
+PYTHON_DEPEND="python? 2:2.6 3:3.2"
 SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="2.[45] 3.*"
+RESTRICT_PYTHON_ABIS="2.[45] 3.1"
 
 inherit elisp-common distutils git-2
 
@@ -23,7 +23,7 @@ IUSE="bash-completion crypt debug doc emacs nmbug python test vim
 
 CDEPEND="
 	>=dev-libs/glib-2.22
-	|| ( dev-libs/gmime:2.4 dev-libs/gmime:2.6 )
+	|| ( dev-libs/gmime:2.4 >=dev-libs/gmime-2.6.7 )
 	dev-libs/xapian
 	doc? ( python? ( dev-python/sphinx ) )
 	sys-libs/talloc
