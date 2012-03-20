@@ -2,6 +2,9 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  20 Mar 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> alot-9999.ebuild:
+  FAQ file no longer exists.
+
   15 Feb 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> alot-9999.ebuild:
   Removed all keywords, because it's a live ebuild.
 

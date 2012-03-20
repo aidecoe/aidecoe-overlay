@@ -28,8 +28,6 @@ RDEPEND="
 	sys-apps/file[python]
 	"
 
-DOCS="FAQ"
-
 src_prepare() {
 	distutils_src_prepare
 
