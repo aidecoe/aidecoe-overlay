@@ -23,7 +23,7 @@ IUSE="bash-completion crypt debug doc emacs nmbug python test vim
 
 CDEPEND="
 	>=dev-libs/glib-2.22
-	|| ( dev-libs/gmime:2.4 >=dev-libs/gmime-2.6.7 )
+	>=dev-libs/gmime-2.6.7
 	dev-libs/xapian
 	doc? ( python? ( dev-python/sphinx ) )
 	sys-libs/talloc

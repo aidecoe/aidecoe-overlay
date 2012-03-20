@@ -3,6 +3,9 @@
 # $Header: $
 
   20 Mar 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
+  Depend on GMime 2.6.7 or later.
+
+  20 Mar 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
   GMime 2.6 must be at least 2.6.7. Latest HEAD is compatible with Python 3.2.
 
   02 Mar 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
