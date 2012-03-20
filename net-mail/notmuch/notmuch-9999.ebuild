@@ -86,6 +86,7 @@ src_compile() {
 
 	if use doc; then
 		pydocs() {
+			mv README README-python
 			pushd docs || die
 			emake html
 			mv html ../python || die

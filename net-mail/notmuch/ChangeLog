@@ -3,6 +3,10 @@
 # $Header: $
 
   20 Mar 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
+  Renamed Python bindings README to README-python, because it used to overwrite
+  main Notmuch README file.
+
+  20 Mar 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
   Depend on GMime 2.6.7 or later.
 
   20 Mar 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
