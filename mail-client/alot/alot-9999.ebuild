@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/mail-client/alot/alot-0.21-r1.ebuild,v 1.1 2011/12/27 11:23:56 aidecoe Exp $
+# $Header: Exp $
 
 EAPI=4
 
@@ -21,10 +21,11 @@ IUSE=""
 
 DEPEND=""
 RDEPEND="
-	dev-python/twisted
+	>=dev-python/configobj-4.6.0
+	>=dev-python/twisted-10.2.0
 	>=dev-python/urwid-1.0.0
 	net-mail/mailbase
-	net-mail/notmuch[crypt,python]
+	>=net-mail/notmuch-0.12[crypt,python]
 	sys-apps/file[python]
 	"
 
@@ -35,6 +36,4 @@ src_prepare() {
 	for md in *.md; do
 		mv "${md}" "${md%.md}"
 	done
-
-	echo "${PV}" > alot/VERSION
 }
