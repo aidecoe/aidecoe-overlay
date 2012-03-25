@@ -239,6 +239,16 @@ pkg_postinst() {
 
 		check_extra_config
 		echo
+	else
+		echo
+		ewarn "Your kernel configuration couldn't be checked.  Do you have"
+		ewarn "/usr/src/linux/.config file there?  Please check manually if"
+		ewarn "following options are enabled:"
+		ewarn ""
+		ewarn "  CONFIG_BLK_DEV_INITRD"
+		ewarn "  CONFIG_DEVTMPFS"
+		ewarn "  CONFIG_MODULES"
+		echo
 	fi
 
 	elog 'To generate the initramfs:'

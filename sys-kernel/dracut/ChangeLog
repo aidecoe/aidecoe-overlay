@@ -2,6 +2,9 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  25 Mar 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild:
+  Synced with sys-kernel/dracut-017-r1::gentoo again.
+
   02 Mar 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild,
   -files/dracut-9999-usrmount-fsck-fix.patch, metadata.xml:
   Synced with sys-kernel/dracut-017-r1::gentoo.
