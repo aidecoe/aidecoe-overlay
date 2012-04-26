@@ -90,6 +90,7 @@ RDEPEND="
 	dracut_modules_syslog? ( || ( app-admin/syslog-ng app-admin/rsyslog ) )
 	"
 DEPEND="
+	app-text/asciidoc
 	>=dev-libs/libxslt-1.1.26
 	app-text/docbook-xml-dtd:4.5
 	>=app-text/docbook-xsl-stylesheets-1.75.2
@@ -150,13 +151,11 @@ src_prepare() {
 }
 
 src_compile() {
-	emake WITH_SWITCH_ROOT=0
+	emake
 }
 
 src_install() {
-	emake WITH_SWITCH_ROOT=0 \
-		prefix=/usr sysconfdir=/etc DESTDIR="${D}" \
-		install
+	emake prefix=/usr sysconfdir=/etc DESTDIR="${D}" install
 
 	local gen2conf
 
@@ -200,7 +199,7 @@ src_install() {
 	use net || rm_module 40network 45ifcfg 45url-lib
 
 	# Remove S/390 modules which are not tested at all
-	rm_module 95dasd 95dasd_mod 95zfcp 95znet
+	rm_module 80cms 95dasd 95dasd_mod 95zfcp 95znet
 
 	# Remove modules which won't work for sure
 	rm_module 95fcoe # no tools
