@@ -151,7 +151,7 @@ src_prepare() {
 }
 
 src_compile() {
-	emake
+	emake doc
 }
 
 src_install() {
@@ -173,6 +173,8 @@ src_install() {
 
 	insinto /etc/logrotate.d
 	newins dracut.logrotate dracut
+
+	dohtml dracut.html
 
 	#
 	# Modules
