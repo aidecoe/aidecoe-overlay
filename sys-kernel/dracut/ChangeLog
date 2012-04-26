@@ -2,6 +2,10 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  26 Apr 2012; Amadeusz Żołnowski <aidecoe@gentoo.org>
+  files/dracut-9999-multipath-udev-rules.patch:
+  Rebased multipath-udev-rules.patch against current dracut git-HEAD.
+
   25 Mar 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild:
   Synced with sys-kernel/dracut-017-r1::gentoo again.
 
