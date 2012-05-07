@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer>
+		<email>aidecoe@gentoo.org</email>
+		<name>Amadeusz Żołnowski</name>
+	</maintainer>
+	<longdescription lang="en">
+		yEd is a powerful desktop application that can be used to quickly and
+		effectively generate high-quality diagrams. Create diagrams manually, or
+		import your external data for analysis. Our automatic layout algorithms
+		arrange even large data sets with just the press of a button. 
+	</longdescription>
+</pkgmetadata>
+

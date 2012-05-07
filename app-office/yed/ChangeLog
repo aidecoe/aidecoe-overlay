@@ -1,0 +1,10 @@
+# ChangeLog for app-office/yed
+# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*yed-3.9.2 (07 May 2012)
+
+  07 May 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> +yed-3.9.2.ebuild,
+  +metadata.xml:
+  Initial ebuild, wrt bug #155873.
+
