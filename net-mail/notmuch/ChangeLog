@@ -3,6 +3,9 @@
 # $Header: $
 
   10 May 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
+  Enforce build with GMime 2.6.
+
+  10 May 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
   Synced with net-mail/notmuch-0.12::gentoo.
 
   20 Mar 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:

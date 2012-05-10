@@ -72,6 +72,7 @@ src_configure() {
 		--bashcompletiondir="${ROOT}/usr/share/bash-completion"
 		--emacslispdir="${ROOT}/${SITELISP}/${PN}"
 		--emacsetcdir="${ROOT}/${SITEETC}/${PN}"
+		--with-gmime-version=2.6
 		--zshcompletiondir="${ROOT}/usr/share/zsh/site-functions"
 		$(use_with bash-completion)
 		$(use_with emacs)
