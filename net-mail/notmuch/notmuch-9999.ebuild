@@ -8,9 +8,9 @@ PYTHON_DEPEND="python? 2:2.6 3:3.2"
 SUPPORT_PYTHON_ABIS="1"
 RESTRICT_PYTHON_ABIS="2.[45] 3.1"
 
-inherit elisp-common distutils git-2
+inherit elisp-common pax-utils distutils git-2
 
-DESCRIPTION="The mail indexer"
+DESCRIPTION="Thread-based e-mail indexer, supporting quick search and tagging"
 HOMEPAGE="http://notmuchmail.org/"
 EGIT_REPO_URI="git://git.notmuchmail.org/git/notmuch"
 
@@ -33,7 +33,7 @@ CDEPEND="
 	vim? ( || ( >=app-editors/vim-7.0 >=app-editors/gvim-7.0 ) )
 	"
 DEPEND="${CDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	test? ( app-misc/dtach sys-devel/gdb )
 	"
 RDEPEND="${CDEPEND}
@@ -86,7 +86,7 @@ src_compile() {
 
 	if use doc; then
 		pydocs() {
-			mv README README-python
+			mv README README-python || die
 			pushd docs || die
 			emake html
 			mv html ../python || die
@@ -97,7 +97,9 @@ src_compile() {
 }
 
 src_test() {
+	pax-mark -m notmuch
 	LD_LIBRARY_PATH="${MY_LD_LIBRARY_PATH}" default
+	pax-mark -ze notmuch
 }
 
 src_install() {
