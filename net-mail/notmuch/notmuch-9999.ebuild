@@ -18,7 +18,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
 REQUIRED_USE="test? ( crypt emacs python )"
-IUSE="bash-completion crypt debug doc emacs nmbug python test vim
+IUSE="bash-completion crypt debug doc emacs mutt nmbug python test vim
 	zsh-completion"
 
 CDEPEND="
@@ -39,6 +39,10 @@ DEPEND="${CDEPEND}
 RDEPEND="${CDEPEND}
 	crypt? ( app-crypt/gnupg )
 	nmbug? ( dev-vcs/git virtual/perl-File-Temp virtual/perl-PodParser )
+	mutt? ( dev-perl/Mail-Box dev-perl/MailTools dev-perl/String-ShellQuote
+		dev-perl/Term-ReadLine-Gnu virtual/perl-File-Path
+		virtual/perl-Getopt-Long virtual/perl-PodParser
+		)
 	zsh-completion? ( app-shells/zsh )
 	"
 
@@ -85,6 +89,13 @@ src_compile() {
 	default
 	bindings python distutils_src_compile
 
+	if use mutt; then
+		pushd contrib/notmuch-mutt || die
+		mv README README-mutt || die
+		emake notmuch-mutt.1
+		popd || die
+	fi
+
 	if use doc; then
 		pydocs() {
 			mv README README-python || die
@@ -114,6 +125,17 @@ src_install() {
 		dobin contrib/nmbug
 	fi
 
+	if use mutt; then
+		[[ -e /etc/mutt/notmuch-mutt.rc ]] && NOTMUCH_MUTT_RC_EXISTS=1
+		pushd contrib/notmuch-mutt || die
+		dobin notmuch-mutt
+		doman notmuch-mutt.1
+		insinto /etc/mutt
+		doins notmuch-mutt.rc
+		dodoc README-mutt
+		popd || die
+	fi
+
 	if use vim; then
 		insinto /usr/share/vim/vimfiles
 		doins -r vim/plugin vim/syntax
@@ -129,6 +151,13 @@ src_install() {
 pkg_postinst() {
 	use emacs && elisp-site-regen
 	use python && distutils_pkg_postinst
+
+	if use mutt && [[ ! ${NOTMUCH_MUTT_RC_EXISTS} ]]; then
+		elog "To enable notmuch support in mutt, add the following line into"
+		elog "your mutt config file, please:"
+		elog ""
+		elog "  source /etc/mutt/notmuch-mutt.rc"
+	fi
 }
 
 pkg_postrm() {
