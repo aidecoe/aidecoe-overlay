@@ -22,10 +22,11 @@ IUSE=""
 DEPEND=""
 RDEPEND="
 	>=dev-python/configobj-4.6.0
+	>=dev-python/pyme-0.8.1
 	>=dev-python/twisted-10.2.0
 	>=dev-python/urwid-1.0.0
 	net-mail/mailbase
-	>=net-mail/notmuch-0.12[crypt,python]
+	>=net-mail/notmuch-0.13[crypt,python]
 	sys-apps/file[python]
 	"
 
