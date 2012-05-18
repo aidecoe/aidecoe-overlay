@@ -17,7 +17,7 @@ EGIT_REPO_URI="git://github.com/pazz/alot.git"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE=""
+IUSE="doc"
 
 DEPEND=""
 RDEPEND="
@@ -37,4 +37,22 @@ src_prepare() {
 	for md in *.md; do
 		mv "${md}" "${md%.md}"
 	done
+}
+
+src_compile() {
+	distutils_src_compile
+
+	if use doc; then
+		pushd docs || die
+		emake html
+		popd || die
+	fi
+}
+
+src_install() {
+	distutils_src_install
+
+	if use doc; then
+		dohtml -r docs/build/html/*
+	fi
 }
