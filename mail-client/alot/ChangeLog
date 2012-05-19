@@ -3,6 +3,9 @@
 # $Header: $
 
   19 May 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> alot-9999.ebuild:
+  Synced with mail-client/alot-0.3.1::gentoo, again.
+
+  19 May 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> alot-9999.ebuild:
   dev-python/sphinx dependency for 'doc' flag.
 
   19 May 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> alot-9999.ebuild:

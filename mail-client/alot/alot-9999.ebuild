@@ -24,7 +24,7 @@ DEPEND="
 	"
 RDEPEND="
 	>=dev-python/configobj-4.6.0
-	>=dev-python/pyme-0.8.1
+	>=dev-python/pyme-0.8.1-r1
 	>=dev-python/twisted-10.2.0
 	>=dev-python/urwid-1.0.0
 	net-mail/mailbase
