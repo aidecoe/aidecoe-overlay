@@ -2,6 +2,9 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  19 May 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
+  Synced with net-mail/notmuch-0.13::gentoo, again.
+
   16 May 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild,
   metadata.xml:
   Synced with net-mail/notmuch-0.13::gentoo.

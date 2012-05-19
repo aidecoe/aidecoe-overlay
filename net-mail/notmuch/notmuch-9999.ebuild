@@ -25,7 +25,6 @@ CDEPEND="
 	>=dev-libs/glib-2.22
 	>=dev-libs/gmime-2.6.7
 	dev-libs/xapian
-	doc? ( python? ( dev-python/sphinx ) )
 	sys-libs/talloc
 	debug? ( dev-util/valgrind )
 	emacs? ( >=virtual/emacs-23 )
@@ -34,6 +33,7 @@ CDEPEND="
 	"
 DEPEND="${CDEPEND}
 	virtual/pkgconfig
+	doc? ( python? ( dev-python/sphinx ) )
 	test? ( app-misc/dtach sys-devel/gdb )
 	"
 RDEPEND="${CDEPEND}
