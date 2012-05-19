@@ -19,7 +19,9 @@ SLOT="0"
 KEYWORDS=""
 IUSE="doc"
 
-DEPEND=""
+DEPEND="
+	doc? ( dev-python/sphinx )
+	"
 RDEPEND="
 	>=dev-python/configobj-4.6.0
 	>=dev-python/pyme-0.8.1
