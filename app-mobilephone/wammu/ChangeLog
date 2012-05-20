@@ -1,0 +1,10 @@
+# ChangeLog for app-mobilephone/wammu
+# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*wammu-9999 (20 May 2012)
+
+  20 May 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> +wammu-9999.ebuild,
+  +metadata.xml:
+  Live ebuild based on app-mobilephone/wammu-0.35::gentoo.
+
