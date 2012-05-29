@@ -4,6 +4,10 @@
 
   29 May 2012; Amadeusz Żołnowski <aidecoe@gentoo.org>
   afew-aidecoe-9999.ebuild:
+  Require 'python' flag enabled for net-mail/notmuch.
+
+  29 May 2012; Amadeusz Żołnowski <aidecoe@gentoo.org>
+  afew-aidecoe-9999.ebuild:
   Block mail-filter/afew.
 
 *afew-aidecoe-9999 (29 May 2012)

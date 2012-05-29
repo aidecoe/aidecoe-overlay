@@ -24,7 +24,8 @@ DEPEND="
 	doc? ( dev-python/sphinx )
 	"
 RDEPEND="app-text/dbacl
-	net-mail/notmuch"
+	net-mail/notmuch[python]
+	"
 
 src_prepare() {
 	distutils_src_prepare
