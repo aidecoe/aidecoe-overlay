@@ -20,6 +20,7 @@ KEYWORDS=""
 IUSE="doc"
 
 DEPEND="
+	!mail-filter/afew
 	doc? ( dev-python/sphinx )
 	"
 RDEPEND="app-text/dbacl
