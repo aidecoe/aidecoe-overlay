@@ -28,6 +28,7 @@ REQUIRED_USE="dracut_modules_crypt-gpg? ( dracut_modules_crypt )
 	"
 COMMON_MODULES="
 	dracut_modules_biosdevname
+	dracut_modules_bootchart
 	dracut_modules_btrfs
 	dracut_modules_caps
 	dracut_modules_crypt-gpg
@@ -73,6 +74,7 @@ RDEPEND="
 	net? ( net-misc/curl >=net-misc/dhcp-4.2.1-r1 sys-apps/iproute2 )
 	selinux? ( sys-libs/libselinux sys-libs/libsepol )
 	dracut_modules_biosdevname? ( sys-apps/biosdevname )
+	dracut_modules_bootchart? ( app-benchmarks/bootchart2 )
 	dracut_modules_btrfs? ( sys-fs/btrfs-progs )
 	dracut_modules_caps? ( sys-libs/libcap )
 	dracut_modules_crypt? ( sys-fs/cryptsetup )
@@ -182,9 +184,6 @@ src_install() {
 	local module
 	modules_dir="${D}/usr/lib/dracut/modules.d"
 
-	echo "${PF}" > "${modules_dir}"/10rpmversion/dracut-version \
-		|| die 'dracut-version failed'
-
 	# Remove modules not enabled by USE flags
 	for module in ${IUSE_DRACUT_MODULES} ; do
 		! use ${module} && rm_module -f ${module#dracut_modules_}
@@ -209,7 +208,7 @@ src_install() {
 	rm_module 01fips 02fips-aesni
 
 	# Remove extra modules which go to future dracut-extras
-	rm_module 00bootchart 05busybox 97masterkey 98ecryptfs 98integrity
+	rm_module 05busybox 97masterkey 98ecryptfs 98integrity 98systemd
 }
 
 pkg_postinst() {
