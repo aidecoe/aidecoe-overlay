@@ -1,0 +1,10 @@
+# ChangeLog for sys-kernel/dracut-aidecoe
+# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*dracut-aidecoe-9999 (27 Jun 2012)
+
+  27 Jun 2012; Amadeusz Żołnowski <aidecoe@gentoo.org>
+  +files/9999-multipath-udev-rules.patch, +dracut-aidecoe-9999.ebuild,
+  +metadata.xml:
+  Copied from sys-kernel/dracut and changed URI-s.
