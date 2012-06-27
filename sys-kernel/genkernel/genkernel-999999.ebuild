@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -62,7 +62,7 @@ IUSE="ibm selinux"
 DEPEND="
 	selinux? ( sys-libs/libselinux )"
 RDEPEND="${DEPEND}
-	>=sys-kernel/dracut-010
+	|| ( >=sys-kernel/dracut-010 sys-kernel/dracut-aidecoe )
 	"
 
 if [[ ${PV} == 9999* ]]; then
