@@ -95,6 +95,7 @@ RDEPEND="
 	dracut_modules_syslog? ( || ( app-admin/syslog-ng app-admin/rsyslog ) )
 	"
 DEPEND="
+	!sys-kernel/dracut
 	app-text/asciidoc
 	>=dev-libs/libxslt-1.1.26
 	app-text/docbook-xml-dtd:4.5
