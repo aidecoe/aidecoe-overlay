@@ -4,7 +4,7 @@
 
 EAPI=4
 
-inherit eutils linux-info git-2
+inherit eutils linux-info toolchain-funcs git-2
 
 add_req_use_for() {
 	local dep="$1"; shift
@@ -55,19 +55,19 @@ NETWORK_MODULES="
 add_req_use_for device-mapper ${DM_MODULES}
 add_req_use_for net ${NETWORK_MODULES}
 IUSE_DRACUT_MODULES="${COMMON_MODULES} ${DM_MODULES} ${NETWORK_MODULES}"
-IUSE="debug device-mapper net selinux ${IUSE_DRACUT_MODULES}"
+IUSE="debug device-mapper optimization net selinux ${IUSE_DRACUT_MODULES}"
 
 RESTRICT="test"
 
 RDEPEND="
+	app-arch/cpio
 	>=app-shells/bash-4.0
 	>=app-shells/dash-0.5.4.11
 	>=sys-apps/baselayout-1.12.14-r1
+	|| ( >=sys-apps/module-init-tools-3.8 >sys-apps/kmod-5[tools] )
 	>=sys-apps/sysvinit-2.87-r3
 	>=sys-apps/util-linux-2.20
-	>=sys-fs/udev-164
-	app-arch/cpio
-	|| ( >=sys-apps/module-init-tools-3.8 >sys-apps/kmod-5[tools] )
+	>=sys-fs/udev-166
 
 	debug? ( dev-util/strace )
 	device-mapper? ( || ( sys-fs/device-mapper >=sys-fs/lvm2-2.02.33 ) )
@@ -135,43 +135,28 @@ rm_module() {
 	done
 }
 
-# Displays Gentoo Base System major release number
-base_sys_maj_ver() {
-	local line
-
-	read line < /etc/gentoo-release
-	line=${line##* }
-	echo "${line%%.*}"
-}
-
 #
 # ebuild functions
 #
 
-src_prepare() {
-	epatch "${FILESDIR}/${P}-multipath-udev-rules.patch"
-}
-
 src_compile() {
-	emake doc
+	if use optimization; then
+		ewarn "Enabling experimental optimization!"
+		tc-export CC
+		emake prefix=/usr sysconfdir=/etc DESTDIR="${D}" doc \
+			install/dracut-install
+	fi
 }
 
 src_install() {
-	emake prefix=/usr sysconfdir=/etc DESTDIR="${D}" install
-
-	local gen2conf
+	emake prefix=/usr libdir="/usr/$(get_libdir)" sysconfdir=/etc \
+		DESTDIR="${D}" install
 
 	dodir /var/lib/dracut/overlay
 	dodoc HACKING TODO AUTHORS NEWS README*
 
-	case "$(base_sys_maj_ver)" in
-		1) gen2conf=gentoo.conf ;;
-		2) gen2conf=gentoo-openrc.conf ;;
-		*) die "Expected ver. 1 or 2 of Gentoo Base System (/etc/gentoo-release)."
-	esac
-
 	insinto /etc/dracut.conf.d
-	newins dracut.conf.d/${gen2conf}.example ${gen2conf}
+	newins dracut.conf.d/gentoo.conf.example gentoo.conf
 
 	insinto /etc/logrotate.d
 	newins dracut.logrotate dracut
@@ -182,7 +167,7 @@ src_install() {
 	# Modules
 	#
 	local module
-	modules_dir="${D}/usr/lib/dracut/modules.d"
+	modules_dir="${D}/usr/$(get_libdir)/dracut/modules.d"
 
 	# Remove modules not enabled by USE flags
 	for module in ${IUSE_DRACUT_MODULES} ; do
@@ -213,11 +198,11 @@ src_install() {
 
 pkg_postinst() {
 	if linux-info_get_any_version && linux_config_src_exists; then
-		echo
+		ewarn ""
 		ewarn "If the following test report contains a missing kernel"
 		ewarn "configuration option, you should reconfigure and rebuild your"
 		ewarn "kernel before booting image generated with this Dracut version."
-		echo
+		ewarn ""
 
 		local CONFIG_CHECK="~BLK_DEV_INITRD ~DEVTMPFS ~MODULES"
 
@@ -240,7 +225,7 @@ pkg_postinst() {
 		check_extra_config
 		echo
 	else
-		echo
+		ewarn ""
 		ewarn "Your kernel configuration couldn't be checked.  Do you have"
 		ewarn "/usr/src/linux/.config file there?  Please check manually if"
 		ewarn "following options are enabled:"
@@ -248,19 +233,6 @@ pkg_postinst() {
 		ewarn "  CONFIG_BLK_DEV_INITRD"
 		ewarn "  CONFIG_DEVTMPFS"
 		ewarn "  CONFIG_MODULES"
-		echo
+		ewarn ""
 	fi
-
-	elog 'To generate the initramfs:'
-	elog '    # mount /boot (if necessary)'
-	elog '    # dracut "" <kernel-version>'
-	elog ''
-	elog 'For command line documentation see dracut.kernel(7).'
-	elog ''
-	elog 'Simple example to select root and resume partition:'
-	elog '    root=/dev/sda1 resume=/dev/sda2'
-	elog ''
-	elog 'To include only dracut modules and kernel drivers for this system,'
-	elog 'use the "-H" option.  Some modules need to be explicitly added with'
-	elog '"-a" option even if required tools are installed.'
 }

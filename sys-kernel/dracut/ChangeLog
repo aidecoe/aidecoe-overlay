@@ -2,6 +2,10 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  28 Jul 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild,
+  metadata.xml:
+  Synced with sys-kernel/dracut-022::gentoo.
+
   10 Jun 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild:
   sys-kernel/dracut-9999: synced with sys-kernel/dracut-019::gentoo
 
