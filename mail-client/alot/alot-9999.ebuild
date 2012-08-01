@@ -24,7 +24,7 @@ DEPEND="
 	"
 RDEPEND="
 	>=dev-python/configobj-4.6.0
-	>=dev-python/pyme-0.8.1-r1
+	dev-python/pygpgme
 	>=dev-python/twisted-10.2.0
 	>=dev-python/urwid-1.0.0
 	net-mail/mailbase
@@ -33,6 +33,9 @@ RDEPEND="
 	"
 
 src_prepare() {
+	find "${S}" -name '*.py' -print0 | xargs -0 -- sed \
+		-e '1i# -*- coding: utf-8 -*-' -i || die
+
 	distutils_src_prepare
 
 	local md
