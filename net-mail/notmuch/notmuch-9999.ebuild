@@ -27,7 +27,7 @@ CDEPEND="
 	dev-libs/xapian
 	sys-libs/talloc
 	debug? ( dev-util/valgrind )
-	emacs? ( >=virtual/emacs-23 )
+	emacs? ( || ( app-editors/emacs:23 app-editors/emacs:24[libxml2] ) )
 	x86? ( >=dev-libs/xapian-1.2.7-r2 )
 	vim? ( || ( >=app-editors/vim-7.0 >=app-editors/gvim-7.0 ) )
 	"

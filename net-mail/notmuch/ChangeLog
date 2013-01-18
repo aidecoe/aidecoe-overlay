@@ -3,6 +3,9 @@
 # $Header: $
 
   18 Jan 2013; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
+  Require libxml2 flag for app-editors/emacs.
+
+  18 Jan 2013; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
   Synced with net-mail/notmuch-0.14-r1::gentoo.
 
   19 May 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
