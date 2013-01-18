@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -39,9 +39,10 @@ DEPEND="${CDEPEND}
 RDEPEND="${CDEPEND}
 	crypt? ( app-crypt/gnupg )
 	nmbug? ( dev-vcs/git virtual/perl-File-Temp virtual/perl-PodParser )
-	mutt? ( dev-perl/Mail-Box dev-perl/MailTools dev-perl/String-ShellQuote
-		dev-perl/Term-ReadLine-Gnu virtual/perl-File-Path
-		virtual/perl-Getopt-Long virtual/perl-PodParser
+	mutt? ( dev-perl/File-Which dev-perl/Mail-Box dev-perl/MailTools
+		dev-perl/String-ShellQuote dev-perl/Term-ReadLine-Gnu
+		virtual/perl-Digest-SHA virtual/perl-File-Path virtual/perl-Getopt-Long
+		virtual/perl-PodParser
 		)
 	zsh-completion? ( app-shells/zsh )
 	"
@@ -122,7 +123,7 @@ src_install() {
 	fi
 
 	if use nmbug; then
-		dobin contrib/nmbug
+		dobin contrib/nmbug/nmbug
 	fi
 
 	if use mutt; then

@@ -1,6 +1,9 @@
 # ChangeLog for net-mail/notmuch
-# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  18 Jan 2013; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
+  Synced with net-mail/notmuch-0.14-r1::gentoo.
 
   19 May 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
   Synced with net-mail/notmuch-0.13::gentoo, again.
