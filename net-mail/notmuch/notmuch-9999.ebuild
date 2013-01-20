@@ -17,8 +17,11 @@ EGIT_REPO_URI="git://git.notmuchmail.org/git/notmuch"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-REQUIRED_USE="test? ( crypt emacs python )"
-IUSE="bash-completion crypt debug doc emacs mutt nmbug python test vim
+REQUIRED_USE="
+	pick? ( emacs )
+	test? ( crypt emacs python )
+	"
+IUSE="bash-completion crypt debug doc emacs mutt nmbug pick python test vim
 	zsh-completion"
 
 CDEPEND="
@@ -49,6 +52,7 @@ RDEPEND="${CDEPEND}
 
 DOCS=( AUTHORS NEWS README )
 SITEFILE="50${PN}-gentoo.el"
+SITEFILE_PICK="60${PN}-pick-gentoo.el"
 MY_LD_LIBRARY_PATH="${WORKDIR}/${P}/lib"
 
 bindings() {
@@ -70,6 +74,14 @@ pkg_setup() {
 src_prepare() {
 	default
 	bindings python distutils_src_prepare
+
+	if use mutt; then
+		mv contrib/notmuch-mutt/README contrib/notmuch-mutt/README-mutt || die
+	fi
+
+	if use pick; then
+		mv contrib/notmuch-pick/README contrib/notmuch-pick/README-pick || die
+	fi
 }
 
 src_configure() {
@@ -92,7 +104,6 @@ src_compile() {
 
 	if use mutt; then
 		pushd contrib/notmuch-mutt || die
-		mv README README-mutt || die
 		emake notmuch-mutt.1
 		popd || die
 	fi
@@ -120,6 +131,14 @@ src_install() {
 
 	if use emacs; then
 		elisp-site-file-install "${FILESDIR}/${SITEFILE}" || die
+
+		if use pick; then
+			pushd contrib/notmuch-pick || die
+			elisp-install "${PN}" notmuch-pick.el || die
+			dodoc README-pick
+			popd || die
+			elisp-site-file-install "${FILESDIR}/${SITEFILE_PICK}" || die
+		fi
 	fi
 
 	if use nmbug; then
