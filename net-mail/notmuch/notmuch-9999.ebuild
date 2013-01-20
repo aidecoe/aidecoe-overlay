@@ -30,14 +30,15 @@ CDEPEND="
 	dev-libs/xapian
 	sys-libs/talloc
 	debug? ( dev-util/valgrind )
-	emacs? ( || ( app-editors/emacs:23 app-editors/emacs:24[libxml2] ) )
+	emacs? ( >=virtual/emacs-23 )
 	x86? ( >=dev-libs/xapian-1.2.7-r2 )
 	vim? ( || ( >=app-editors/vim-7.0 >=app-editors/gvim-7.0 ) )
 	"
 DEPEND="${CDEPEND}
 	virtual/pkgconfig
 	doc? ( python? ( dev-python/sphinx ) )
-	test? ( app-misc/dtach sys-devel/gdb )
+	test? ( app-misc/dtach || ( >=app-editors/emacs-23[libxml2]
+		>=app-editors/emacs-vcs-23[libxml2] ) sys-devel/gdb )
 	"
 RDEPEND="${CDEPEND}
 	crypt? ( app-crypt/gnupg )
