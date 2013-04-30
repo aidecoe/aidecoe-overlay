@@ -52,6 +52,5 @@ src_install() {
 
 	if use doc; then
 		dohtml -r docs/build/html/*
-		dodoc docs/move_mode
 	fi
 }
