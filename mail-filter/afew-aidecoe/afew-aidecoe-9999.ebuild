@@ -1,12 +1,12 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI=4
 
-PYTHON_DEPEND="2:2.7 3:3.2"
+PYTHON_DEPEND="3:3.2"
 SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="2.[456] 3.[01]"
+RESTRICT_PYTHON_ABIS="2.* 3.[01]"
 
 inherit distutils git-2
 
@@ -53,6 +53,5 @@ src_install() {
 
 	if use doc; then
 		dohtml -r docs/build/html/*
-		dodoc docs/move_mode
 	fi
 }
