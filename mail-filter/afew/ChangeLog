@@ -2,6 +2,9 @@
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  06 Jul 2013; Amadeusz Żołnowski <aidecoe@gentoo.org> afew-9999.ebuild:
+  Added missing setuptools dependency.
+
   30 Apr 2013; Amadeusz Żołnowski <aidecoe@gentoo.org> ChangeLog:
   move_mode text file no longer exists and because of this dodoc used to fail.
 

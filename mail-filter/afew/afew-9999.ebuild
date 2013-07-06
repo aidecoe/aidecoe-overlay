@@ -19,7 +19,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE="doc"
 
-DEPEND="
+DEPEND="dev-python/setuptools
 	doc? ( dev-python/sphinx )
 	"
 RDEPEND="app-text/dbacl
