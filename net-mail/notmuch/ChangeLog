@@ -3,6 +3,9 @@
 # $Header: $
 
   08 Jul 2013; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
+  Handling installation of new Notmuch UI for Vim.
+
+  08 Jul 2013; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
   Cosmetic changes.
 
   07 Jul 2013; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:

@@ -20,6 +20,7 @@ KEYWORDS=""
 REQUIRED_USE="
 	pick? ( emacs )
 	test? ( crypt emacs python )
+	vim? ( ruby )
 	"
 IUSE="bash-completion crypt debug doc emacs mutt nmbug pick python ruby test vim
 	zsh-completion"
@@ -33,7 +34,8 @@ CDEPEND="
 	emacs? ( >=virtual/emacs-23 )
 	x86? ( >=dev-libs/xapian-1.2.7-r2 )
 	ruby? ( dev-lang/ruby:1.9 )
-	vim? ( || ( >=app-editors/vim-7.0 >=app-editors/gvim-7.0 ) )
+	vim? ( || ( >=app-editors/vim-7.0[ruby] >=app-editors/gvim-7.0[ruby] )
+		dev-ruby/mail )
 	"
 DEPEND="${CDEPEND}
 	virtual/pkgconfig
@@ -157,7 +159,7 @@ src_install() {
 	fi
 
 	if use nmbug; then
-		dobin contrib/nmbug/nmbug
+		dobin devel/nmbug/nmbug
 	fi
 
 	if use mutt; then
@@ -173,7 +175,9 @@ src_install() {
 
 	if use vim; then
 		insinto /usr/share/vim/vimfiles
-		doins -r vim/plugin vim/syntax
+		doins -r vim/syntax
+		insinto /usr/share/vim/vimfiles/plugin
+		doins vim/notmuch.vim
 	fi
 
 	DOCS="" bindings python distutils_src_install
