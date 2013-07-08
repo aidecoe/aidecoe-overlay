@@ -58,12 +58,17 @@ SITEFILE_PICK="60${PN}-pick-gentoo.el"
 MY_LD_LIBRARY_PATH="${WORKDIR}/${P}/lib"
 
 bindings() {
+	local ret=0
+
 	if use $1; then
 		pushd bindings/$1 || die
 		shift
 		$@
+		ret=$?
 		popd || die
 	fi
+
+	return $ret
 }
 
 pkg_setup() {
@@ -76,14 +81,9 @@ pkg_setup() {
 src_prepare() {
 	default
 	bindings python distutils_src_prepare
-
-	if use mutt; then
-		mv contrib/notmuch-mutt/README contrib/notmuch-mutt/README-mutt || die
-	fi
-
-	if use pick; then
-		mv contrib/notmuch-pick/README contrib/notmuch-pick/README-pick || die
-	fi
+	bindings python mv README README-python || die
+	mv contrib/notmuch-mutt/README contrib/notmuch-mutt/README-mutt || die
+	mv contrib/notmuch-pick/README contrib/notmuch-pick/README-pick || die
 }
 
 ruby_my_configure() {
@@ -122,7 +122,6 @@ src_compile() {
 
 	if use doc; then
 		pydocs() {
-			mv README README-python || die
 			pushd docs || die
 			emake html
 			mv html ../python || die
