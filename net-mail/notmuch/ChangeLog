@@ -2,6 +2,11 @@
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  07 Jul 2013; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
+  Ruby bindings. Fixes bug #475624. Thanks and credits to Franz Fellner
+  <alpine.art.de@googlemail.com> and Jeroen Roovers <jer@gentoo.org> and me,
+  too. :-)
+
   20 Jan 2013; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
   Synced with net-mail/notmuch-0.15::gentoo.
 
