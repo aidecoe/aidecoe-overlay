@@ -23,6 +23,7 @@ DEPEND="dev-python/setuptools
 	doc? ( dev-python/sphinx )
 	"
 RDEPEND="app-text/dbacl
+	dev-python/chardet
 	net-mail/notmuch[python]
 	"
 
