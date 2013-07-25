@@ -12,7 +12,7 @@ inherit distutils git-2
 
 DESCRIPTION="Initial tagging script for Notmuch"
 HOMEPAGE="https://github.com/teythoon/afew"
-EGIT_REPO_URI="git://github.com/teythoon/afew.git"
+EGIT_REPO_URI="git://github.com/aidecoe/afew.git"
 
 LICENSE="ISC"
 SLOT="0"
@@ -23,11 +23,12 @@ DEPEND="dev-python/setuptools
 	doc? ( dev-python/sphinx )
 	"
 RDEPEND="app-text/dbacl
-	dev-python/chardet
 	net-mail/notmuch[python]
 	"
 
 src_prepare() {
+	sed -e "/'subprocess32',/d" -i setup.py
+
 	distutils_src_prepare
 
 	local md
