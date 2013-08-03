@@ -2,13 +2,11 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
-PYTHON_DEPEND="python? 2:2.6 3:3.2"
-SUPPORT_PYTHON_ABIS="1"
-RESTRICT_PYTHON_ABIS="2.[45] 3.1"
+PYTHON_COMPAT=( python{2_6,2_7,3_2,3_3} )
 
-inherit elisp-common pax-utils distutils git-2
+inherit elisp-common pax-utils distutils-r1 git-2
 
 DESCRIPTION="Thread-based e-mail indexer, supporting quick search and tagging"
 HOMEPAGE="http://notmuchmail.org/"
@@ -35,7 +33,7 @@ CDEPEND="
 	"
 DEPEND="${CDEPEND}
 	virtual/pkgconfig
-	doc? ( python? ( dev-python/sphinx ) )
+	doc? ( python? ( dev-python/sphinx[${PYTHON_USEDEP}] ) )
 	test? ( app-misc/dtach || ( >=app-editors/emacs-23[libxml2]
 		>=app-editors/emacs-vcs-23[libxml2] ) sys-devel/gdb )
 	"
@@ -73,12 +71,12 @@ pkg_setup() {
 	if use emacs; then
 		elisp-need-emacs 23 || die "Emacs version too low"
 	fi
-	use python && python_pkg_setup
+	use python && python-r1_pkg_setup
 }
 
 src_prepare() {
 	default
-	bindings python distutils_src_prepare
+	bindings python distutils-r1_src_prepare
 	bindings python mv README README-python || die
 	mv contrib/notmuch-mutt/README contrib/notmuch-mutt/README-mutt || die
 	mv contrib/notmuch-pick/README contrib/notmuch-pick/README-pick || die
@@ -100,7 +98,7 @@ src_configure() {
 
 src_compile() {
 	default
-	bindings python distutils_src_compile
+	bindings python distutils-r1_src_compile
 
 	if use mutt; then
 		pushd contrib/notmuch-mutt || die
@@ -155,16 +153,13 @@ src_install() {
 		popd || die
 	fi
 
-	DOCS="" bindings python distutils_src_install
-
-	if use doc; then
-		bindings python dohtml -r python
-	fi
+	DOCS="" bindings python distutils-r1_src_install
+	use doc && bindings python dohtml -r python
 }
 
 pkg_postinst() {
 	use emacs && elisp-site-regen
-	use python && distutils_pkg_postinst
+	use python && distutils-r1_pkg_postinst
 
 	if use mutt && [[ ! ${NOTMUCH_MUTT_RC_EXISTS} ]]; then
 		elog "To enable notmuch support in mutt, add the following line into"
@@ -176,5 +171,5 @@ pkg_postinst() {
 
 pkg_postrm() {
 	use emacs && elisp-site-regen
-	use python && distutils_pkg_postrm
+	use python && distutils-r1_pkg_postrm
 }
