@@ -3,6 +3,9 @@
 # $Header: $
 
   03 Aug 2013; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
+  Fixes wrt distutils-r1 usage. Credits go Mike Gilbert <floppym@gentoo.org>.
+
+  03 Aug 2013; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild:
   Bump EAPI to 5 and use distutils-r1 (for bindings) instead of the old one.
 
   03 Aug 2013; Amadeusz Żołnowski <aidecoe@gentoo.org> notmuch-9999.ebuild,

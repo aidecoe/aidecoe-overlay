@@ -4,6 +4,7 @@
 
 EAPI=5
 
+DISTUTILS_OPTIONAL=1
 PYTHON_COMPAT=( python{2_6,2_7,3_2,3_3} )
 
 inherit elisp-common pax-utils distutils-r1 git-2
@@ -17,6 +18,7 @@ SLOT="0"
 KEYWORDS=""
 REQUIRED_USE="
 	pick? ( emacs )
+	python? ( ${PYTHON_REQUIRED_USE} )
 	test? ( crypt emacs python )
 	"
 IUSE="bash-completion crypt debug doc emacs mutt nmbug pick python test
@@ -29,6 +31,7 @@ CDEPEND="
 	sys-libs/talloc
 	debug? ( dev-util/valgrind )
 	emacs? ( >=virtual/emacs-23 )
+	python? ( ${PYTHON_DEPS} )
 	x86? ( >=dev-libs/xapian-1.2.7-r2 )
 	"
 DEPEND="${CDEPEND}
@@ -59,7 +62,7 @@ bindings() {
 	if use $1; then
 		pushd bindings/$1 || die
 		shift
-		$@
+		"$@"
 		ret=$?
 		popd || die
 	fi
@@ -71,7 +74,6 @@ pkg_setup() {
 	if use emacs; then
 		elisp-need-emacs 23 || die "Emacs version too low"
 	fi
-	use python && python-r1_pkg_setup
 }
 
 src_prepare() {
@@ -159,7 +161,6 @@ src_install() {
 
 pkg_postinst() {
 	use emacs && elisp-site-regen
-	use python && distutils-r1_pkg_postinst
 
 	if use mutt && [[ ! ${NOTMUCH_MUTT_RC_EXISTS} ]]; then
 		elog "To enable notmuch support in mutt, add the following line into"
@@ -171,5 +172,4 @@ pkg_postinst() {
 
 pkg_postrm() {
 	use emacs && elisp-site-regen
-	use python && distutils-r1_pkg_postrm
 }
