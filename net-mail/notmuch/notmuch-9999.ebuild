@@ -20,9 +20,8 @@ KEYWORDS=""
 REQUIRED_USE="
 	pick? ( emacs )
 	test? ( crypt emacs python )
-	vim? ( ruby )
 	"
-IUSE="bash-completion crypt debug doc emacs mutt nmbug pick python ruby test vim
+IUSE="bash-completion crypt debug doc emacs mutt nmbug pick python test
 	zsh-completion"
 
 CDEPEND="
@@ -33,9 +32,6 @@ CDEPEND="
 	debug? ( dev-util/valgrind )
 	emacs? ( >=virtual/emacs-23 )
 	x86? ( >=dev-libs/xapian-1.2.7-r2 )
-	ruby? ( dev-lang/ruby:1.9 )
-	vim? ( || ( >=app-editors/vim-7.0[ruby] >=app-editors/gvim-7.0[ruby] )
-		dev-ruby/mail )
 	"
 DEPEND="${CDEPEND}
 	virtual/pkgconfig
@@ -88,10 +84,6 @@ src_prepare() {
 	mv contrib/notmuch-pick/README contrib/notmuch-pick/README-pick || die
 }
 
-ruby_my_configure() {
-	ruby19 extconf.rb || die
-}
-
 src_configure() {
 	local myeconfargs=(
 		--bashcompletiondir="${ROOT}/usr/share/bash-completion"
@@ -106,15 +98,9 @@ src_configure() {
 	econf "${myeconfargs[@]}"
 }
 
-ruby_my_compile() {
-	emake V=1
-}
-
 src_compile() {
 	default
 	bindings python distutils_src_compile
-	bindings ruby ruby_my_configure
-	bindings ruby ruby_my_compile
 
 	if use mutt; then
 		pushd contrib/notmuch-mutt || die
@@ -137,10 +123,6 @@ src_test() {
 	pax-mark -m notmuch
 	LD_LIBRARY_PATH="${MY_LD_LIBRARY_PATH}" default
 	pax-mark -ze notmuch
-}
-
-ruby_my_install() {
-	emake DESTDIR="${D}" install
 }
 
 src_install() {
@@ -173,15 +155,7 @@ src_install() {
 		popd || die
 	fi
 
-	if use vim; then
-		insinto /usr/share/vim/vimfiles
-		doins -r vim/syntax
-		insinto /usr/share/vim/vimfiles/plugin
-		doins vim/notmuch.vim
-	fi
-
 	DOCS="" bindings python distutils_src_install
-	bindings ruby ruby_my_install
 
 	if use doc; then
 		bindings python dohtml -r python
