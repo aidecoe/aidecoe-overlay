@@ -17,8 +17,6 @@ IUSE="debug selinux systemd"
 RESTRICT="test"
 
 CDEPEND="virtual/udev
-	!>=sys-fs/udev-210
-	!>=sys-apps/systemd-210
 	systemd? ( >=sys-apps/systemd-199 )
 	selinux? ( sec-policy/selinux-dracut )
 	"
