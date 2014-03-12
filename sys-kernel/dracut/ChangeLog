@@ -1,6 +1,13 @@
 # ChangeLog for sys-kernel/dracut
-# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  12 Mar 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild,
+  +files/9999-0001-dracut-functions.sh-support-for-altern.patch,
+  +files/9999-0002-gentoo.conf-let-udevdir-be-handled-by-.patch,
+  +files/9999-0003-Use-the-same-paths-in-dracut.sh-as-tho.patch,
+  +files/9999-0004-Install-dracut-install-into-libexec-di.patch, metadata.xml:
+  Synced with sys-kernel/dracut-036-r4::gentoo.
 
   28 Jul 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild,
   metadata.xml:
