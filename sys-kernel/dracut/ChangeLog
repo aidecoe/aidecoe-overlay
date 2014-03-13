@@ -2,6 +2,10 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  13 Mar 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild:
+  Set systemdutildir to special location if systemd is not installed. It's
+  required for new udevd which has been moved to that special location.
+
   12 Mar 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> dracut-9999.ebuild:
   Unblocked new systemd and udevd (>=210).
 

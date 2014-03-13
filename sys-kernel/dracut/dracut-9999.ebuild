@@ -116,6 +116,12 @@ src_prepare() {
 		einfo "Setting systemdsystemconfdir to ${systemdsystemconfdir}..."
 		sed -e "7asystemdsystemconfdir=\"${systemdsystemconfdir}\"" \
 			-i "${S}/dracut.conf.d/gentoo.conf.example" || die
+	else
+		local systemdutildir="/lib/systemd"
+		einfo "Setting systemdutildir for standalone udev to" \
+			"${systemdutildir}..."
+		sed -e "5asystemdutildir=\"${systemdutildir}\"" \
+			-i "${S}/dracut.conf.d/gentoo.conf.example" || die
 	fi
 
 	epatch_user
