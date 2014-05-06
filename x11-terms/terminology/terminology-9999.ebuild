@@ -17,7 +17,7 @@ KEYWORDS=""
 IUSE=""
 
 RDEPEND="
-	>=dev-libs/efl-1.8.1
+	>=dev-libs/efl-1.8.1[-pixman]
 	>=media-libs/elementary-1.8.0"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
