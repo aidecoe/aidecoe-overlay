@@ -3,6 +3,10 @@
 # $Header: $
 
   03 Aug 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> burp-1.4.20.ebuild:
+  Specified correct sbin and sysconf directories, because files used to be
+  installed into /usr/usr/sbin and /etc instead of /usr/sbin and /etc/burp.
+
+  03 Aug 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> burp-1.4.20.ebuild:
   Fixed handling tcpd USE flag.
 
 *burp-1.4.20 (03 Aug 2014)

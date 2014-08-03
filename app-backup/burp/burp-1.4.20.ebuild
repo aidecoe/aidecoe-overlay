@@ -34,6 +34,8 @@ src_unpack() {
 
 src_configure() {
 	local myeconfargs=(
+		--sbindir=/usr/sbin
+		--sysconfdir=/etc/burp
 		--enable-largefile
 		$(use_with ssl openssl)
 		$(use_enable acl)
