@@ -1,0 +1,10 @@
+# ChangeLog for app-backup/burp
+# Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*burp-1.4.20 (03 Aug 2014)
+
+  03 Aug 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> +burp-1.4.20.ebuild,
+  +metadata.xml:
+  Initial ebuild of latest stable candidate version.
+
