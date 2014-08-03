@@ -40,8 +40,8 @@ src_configure() {
 		$(use_enable afs)
 		$(use_enable ipv6)
 		$(use_enable nls)
-		$(use_enable tcpd)
 		$(use_enable xattr)
+		$(use_with tcpd tcp-wrappers)
 	)
 	econf "${myeconfargs[@]}"
 }
