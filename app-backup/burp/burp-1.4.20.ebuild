@@ -4,7 +4,7 @@
 
 EAPI=5
 
-DESCRIPTION="Network backup and restore program"
+DESCRIPTION="Network backup and restore client and server for Unix and Windows"
 HOMEPAGE="http://burp.grke.org/"
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
 
@@ -17,6 +17,7 @@ DEPEND="
 	dev-libs/uthash
 	sys-libs/libcap
 	net-libs/librsync
+	sys-libs/ncurses
 	sys-libs/zlib
 	acl? ( sys-apps/acl )
 	afs? ( net-fs/openafs )
@@ -25,7 +26,11 @@ DEPEND="
 	tcpd? ( sys-apps/tcp-wrappers )
 	xattr? ( sys-apps/attr )
 	"
-RDEPEND="${DEPEND}"
+RDEPEND="${DEPEND}
+	virtual/logger
+	"
+
+DOCS=( CONTRIBUTORS DONATIONS UPGRADING )
 
 src_unpack() {
 	default
@@ -46,4 +51,42 @@ src_configure() {
 		$(use_with tcpd tcp-wrappers)
 	)
 	econf "${myeconfargs[@]}"
+}
+
+pkg_preinst() {
+	enewgroup burp
+	enewuser burp -1 -1 -1 burp
+}
+
+src_install() {
+	default
+
+	fowners root:burp /etc/burp /var/spool/burp
+	fperms 775 /etc/burp /var/spool/burp
+
+	if use ssl; then
+		# The server will create this directory if it doesn't exist, but the
+		# client won't.  It must be writable by both.
+		dodir /etc/burp/CA
+		fowners root:burp /etc/burp/CA
+		fperms 775 /etc/burp/CA
+	fi
+
+	newinitd "${FILESDIR}"/${PN}.initd ${PN}
+	dodoc docs/*
+
+	sed -i \
+		-e 's|^# user=graham|user = burp|' \
+		-e 's|^# group=nogroup|group = burp|' \
+		-e 's|^pidfile = .*|lockfile = /run/lock/burp-server.lock|'
+		"${D}"/etc/burp/burp-server.conf || die
+}
+
+pkg_postinst() {
+	if use ssl; then
+		einfo "Generating initial CA certificates and keys if necessary..."
+		# Set $HOME to a directory writable by the server process.  OpenSSL
+		# writes its "random state" file there while generating the certs/keys.
+		HOME=/var/spool/burp /usr/sbin/burp -F -g
+	fi
 }

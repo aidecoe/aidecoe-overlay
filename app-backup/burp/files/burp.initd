@@ -1,0 +1,44 @@
+#!/sbin/runscript
+# Copyright 1999-2014 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+PIDFILE=/run/burp-server.pid
+
+depend() {
+	need localmount
+	after bootmisc
+	use net
+}
+
+checkconfig() {
+	if [ ! -e /etc/burp/dhfile.pem ]; then
+		ebegin "Generating DH file"
+		/usr/sbin/burp_ca --dhfile /etc/burp/dhfile.pem
+		eend $? || return 1
+	fi
+	if [ ! -d /etc/burp/CA ]; then
+		ebegin "Generating key"
+		/usr/sbin/burp_ca --init --ca burpCA
+		eend $? || return 1
+	fi
+}
+
+start() {
+	#checkconfig || return 1
+
+	ebegin "Starting burp server"
+	start-stop-daemon --start \
+		--pidfile "$PIDFILE" \
+		--make-pidfile \
+		--background \
+		--exec /usr/sbin/burp -- -F
+	eend $? "Failed to start burp server"
+}
+
+stop() {
+	ebegin "Stopping burp server"
+	start-stop-daemon --stop \
+		--pidfile "$PIDFILE"
+	eend $? "Failed to stop burp server"
+}
