@@ -4,6 +4,8 @@
 
 EAPI=5
 
+inherit user
+
 DESCRIPTION="Network backup and restore client and server for Unix and Windows"
 HOMEPAGE="http://burp.grke.org/"
 SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
@@ -17,7 +19,7 @@ DEPEND="
 	dev-libs/uthash
 	sys-libs/libcap
 	net-libs/librsync
-	sys-libs/ncurses
+	sys-libs/ncurses[-tinfo]
 	sys-libs/zlib
 	acl? ( sys-apps/acl )
 	afs? ( net-fs/openafs )
@@ -31,6 +33,11 @@ RDEPEND="${DEPEND}
 	"
 
 DOCS=( CONTRIBUTORS DONATIONS UPGRADING )
+
+pkg_setup() {
+	enewgroup "${PN}"
+	enewuser "${PN}" -1 "" "" "${PN}"
+}
 
 src_unpack() {
 	default
@@ -53,11 +60,6 @@ src_configure() {
 	econf "${myeconfargs[@]}"
 }
 
-pkg_preinst() {
-	enewgroup burp
-	enewuser burp -1 -1 -1 burp
-}
-
 src_install() {
 	default
 
@@ -75,11 +77,10 @@ src_install() {
 	newinitd "${FILESDIR}"/${PN}.initd ${PN}
 	dodoc docs/*
 
-	sed -i \
-		-e 's|^# user=graham|user = burp|' \
+	sed -e 's|^# user=graham|user = burp|' \
 		-e 's|^# group=nogroup|group = burp|' \
-		-e 's|^pidfile = .*|lockfile = /run/lock/burp-server.lock|'
-		"${D}"/etc/burp/burp-server.conf || die
+		-e 's|^pidfile = .*|lockfile = /run/lock/burp-server.lock|' \
+		-i "${D}"/etc/burp/burp-server.conf || die
 }
 
 pkg_postinst() {

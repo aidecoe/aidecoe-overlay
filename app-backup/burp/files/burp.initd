@@ -11,28 +11,13 @@ depend() {
 	use net
 }
 
-checkconfig() {
-	if [ ! -e /etc/burp/dhfile.pem ]; then
-		ebegin "Generating DH file"
-		/usr/sbin/burp_ca --dhfile /etc/burp/dhfile.pem
-		eend $? || return 1
-	fi
-	if [ ! -d /etc/burp/CA ]; then
-		ebegin "Generating key"
-		/usr/sbin/burp_ca --init --ca burpCA
-		eend $? || return 1
-	fi
-}
-
 start() {
-	#checkconfig || return 1
-
 	ebegin "Starting burp server"
 	start-stop-daemon --start \
 		--pidfile "$PIDFILE" \
 		--make-pidfile \
 		--background \
-		--exec /usr/sbin/burp -- -F
+		--exec /usr/sbin/burp -- -c /etc/burp/burp-server.conf -F
 	eend $? "Failed to start burp server"
 }
 
