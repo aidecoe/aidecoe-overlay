@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit user
+inherit autotools eutils user
 
 DESCRIPTION="Network backup and restore client and server for Unix and Windows"
 HOMEPAGE="http://burp.grke.org/"
@@ -19,7 +19,7 @@ DEPEND="
 	dev-libs/uthash
 	sys-libs/libcap
 	net-libs/librsync
-	sys-libs/ncurses[-tinfo]
+	sys-libs/ncurses
 	sys-libs/zlib
 	acl? ( sys-apps/acl )
 	afs? ( net-fs/openafs )
@@ -33,6 +33,7 @@ RDEPEND="${DEPEND}
 	"
 
 DOCS=( CONTRIBUTORS DONATIONS UPGRADING )
+PATCHES=( ${FILESDIR}/${PV}-tinfo.patch )
 
 pkg_setup() {
 	enewgroup "${PN}"
@@ -42,6 +43,11 @@ pkg_setup() {
 src_unpack() {
 	default
 	mv burp "${P}" || die
+}
+
+src_prepare() {
+	epatch "${PATCHES[@]}"
+	eautoreconf
 }
 
 src_configure() {
