@@ -85,7 +85,7 @@ src_install() {
 
 	sed -e 's|^# user=graham|user = burp|' \
 		-e 's|^# group=nogroup|group = burp|' \
-		-e 's|^pidfile = .*|lockfile = /run/lock/burp-server.lock|' \
+		-e 's|^pidfile = .*|lockfile = /run/lock/burp/server.lock|' \
 		-i "${D}"/etc/burp/burp-server.conf || die
 }
 
@@ -94,6 +94,14 @@ pkg_postinst() {
 		einfo "Generating initial CA certificates and keys if necessary..."
 		# Set $HOME to a directory writable by the server process.  OpenSSL
 		# writes its "random state" file there while generating the certs/keys.
-		HOME=/var/spool/burp /usr/sbin/burp -F -g
+		if [ -d /run/lock/burp ]; then
+			mkdir -m 0775 /run/lock/burp \
+				|| ewarn 'Failed to create /run/lock/burp directory'
+		fi
+		chown burp:burp /run/lock/burp \
+			|| ewarn 'Failed to change owner of /run/lock/burp direcoty'
+		HOME=/var/spool/burp \
+			/usr/sbin/burp -c /etc/burp/burp-server.conf -F -g \
+			|| ewarn 'Failed to generate certificates for burp'
 	fi
 }

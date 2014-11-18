@@ -2,6 +2,13 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  18 Nov 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> burp-1.4.26.ebuild,
+  files/burp.initd:
+  Change location of a lock file to a writable 'burp' subdirectory. Create
+  /run/lock/burp before running burp-server.
+
+  Rels bug #411973. Thanks to Marcin Mirosław for pointing that out.
+
   16 Aug 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> burp-1.4.20.ebuild,
   +files/burp.initd:
   Ebuild improvements taken from Aurelien Reynaud's <aurelien@wattapower.net>
