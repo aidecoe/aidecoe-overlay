@@ -90,18 +90,20 @@ src_install() {
 }
 
 pkg_postinst() {
-	if use ssl; then
-		einfo "Generating initial CA certificates and keys if necessary..."
-		# Set $HOME to a directory writable by the server process.  OpenSSL
-		# writes its "random state" file there while generating the certs/keys.
-		if [ ! -d /run/lock/burp ]; then
-			mkdir -m 0775 /run/lock/burp \
-				|| ewarn 'Failed to create /run/lock/burp directory'
-		fi
-		chown burp:burp /run/lock/burp \
-			|| ewarn 'Failed to change owner of /run/lock/burp direcoty'
-		HOME=/var/spool/burp \
-			/usr/sbin/burp -c /etc/burp/burp-server.conf -F -g \
-			|| ewarn 'Failed to generate certificates for burp'
+	if use ssl && [ ! -e /etc/burp/CA/index.txt ]; then
+		elog "At first run burp will generate DH parameters and SSL "
+		elog "certificates.  You should adjust configuration before."
+		elog "Server configuration is located at"
+		elog ""
+		elog "  /etc/burp/burp-server.conf"
+		elog ""
+		elog "and client configuration is located at"
+		elog ""
+		elog "  /etc/burp/burp.conf"
+		elog ""
+		elog "To generate certificates without running burp server run"
+		elog ""
+		elog "  HOME=/var/spool/burp burp -c /etc/burp/burp-server.conf -F -g"
+		elog ""
 	fi
 }

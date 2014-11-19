@@ -2,6 +2,9 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  19 Nov 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> burp-1.4.26.ebuild:
+  Don't generate certificates in postinst phase. Print instructions instead.
+
   19 Nov 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> burp-1.4.26.ebuild,
   files/burp.initd:
   Use checkpath to set up directories. Make a cosmetic change in the ebuild.
