@@ -70,14 +70,14 @@ src_install() {
 	default
 
 	fowners root:burp /etc/burp /var/spool/burp
-	fperms 775 /etc/burp /var/spool/burp
+	fperms 0775 /etc/burp /var/spool/burp
 
 	if use ssl; then
 		# The server will create this directory if it doesn't exist, but the
 		# client won't.  It must be writable by both.
 		dodir /etc/burp/CA
 		fowners root:burp /etc/burp/CA
-		fperms 775 /etc/burp/CA
+		fperms 0775 /etc/burp/CA
 	fi
 
 	newinitd "${FILESDIR}"/${PN}.initd ${PN}

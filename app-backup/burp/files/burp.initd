@@ -13,10 +13,9 @@ depend() {
 
 start() {
 	ebegin "Starting burp server"
-	if [ ! -d /run/lock/burp ]; then
-		mkdir -m 0775 /run/lock/burp
-		chown burp:burp /run/lock/burp
-	fi
+	checkpath -o burp:burp -m 0775 -d /run/lock/burp
+	checkpath -o root:burp -m 0775 -d /etc/burp
+	checkpath -o root:burp -m 0775 -d /etc/burp/CA
 	start-stop-daemon --start \
 		--pidfile "$PIDFILE" \
 		--make-pidfile \
