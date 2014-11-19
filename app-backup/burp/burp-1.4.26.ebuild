@@ -94,7 +94,7 @@ pkg_postinst() {
 		einfo "Generating initial CA certificates and keys if necessary..."
 		# Set $HOME to a directory writable by the server process.  OpenSSL
 		# writes its "random state" file there while generating the certs/keys.
-		if [ -d /run/lock/burp ]; then
+		if [ ! -d /run/lock/burp ]; then
 			mkdir -m 0775 /run/lock/burp \
 				|| ewarn 'Failed to create /run/lock/burp directory'
 		fi
