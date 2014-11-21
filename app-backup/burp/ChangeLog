@@ -2,6 +2,10 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  21 Nov 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> burp-1.4.26.ebuild,
+  +files/1.4.26-bedup-conf-path.patch:
+  Apply patch changing default config path for bedup.
+
   19 Nov 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> burp-1.4.26.ebuild:
   Don't generate certificates in postinst phase. Print instructions instead.
 

@@ -33,7 +33,10 @@ RDEPEND="${DEPEND}
 	"
 
 DOCS=( CONTRIBUTORS DONATIONS UPGRADING )
-PATCHES=( ${FILESDIR}/${PV}-tinfo.patch )
+PATCHES=(
+	"${FILESDIR}/${PV}-bedup-conf-path.patch"
+	"${FILESDIR}/${PV}-tinfo.patch"
+	)
 
 pkg_setup() {
 	enewgroup "${PN}"
