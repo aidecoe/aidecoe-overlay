@@ -2,6 +2,13 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*burp-1.3.48 (22 Nov 2014)
+
+  22 Nov 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> +burp-1.3.48.ebuild,
+  +files/1.3.48-bedup-conf-path.patch, +files/1.3.48-tinfo.patch:
+  Add latest stable version of burp. 1.4.26 is a stable candidate as stated on
+  the homepage.
+
   21 Nov 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> burp-1.4.26.ebuild,
   +files/1.4.26-bedup-conf-path.patch:
   Apply patch changing default config path for bedup.
