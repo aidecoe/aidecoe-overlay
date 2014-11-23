@@ -2,6 +2,13 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*burp-1.3.8 (23 Nov 2014)
+
+  23 Nov 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> +burp-1.3.8.ebuild,
+  +files/1.3.8-bedup-conf-path.patch:
+  Add version 1.3.8 which is present in Debian Wheezy. This is in case someone
+  would like to backup to/from Debian. Burp warns if versions don't match.
+
 *burp-1.3.48 (22 Nov 2014)
 
   22 Nov 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> +burp-1.3.48.ebuild,
