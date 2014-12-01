@@ -2,6 +2,11 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  01 Dec 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> burp-1.3.8.ebuild,
+  burp-1.3.48.ebuild, burp-1.4.26.ebuild, files/burp.initd:
+  Limit access to files and directories which might store some secrets.
+  Shorten the postinst elog message about setting up certificates.
+
 *burp-1.3.8 (23 Nov 2014)
 
   23 Nov 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> +burp-1.3.8.ebuild,
