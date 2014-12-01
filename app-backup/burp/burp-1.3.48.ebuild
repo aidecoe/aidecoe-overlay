@@ -37,15 +37,11 @@ PATCHES=(
 	"${FILESDIR}/${PV}-bedup-conf-path.patch"
 	"${FILESDIR}/${PV}-tinfo.patch"
 	)
+S="${WORKDIR}/burp"
 
 pkg_setup() {
 	enewgroup "${PN}"
 	enewuser "${PN}" -1 "" "" "${PN}"
-}
-
-src_unpack() {
-	default
-	mv burp "${P}" || die
 }
 
 src_prepare() {

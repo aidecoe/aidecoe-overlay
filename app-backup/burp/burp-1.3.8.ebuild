@@ -34,15 +34,11 @@ RDEPEND="${DEPEND}
 
 DOCS=( CONTRIBUTORS DONATIONS UPGRADING )
 PATCHES=( "${FILESDIR}/${PV}-bedup-conf-path.patch" )
+S="${WORKDIR}/burp"
 
 pkg_setup() {
 	enewgroup "${PN}"
 	enewuser "${PN}" -1 "" "" "${PN}"
-}
-
-src_unpack() {
-	default
-	mv burp "${P}" || die
 }
 
 src_prepare() {

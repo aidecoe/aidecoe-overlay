@@ -3,6 +3,10 @@
 # $Header: $
 
   01 Dec 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> burp-1.3.8.ebuild,
+  burp-1.3.48.ebuild, burp-1.4.26.ebuild:
+  Fix QA issues. Use S variable instead of moving workdir.
+
+  01 Dec 2014; Amadeusz Żołnowski <aidecoe@gentoo.org> burp-1.3.8.ebuild,
   burp-1.3.48.ebuild, burp-1.4.26.ebuild, files/burp.initd:
   Limit access to files and directories which might store some secrets.
   Shorten the postinst elog message about setting up certificates.
