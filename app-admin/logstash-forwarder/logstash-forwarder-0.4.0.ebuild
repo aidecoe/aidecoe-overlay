@@ -26,6 +26,6 @@ pkg_setup() {
 src_install() {
 	dobin "${PN}"
 	dodoc "${PN}".conf.example CHANGELOG README.md
-	doconfd "${FILESDIR}/${PN}.confd" "${PN}"
-	doinitd "${FILESDIR}/${PN}.initd" "${PN}"
+	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
+	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
 }
