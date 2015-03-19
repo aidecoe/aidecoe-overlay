@@ -4,6 +4,8 @@
 
 EAPI=5
 
+inherit user
+
 DESCRIPTION="Collects logs locally in preparation for processing elsewhere"
 HOMEPAGE="https://github.com/elastic/logstash-forwarder"
 SRC_URI="https://github.com/elastic/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"

@@ -4,6 +4,10 @@
 
   19 Mar 2015; Amadeusz Żołnowski <aidecoe@gentoo.org>
   logstash-forwarder-0.4.0.ebuild:
+  Add missing eclass inheritance.
+
+  19 Mar 2015; Amadeusz Żołnowski <aidecoe@gentoo.org>
+  logstash-forwarder-0.4.0.ebuild:
   Rename initd script and confd file when installing.
 
   19 Mar 2015; Amadeusz Żołnowski <aidecoe@gentoo.org>
