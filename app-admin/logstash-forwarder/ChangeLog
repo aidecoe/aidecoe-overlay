@@ -3,6 +3,10 @@
 # $Header: $
 
   19 Mar 2015; Amadeusz Żołnowski <aidecoe@gentoo.org>
+  logstash-forwarder-0.4.0.ebuild:
+  Rename initd script and confd file when installing.
+
+  19 Mar 2015; Amadeusz Żołnowski <aidecoe@gentoo.org>
   logstash-forwarder-0.4.0.ebuild, +files/logstash-forwarder.confd,
   +files/logstash-forwarder.initd:
   Add initd script. Create user and group for logstash-forwarder.
