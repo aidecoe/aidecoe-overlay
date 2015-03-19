@@ -1,0 +1,22 @@
+#!/sbin/runscript
+# Copyright 1999-2015 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+start() {
+	local config_file=/etc/logstash-forwarder/logstash-forwarder.conf
+
+	ebegin "Starting logstash-forwarder"
+   	start-stop-daemon --start --exec /usr/bin/logstash-forwarder \
+		--make-pidfile --pidfile /run/logstash-forwarder.pid --background \
+		--user logstash --group logstash \
+		-- -config="${config_file}" ${LOGSTASH_FORWARDER_ARGS}
+	eend $*
+}
+
+stop() {
+	ebegin "Stopping logstash-forwarder"
+	start-stop-daemon --stop --exec /usr/bin/logstash-forwarder \
+		--pidfile /run/logstash-forwarder.pid --user logstash --group logstash
+	eend $*
+}

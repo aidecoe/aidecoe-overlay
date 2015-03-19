@@ -2,6 +2,11 @@
 # Copyright 1999-2015 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  19 Mar 2015; Amadeusz Żołnowski <aidecoe@gentoo.org>
+  logstash-forwarder-0.4.0.ebuild, +files/logstash-forwarder.confd,
+  +files/logstash-forwarder.initd:
+  Add initd script. Create user and group for logstash-forwarder.
+
 *logstash-forwarder-0.4.0 (19 Mar 2015)
 
   19 Mar 2015; Amadeusz Żołnowski <aidecoe@gentoo.org>

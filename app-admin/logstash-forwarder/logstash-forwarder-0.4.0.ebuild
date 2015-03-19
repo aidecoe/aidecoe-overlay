@@ -16,7 +16,14 @@ IUSE=""
 DEPEND="dev-lang/go"
 RDEPEND="${DEPEND}"
 
+pkg_setup() {
+	enewgroup logstash
+	enewuser logstash -1 -1 -1 logstash
+}
+
 src_install() {
 	dobin "${PN}"
 	dodoc "${PN}".conf.example CHANGELOG README.md
+	doconfd "${FILESDIR}/${PN}.confd"
+	doinitd "${FILESDIR}/${PN}.initd"
 }
