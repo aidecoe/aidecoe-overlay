@@ -3,6 +3,10 @@
 # $Header: $
 
   20 Mar 2015; Amadeusz Żołnowski <aidecoe@gentoo.org>
+  logstash-forwarder-0.4.0.ebuild:
+  Create config directory and inform user about required configuration.
+
+  20 Mar 2015; Amadeusz Żołnowski <aidecoe@gentoo.org>
   files/logstash-forwarder.initd:
   Fix and improve initd script.
 

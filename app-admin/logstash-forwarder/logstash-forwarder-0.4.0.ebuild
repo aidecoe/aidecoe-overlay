@@ -25,7 +25,18 @@ pkg_setup() {
 
 src_install() {
 	dobin "${PN}"
+	dodir "/etc/${PN}"
 	dodoc "${PN}".conf.example CHANGELOG README.md
 	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
 	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
+}
+
+pkg_postinst() {
+	if ! [[ -e /etc/${PN}/${PN}.conf ]]; then
+		elog "Before starting logstash-forwarder create config file at"
+		elog
+		elog "  /etc/${PN}/${PN}.conf"
+		elog
+		elog "See example in /usr/share/doc/${PVR} directory."
+	fi
 }
