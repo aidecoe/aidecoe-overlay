@@ -37,6 +37,8 @@ pkg_postinst() {
 		elog
 		elog "  /etc/${PN}/${PN}.conf"
 		elog
-		elog "See example in /usr/share/doc/${PVR} directory."
+		elog "See example in /usr/share/doc/${PVR} directory. You can remove"
+		elog "-quiet from logstash-forward arguments in /etc/conf.d/${PN} to"
+		elog "until you get working configuration. Search syslog for errors."
 	fi
 }
