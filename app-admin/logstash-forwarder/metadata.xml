@@ -6,5 +6,10 @@
 		<name>Amadeusz Żołnowski</name>
 	</maintainer>
 	<longdescription lang="en">
+		logstash-forwarder is a lightweight replacement for logstash when you
+		only need to collect logs locally in preparation for processing
+		elsewhere.  It is written in Go and uses not much memory.  For
+		transmission lumberjack protocol is used.  It is is secure, low
+		latency, low resource usage, and reliable.
 	</longdescription>
 </pkgmetadata>
