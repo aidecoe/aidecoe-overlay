@@ -1,6 +1,9 @@
 # ChangeLog for mail-client/alot
-# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2015 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  15 Aug 2015; Amadeusz Żołnowski <aidecoe@gentoo.org> alot-9999.ebuild:
+  Sync live ebuild with the one in main Gentoo repository.
 
   01 Aug 2012; Amadeusz Żołnowski <aidecoe@gentoo.org> alot-9999.ebuild:
   Depends on pygpgme instead of pyme. Adding encoding header for all .py files
