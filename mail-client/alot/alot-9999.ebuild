@@ -1,6 +1,6 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -23,11 +23,12 @@ DEPEND="
 RDEPEND="
 	>=dev-python/configobj-4.6.0[${PYTHON_USEDEP}]
 	dev-python/pygpgme[${PYTHON_USEDEP}]
+	dev-python/python-magic[${PYTHON_USEDEP}]
 	>=dev-python/twisted-core-10.2.0
 	>=dev-python/urwid-1.1.0[${PYTHON_USEDEP}]
+	>=dev-python/urwidtrees-1.0[${PYTHON_USEDEP}]
 	net-mail/mailbase
 	>=net-mail/notmuch-0.13[crypt,python]
-	sys-apps/file[python]
 	"
 
 ALOT_UPDATE=""
