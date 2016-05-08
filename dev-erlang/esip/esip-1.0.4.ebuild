@@ -1,0 +1,27 @@
+# Copyright 1999-2016 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Id$
+
+EAPI=5
+
+inherit rebar
+
+DESCRIPTION="ProcessOne SIP server component"
+HOMEPAGE="https://github.com/processone/esip"
+SRC_URI="https://github.com/processone/${PN}/archive/${PV}.tar.gz
+	-> ${P}.tar.gz"
+
+LICENSE="GPL-2"
+SLOT="0"
+KEYWORDS="~amd64 ~x86"
+
+DEPEND=">=dev-erlang/fast_tls-1.0.0
+	>=dev-erlang/stun-1.0.0
+	>=dev-erlang/p1_utils-1.0.2
+	>=dev-lang/erlang-17.1"
+RDEPEND="${DEPEND}"
+
+src_prepare() {
+	rebar_src_prepare
+	rebar_fix_include_path stun
+}
