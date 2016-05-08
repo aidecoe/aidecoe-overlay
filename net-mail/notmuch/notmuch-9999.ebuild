@@ -1,60 +1,63 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
 DISTUTILS_OPTIONAL=1
-PYTHON_COMPAT=( python{2_6,2_7,3_2,3_3} )
+PYTHON_COMPAT=( python{2_7,3_3,3_4} )
 
-inherit elisp-common pax-utils distutils-r1 git-2
+inherit bash-completion-r1 elisp-common eutils flag-o-matic pax-utils \
+	distutils-r1 toolchain-funcs git-2
 
 DESCRIPTION="Thread-based e-mail indexer, supporting quick search and tagging"
 HOMEPAGE="http://notmuchmail.org/"
 EGIT_REPO_URI="git://git.notmuchmail.org/git/notmuch"
 
 LICENSE="GPL-3"
-SLOT="0"
+# Sub-slot corresponds to major wersion of libnotmuch.so.X.Y.  Bump of Y is
+# meant to be binary backward compatible.
+SLOT="0/4"
 KEYWORDS=""
 REQUIRED_USE="
-	pick? ( emacs )
+	nmbug? ( python )
 	python? ( ${PYTHON_REQUIRED_USE} )
-	test? ( crypt emacs python )
+	test? ( crypt debug emacs python )
 	"
-IUSE="bash-completion crypt debug doc emacs mutt nmbug pick python test
-	zsh-completion"
+IUSE="crypt debug doc emacs mutt nmbug python test"
 
 CDEPEND="
-	>=dev-libs/glib-2.22
-	>=dev-libs/gmime-2.6.7
-	dev-libs/xapian
+	>=app-shells/bash-completion-1.9
+	>=dev-libs/glib-2.22:2
+	>=dev-libs/gmime-2.6.20:2.6
+	>=dev-libs/xapian-1.2.7-r2:=
+	dev-python/sphinx[${PYTHON_USEDEP}]
+	>=sys-libs/zlib-1.2.5.2
 	sys-libs/talloc
 	debug? ( dev-util/valgrind )
 	emacs? ( >=virtual/emacs-23 )
 	python? ( ${PYTHON_DEPS} )
-	x86? ( >=dev-libs/xapian-1.2.7-r2 )
 	"
 DEPEND="${CDEPEND}
 	virtual/pkgconfig
-	doc? ( python? ( dev-python/sphinx[${PYTHON_USEDEP}] ) )
+	doc? ( app-doc/doxygen )
 	test? ( app-misc/dtach || ( >=app-editors/emacs-23[libxml2]
 		>=app-editors/emacs-vcs-23[libxml2] ) sys-devel/gdb )
 	"
 RDEPEND="${CDEPEND}
 	crypt? ( app-crypt/gnupg )
-	nmbug? ( dev-vcs/git virtual/perl-File-Temp virtual/perl-PodParser )
+	nmbug? ( dev-vcs/git )
 	mutt? ( dev-perl/File-Which dev-perl/Mail-Box dev-perl/MailTools
 		dev-perl/String-ShellQuote dev-perl/Term-ReadLine-Gnu
 		virtual/perl-Digest-SHA virtual/perl-File-Path virtual/perl-Getopt-Long
-		virtual/perl-PodParser
+		virtual/perl-Pod-Parser
 		)
-	zsh-completion? ( app-shells/zsh )
 	"
 
 DOCS=( AUTHORS NEWS README )
 SITEFILE="50${PN}-gentoo.el"
-SITEFILE_PICK="60${PN}-pick-gentoo.el"
 MY_LD_LIBRARY_PATH="${WORKDIR}/${P}/lib"
+MY_PATCHES=( )
 
 bindings() {
 	local ret=0
@@ -77,29 +80,35 @@ pkg_setup() {
 }
 
 src_prepare() {
-	default
+	[[ "${MY_PATCHES[@]}" ]] && epatch "${MY_PATCHES[@]}"
+
 	bindings python distutils-r1_src_prepare
 	bindings python mv README README-python || die
 	mv contrib/notmuch-mutt/README contrib/notmuch-mutt/README-mutt || die
-	mv contrib/notmuch-pick/README contrib/notmuch-pick/README-pick || die
+
+	rm -f Makefile.config # assure that new Makefile.config will be generated
+
+	if use debug; then
+		append-cflags -g
+		append-cxxflags -g
+	fi
 }
 
 src_configure() {
 	local myeconfargs=(
-		--bashcompletiondir="${ROOT}/usr/share/bash-completion"
-		--emacslispdir="${ROOT}/${SITELISP}/${PN}"
-		--emacsetcdir="${ROOT}/${SITEETC}/${PN}"
-		--with-gmime-version=2.6
-		--zshcompletiondir="${ROOT}/usr/share/zsh/site-functions"
-		$(use_with bash-completion)
+		--bashcompletiondir="$(get_bashcompdir)"
+		--emacslispdir="${EPREFIX}/${SITELISP}/${PN}"
+		--emacsetcdir="${EPREFIX}/${SITEETC}/${PN}"
+		--without-ruby
+		--zshcompletiondir="${EPREFIX}/usr/share/zsh/site-functions"
 		$(use_with emacs)
-		$(use_with zsh-completion)
 	)
+	tc-export CC CXX
 	econf "${myeconfargs[@]}"
 }
 
 src_compile() {
-	default
+	V=1 default
 	bindings python distutils-r1_src_compile
 
 	if use mutt; then
@@ -121,6 +130,7 @@ src_compile() {
 
 src_test() {
 	pax-mark -m notmuch
+	emake download-test-databases
 	LD_LIBRARY_PATH="${MY_LD_LIBRARY_PATH}" default
 	pax-mark -ze notmuch
 }
@@ -130,22 +140,14 @@ src_install() {
 
 	if use emacs; then
 		elisp-site-file-install "${FILESDIR}/${SITEFILE}" || die
-
-		if use pick; then
-			pushd contrib/notmuch-pick || die
-			elisp-install "${PN}" notmuch-pick.el || die
-			dodoc README-pick
-			popd || die
-			elisp-site-file-install "${FILESDIR}/${SITEFILE_PICK}" || die
-		fi
 	fi
 
 	if use nmbug; then
 		dobin devel/nmbug/nmbug
+		dobin devel/nmbug/notmuch-report
 	fi
 
 	if use mutt; then
-		[[ -e /etc/mutt/notmuch-mutt.rc ]] && NOTMUCH_MUTT_RC_EXISTS=1
 		pushd contrib/notmuch-mutt || die
 		dobin notmuch-mutt
 		doman notmuch-mutt.1
@@ -159,15 +161,17 @@ src_install() {
 	use doc && bindings python dohtml -r python
 }
 
-pkg_postinst() {
-	use emacs && elisp-site-regen
-
-	if use mutt && [[ ! ${NOTMUCH_MUTT_RC_EXISTS} ]]; then
+pkg_preinst() {
+	if use mutt && ! [[ -e ${ROOT}/etc/mutt/notmuch-mutt.rc ]]; then
 		elog "To enable notmuch support in mutt, add the following line into"
 		elog "your mutt config file, please:"
 		elog ""
 		elog "  source /etc/mutt/notmuch-mutt.rc"
 	fi
+}
+
+pkg_postinst() {
+	use emacs && elisp-site-regen
 }
 
 pkg_postrm() {
