@@ -1,13 +1,13 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI=4
+EAPI=5
 
 inherit bash-completion-r1 eutils linux-info multilib systemd git-2
 
 DESCRIPTION="Generic initramfs generation tool"
-HOMEPAGE="http://dracut.wiki.kernel.org"
+HOMEPAGE="https://dracut.wiki.kernel.org"
 EGIT_REPO_URI="git://git.kernel.org/pub/scm/boot/${PN}/${PN}.git"
 LICENSE="GPL-2"
 SLOT="0"
@@ -18,17 +18,24 @@ RESTRICT="test"
 
 CDEPEND="virtual/udev
 	systemd? ( >=sys-apps/systemd-199 )
-	selinux? ( sec-policy/selinux-dracut )
 	"
 RDEPEND="${CDEPEND}
 	app-arch/cpio
 	>=app-shells/bash-4.0
 	>sys-apps/kmod-5[tools]
-	|| ( >=sys-apps/sysvinit-2.87-r3 sys-apps/systemd-sysv-utils )
+	|| (
+		>=sys-apps/sysvinit-2.87-r3
+		sys-apps/systemd[sysv-utils]
+		sys-apps/systemd-sysv-utils
+	)
 	>=sys-apps/util-linux-2.21
 
 	debug? ( dev-util/strace )
-	selinux? ( sys-libs/libselinux sys-libs/libsepol )
+	selinux? (
+		sys-libs/libselinux
+		sys-libs/libsepol
+		sec-policy/selinux-dracut
+	)
 	"
 DEPEND="${CDEPEND}
 	app-text/asciidoc
@@ -41,12 +48,10 @@ DEPEND="${CDEPEND}
 DOCS=( AUTHORS HACKING NEWS README README.generic README.kernel README.modules
 	README.testsuite TODO )
 MY_LIBDIR=/usr/lib
-PATCHES=(
-	"${FILESDIR}/${PV}-0001-dracut-functions.sh-support-for-altern.patch"
-	"${FILESDIR}/${PV}-0002-gentoo.conf-let-udevdir-be-handled-by-.patch"
-	"${FILESDIR}/${PV}-0003-Use-the-same-paths-in-dracut.sh-as-tho.patch"
-	"${FILESDIR}/${PV}-0004-Install-dracut-install-into-libexec-di.patch"
-	)
+QA_MULTILIB_PATHS="
+	usr/lib/dracut/dracut-install
+	usr/lib/dracut/skipcpio
+	"
 
 #
 # Helper functions
@@ -68,29 +73,12 @@ rm_module() {
 	done
 }
 
-# Grabbed from net-misc/netctl ebuild.
-optfeature() {
-	local desc=$1
-	shift
-	while (( $# )); do
-		if has_version "$1"; then
-			elog "  [I] $1 to ${desc}"
-		else
-			elog "  [ ] $1 to ${desc}"
-		fi
-		shift
-	done
-}
-
-#
-# ebuild functions
-#
-
 src_prepare() {
-	epatch "${PATCHES[@]}"
-
 	local libdirs="/$(get_libdir) /usr/$(get_libdir)"
-	[[ $libdirs =~ /lib\  ]] || libdirs+=" /lib /usr/lib"
+	if [[ ${SYMLINK_LIB} = yes ]]; then
+		# Preserve lib -> lib64 symlinks in initramfs
+		[[ $libdirs =~ /lib\  ]] || libdirs+=" /lib /usr/lib"
+	fi
 	einfo "Setting libdirs to \"${libdirs}\" ..."
 	sed -e "3alibdirs=\"${libdirs}\"" \
 		-i "${S}/dracut.conf.d/gentoo.conf.example" || die
@@ -140,7 +128,7 @@ src_configure() {
 
 src_compile() {
 	tc-export CC
-	emake doc install/dracut-install
+	emake doc install/dracut-install skipcpio/skipcpio
 }
 
 src_install() {
@@ -161,6 +149,11 @@ src_install() {
 
 	dohtml dracut.html
 
+	if ! use systemd; then
+		# Scripts in kernel/install.d are systemd-specific
+		rm -r "${D%/}/${my_libdir}/kernel" || die
+	fi
+
 	#
 	# Modules
 	#
@@ -174,9 +167,9 @@ src_install() {
 		# With systemd following modules do not make sense
 		rm_module 96securityfs 97masterkey 98integrity
 	else
-		rm_module 98systemd
+		rm_module 00systemd 98dracut-systemd
 		# Without systemd following modules do not make sense
-		rm_module 00systemd-bootchart
+		rm_module 00systemd-bootchart 01systemd-initrd 02systemd-networkd
 	fi
 
 	# Remove modules which won't work for sure
@@ -186,7 +179,7 @@ src_install() {
 }
 
 pkg_postinst() {
-	if linux-info_get_any_version && linux_config_src_exists; then
+	if linux-info_get_any_version && linux_config_exists; then
 		ewarn ""
 		ewarn "If the following test report contains a missing kernel"
 		ewarn "configuration option, you should reconfigure and rebuild your"
@@ -230,13 +223,13 @@ pkg_postinst() {
 		sys-apps/iproute2
 	optfeature \
 		"Measure performance of the boot process for later visualisation" \
-		app-benchmarks/bootchart2 sys-apps/usleep sys-process/acct
+		app-benchmarks/bootchart2 app-admin/killproc sys-process/acct
 	optfeature "Scan for Btrfs on block devices"  sys-fs/btrfs-progs
 	optfeature "Load kernel modules and drop this privilege for real init" \
 		sys-libs/libcap
 	optfeature "Support CIFS" net-fs/cifs-utils
 	optfeature "Decrypt devices encrypted with cryptsetup/LUKS" \
-		sys-fs/cryptsetup
+		"sys-fs/cryptsetup[-static-libs]"
 	optfeature "Support for GPG-encrypted keys for crypt module" \
 		app-crypt/gnupg
 	optfeature \
@@ -249,12 +242,12 @@ pkg_postinst() {
 	optfeature "Support MD devices, also known as software RAID devices" \
 		sys-fs/mdadm
 	optfeature "Support Device Mapper multipathing" sys-fs/multipath-tools
-	optfeature "Plymouth boot splash" sys-boot/plymouth
+	optfeature "Plymouth boot splash"  '>=sys-boot/plymouth-0.8.5-r5'
 	optfeature "Support network block devices" sys-block/nbd
 	optfeature "Support NFS" net-fs/nfs-utils net-nds/rpcbind
 	optfeature \
 		"Install ssh and scp along with config files and specified keys" \
-		dev-libs/openssl
+		net-misc/openssh
 	optfeature "Enable logging with syslog-ng or rsyslog" app-admin/syslog-ng \
 		app-admin/rsyslog
 }
