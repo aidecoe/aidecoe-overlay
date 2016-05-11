@@ -17,14 +17,16 @@ KEYWORDS="~amd64 ~x86"
 REQUIRED_USE="mssql? ( odbc )"
 # TODO: Add 'tools' flag.
 IUSE="captcha debug full-xml hipe ldap mssql mysql nls odbc pam postgres redis
-	riak roster-gw sqlite test zlib"
+	riak roster-gw sqlite zlib"
+
+RESTRICT="test"
 
 # TODO: Add dependencies for 'tools' flag enabled.
 # TODO: tools? (
 # TODO: 	>=dev-erlang/meck-0.8.4
 # TODO: 	>=dev-erlang/moka-1.0.5b
 # TODO: )
-CDEPEND=">=dev-erlang/lager-3.0.2
+DEPEND=">=dev-erlang/lager-3.0.2
 	>=dev-erlang/p1_utils-1.0.4
 	>=dev-erlang/cache_tab-1.0.2
 	>=dev-erlang/fast_tls-1.0.3
@@ -52,13 +54,7 @@ CDEPEND=">=dev-erlang/lager-3.0.2
 	)
 	sqlite? ( >=dev-erlang/sqlite3-1.1.5 )
 	zlib? ( >=dev-erlang/ezlib-1.0.1 )"
-
-DEPEND="${CDEPEND}
-	test? (
-		>=dev-lang/elixir-1.1.1
-		>=dev-erlang/rebar_elixir_plugin-0.1.0
-	)"
-RDEPEND="${CDEPEND}
+RDEPEND="${DEPEND}
 	captcha? ( media-gfx/imagemagick[truetype,png] )"
 
 # Paths in net-im/jabber-base
@@ -109,7 +105,6 @@ src_configure() {
 		$(use_enable zlib) \
 		$(use_enable riak) \
 		$(use_enable redis) \
-		$(use_enable test elixir) \
 		$(use_enable nls iconv) \
 		$(use_enable debug) \
 		--enable-user=jabber
