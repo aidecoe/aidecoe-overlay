@@ -89,12 +89,26 @@ set_jabberbase_paths() {
 		|| die 'failed to set paths ejabberdctl.template'
 }
 
+skip_docs() {
+	awk_i "${S}/Makefile.in" \
+		'/# Documentation/, /^[[:space:]]*#?[[:space:]]*$/ {
+	if ($0 ~ /^[[:space:]]*#?[[:space:]]*$/) {
+		print $0;
+	} else {
+		next;
+	}
+}
+1
+' || die 'failed to remove docs section from Makefile.in'
+}
+
 src_prepare() {
 	epatch "${FILESDIR}/${P}-ejabberdctl.patch"
 
 	rebar_remove_deps
 	correct_ejabberd_paths
 	set_jabberbase_paths
+	skip_docs
 
 	# Use our sample certificates.
 	# Correct PAM service name.
