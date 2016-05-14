@@ -4,6 +4,8 @@
 
 EAPI=5
 
+SSL_CERT_MANDATORY=1
+
 inherit eutils pam rebar ssl-cert systemd
 
 DESCRIPTION="Robust, Scalable and Extensible XMPP Server"
