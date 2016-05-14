@@ -62,6 +62,18 @@ JABBER_ETC="${EPREFIX}/etc/jabber"
 JABBER_LOG="${EPREFIX}/var/log/jabber"
 JABBER_SPOOL="${EPREFIX}/var/spool/jabber"
 
+# Adjust example configuration file to Gentoo.
+# - Use our sample certificates.
+# - Correct PAM service name.
+adjust_config() {
+	sed -e "s|/path/to/ssl.pem|/etc/ssl/ejabberd/server.pem|g" \
+		-e "s|pamservicename|xmpp|" \
+		-i "${S}/ejabberd.yml.example" \
+		|| die 'failed to adjust example config'
+}
+
+# Set paths to ejabberd lib directory consistently to point always to directory
+# suffixed with version.
 correct_ejabberd_paths() {
 	sed -e "/^EJABBERDDIR[[:space:]]*=/{s:ejabberd:${P}:}" \
 		-i "${S}/Makefile.in" \
@@ -69,14 +81,18 @@ correct_ejabberd_paths() {
 	sed -e "/EJABBERD_BIN_PATH=/{s:ejabberd:${P}:}" \
 		-i "${S}/ejabberdctl.template" \
 		|| die 'failed to set ejabberd path in ejabberdctl.template'
+	sed -e 's|\({captcha_cmd,[[:space:]]*"\).\+"}|\1'$(get_ejabberd_path)'/priv/bin/captcha.sh"}|' \
+		-i "${S}/ejabberd.yml.example" \
+		|| die 'failed to correct path to captcha.sh in example config'
 }
 
+# Get path to ejabberd lib directory.
 get_ejabberd_path() {
 	echo "$(get_erl_libs)/${P}"
 }
 
+# Set paths to defined by net-im/jabber-base.
 set_jabberbase_paths() {
-	# Set paths to defined by net-im/jabber-base.
 	sed -e "/^ETCDIR[[:space:]]*=/{s:@sysconfdir@/ejabberd:${JABBER_ETC}:}" \
 		-e "/^LOGDIR[[:space:]]*=/{s:@localstatedir@/log/ejabberd:${JABBER_LOG}:}" \
 		-e "/^SPOOLDIR[[:space:]]*=/{s:@localstatedir@/lib/ejabberd:${JABBER_SPOOL}:}" \
@@ -89,6 +105,7 @@ set_jabberbase_paths() {
 		|| die 'failed to set paths ejabberdctl.template'
 }
 
+# Skip installing docs because it's only COPYING that's installed by Makefile.
 skip_docs() {
 	awk_i "${S}/Makefile.in" \
 		'/# Documentation/, /^[[:space:]]*#?[[:space:]]*$/ {
@@ -109,15 +126,7 @@ src_prepare() {
 	correct_ejabberd_paths
 	set_jabberbase_paths
 	skip_docs
-
-	# Use our sample certificates.
-	# Correct PAM service name.
-	# Correct path to captcha script in example ejabberd.yml.
-	sed -e "s|/path/to/ssl.pem|/etc/ssl/ejabberd/server.pem|g" \
-		-e "s|pamservicename|xmpp|" \
-		-e 's|\({captcha_cmd,[[:space:]]*"\).\+"}|\1'$(get_ejabberd_path)'/priv/bin/captcha.sh"}|' \
-		-i "${S}/ejabberd.yml.example" \
-		|| die 'failed to correct example config'
+	adjust_config
 
 	epatch_user
 }
