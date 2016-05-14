@@ -62,30 +62,48 @@ JABBER_ETC="${EPREFIX}/etc/jabber"
 JABBER_LOG="${EPREFIX}/var/log/jabber"
 JABBER_SPOOL="${EPREFIX}/var/spool/jabber"
 
+correct_ejabberd_paths() {
+	sed -e "/^EJABBERDDIR[[:space:]]*=/{s:ejabberd:${P}:}" \
+		-i "${S}/Makefile.in" \
+		|| die 'failed to set ejabberd path in Makefile.in'
+	sed -e "/EJABBERD_BIN_PATH=/{s:ejabberd:${P}:}" \
+		-i "${S}/ejabberdctl.template" \
+		|| die 'failed to set ejabberd path in ejabberdctl.template'
+}
+
+get_ejabberd_path() {
+	echo "$(get_erl_libs)/${P}"
+}
+
+set_jabberbase_paths() {
+	# Set paths to defined by net-im/jabber-base.
+	sed -e "/^ETCDIR[[:space:]]*=/{s:@sysconfdir@/ejabberd:${JABBER_ETC}:}" \
+		-e "/^LOGDIR[[:space:]]*=/{s:@localstatedir@/log/ejabberd:${JABBER_LOG}:}" \
+		-e "/^SPOOLDIR[[:space:]]*=/{s:@localstatedir@/lib/ejabberd:${JABBER_SPOOL}:}" \
+		-i "${S}/Makefile.in" \
+		|| die 'failed to set paths in Makefile.in'
+	sed -e "s|\(ETC_DIR=\){{sysconfdir}}.*|\1${JABBER_ETC}|" \
+		-e "s|\(LOGS_DIR=\){{localstatedir}}.*|\1${JABBER_LOG}|" \
+		-e "s|\(SPOOL_DIR=\){{localstatedir}}.*|\1${JABBER_SPOOL}|" \
+		-i "${S}/ejabberdctl.template" \
+		|| die 'failed to set paths ejabberdctl.template'
+}
+
 src_prepare() {
 	epatch "${FILESDIR}/${P}-ejabberdctl.patch"
 
 	rebar_remove_deps
-
-	# Set paths to defined by net-im/jabber-base.
-	sed -e "/^EJABBERDDIR[[:space:]]*=/{s:ejabberd:${PF}:}" \
-		-e "/^ETCDIR[[:space:]]*=/{s:@sysconfdir@/ejabberd:${JABBER_ETC}:}" \
-		-e "/^LOGDIR[[:space:]]*=/{s:@localstatedir@/log/ejabberd:${JABBER_LOG}:}" \
-		-e "/^SPOOLDIR[[:space:]]*=/{s:@localstatedir@/lib/ejabberd:${JABBER_SPOOL}:}" \
-		-i Makefile.in || die
-	sed -e "/EJABBERDDIR=/{s:ejabberd:${PF}:}" \
-		-e "s|\(ETC_DIR=\){{sysconfdir}}.*|\1${JABBER_ETC}|" \
-		-e "s|\(LOGS_DIR=\){{localstatedir}}.*|\1${JABBER_LOG}|" \
-		-e "s|\(SPOOL_DIR=\){{localstatedir}}.*|\1${JABBER_SPOOL}|" \
-		-i ejabberdctl.template || die
+	correct_ejabberd_paths
+	set_jabberbase_paths
 
 	# Use our sample certificates.
 	# Correct PAM service name.
 	# Correct path to captcha script in example ejabberd.yml.
 	sed -e "s|/path/to/ssl.pem|/etc/ssl/ejabberd/server.pem|g" \
 		-e "s|pamservicename|xmpp|" \
-		-e 's|\({captcha_cmd,[[:space:]]*"\).\+"}|\1/usr/'$(get_erl_libs)'/'${P}'/priv/bin/captcha.sh"}|' \
-		-i ejabberd.yml.example || die
+		-e 's|\({captcha_cmd,[[:space:]]*"\).\+"}|\1'$(get_ejabberd_path)'/priv/bin/captcha.sh"}|' \
+		-i "${S}/ejabberd.yml.example" \
+		|| die 'failed to correct example config'
 
 	epatch_user
 }
@@ -93,6 +111,7 @@ src_prepare() {
 src_configure() {
 	econf \
 		--docdir="${EPREFIX}/usr/share/doc/${PF}/html" \
+		--libdir="${EPREFIX}$(get_erl_libs)" \
 		$(use_enable hipe) \
 		$(use_enable roster-gw roster-gateway-workaround) \
 		$(use_enable full-xml) \
@@ -122,7 +141,7 @@ src_install() {
 		# https://www.process-one.net/docs/ejabberd/guide_en.html#pam
 		pamd_mimic_system xmpp auth account || die "cannot create pam.d file"
 		install -D -m 4750 -g jabber \
-			-t "${ED}$(get_erl_libs)/${PF}/priv/bin/" \
+			-t "${ED}$(get_ejabberd_path)/priv/bin/" \
 			"${EPREFIX}$(get_erl_libs)"/p1_pam-*/priv/bin/epam \
 			|| die "failed to copy epam bin from p1_pam"
 	fi
