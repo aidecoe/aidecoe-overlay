@@ -88,6 +88,19 @@ correct_ejabberd_paths() {
 		|| die 'failed to correct path to captcha.sh in example config'
 }
 
+# Get epam-wrapper from 'files' directory and correct path to lib directory in
+# it. epam-wrapper is placed into work directory. It is assumed no epam-wrapper
+# file exists there already.
+customize_epam_wrapper() {
+	local epam_wrapper_src="$1"
+	local epam_wrapper_dst="${S}/epam-wrapper"
+
+	[[ -e ${epam_wrapper_dst} ]] && die 'epam-wrapper already exists'
+	sed -r -e "s@^(ERL_LIBS=).*\$@\1${EPREFIX}$(get_erl_libs)@" \
+		"${epam_wrapper_src}" >"${epam_wrapper_dst}" \
+		|| die 'failed to install epam-wrapper'
+}
+
 # Get path to ejabberd lib directory.
 get_ejabberd_path() {
 	echo "$(get_erl_libs)/${P}"
@@ -129,6 +142,7 @@ src_prepare() {
 	set_jabberbase_paths
 	skip_docs
 	adjust_config
+	customize_epam_wrapper "${FILESDIR}/epam-wrapper"
 
 	epatch_user
 }
@@ -162,13 +176,15 @@ src_install() {
 	default
 
 	if use pam; then
+		local epam_path="$(get_ejabberd_path)/priv/bin/epam"
+
+		pamd_mimic_system xmpp auth account || die "cannot create pam.d file"
+		into "$(get_ejabberd_path)/priv"
+		newbin epam-wrapper epam
 		# PAM helper module permissions
 		# https://www.process-one.net/docs/ejabberd/guide_en.html#pam
-		pamd_mimic_system xmpp auth account || die "cannot create pam.d file"
-		install -D -m 4750 -g jabber \
-			-t "${ED}$(get_ejabberd_path)/priv/bin/" \
-			"${EPREFIX}$(get_erl_libs)"/p1_pam-*/priv/bin/epam \
-			|| die "failed to copy epam bin from p1_pam"
+		fperms 4750 "${epam_path}"
+		fowners root:jabber "${epam_path}"
 	fi
 
 	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
