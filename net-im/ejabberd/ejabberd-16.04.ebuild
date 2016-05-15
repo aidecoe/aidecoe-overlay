@@ -8,7 +8,7 @@ SSL_CERT_MANDATORY=1
 
 inherit eutils pam rebar ssl-cert systemd
 
-DESCRIPTION="Robust, Scalable and Extensible XMPP Server"
+DESCRIPTION="Robust, scalable and extensible XMPP server"
 HOMEPAGE="http://www.ejabberd.im/ https://github.com/processone/ejabberd/"
 SRC_URI="http://www.process-one.net/downloads/${PN}/${PV}/${P}.tgz
 	-> ${P}.tar.gz"
