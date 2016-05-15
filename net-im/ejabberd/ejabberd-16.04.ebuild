@@ -28,19 +28,20 @@ RESTRICT="test"
 # TODO: 	>=dev-erlang/meck-0.8.4
 # TODO: 	>=dev-erlang/moka-1.0.5b
 # TODO: )
-DEPEND=">=dev-erlang/lager-3.0.2
-	>=dev-erlang/p1_utils-1.0.4
+DEPEND="
 	>=dev-erlang/cache_tab-1.0.2
-	>=dev-erlang/fast_tls-1.0.3
-	>=dev-erlang/stringprep-1.0.3
-	>=dev-erlang/fast_xml-1.1.3
-	>=dev-erlang/stun-1.0.3
 	>=dev-erlang/esip-1.0.4
+	>=dev-erlang/fast_tls-1.0.3
+	>=dev-erlang/fast_xml-1.1.3
 	>=dev-erlang/fast_yaml-1.0.3
 	>=dev-erlang/jiffy-0.14.7
-	>=dev-erlang/p1_oauth2-0.6.1
-	>=dev-erlang/p1_xmlrpc-1.15.1
+	>=dev-erlang/lager-3.0.2
 	>=dev-erlang/luerl-0.2
+	>=dev-erlang/p1_oauth2-0.6.1
+	>=dev-erlang/p1_utils-1.0.4
+	>=dev-erlang/p1_xmlrpc-1.15.1
+	>=dev-erlang/stringprep-1.0.3
+	>=dev-erlang/stun-1.0.3
 	>=dev-lang/erlang-17.1[hipe?,odbc?,ssl]
 	>=net-im/jabber-base-0.01
 	ldap? ( =net-nds/openldap-2* )
@@ -151,21 +152,21 @@ src_configure() {
 	econf \
 		--docdir="${EPREFIX}/usr/share/doc/${PF}/html" \
 		--libdir="${EPREFIX}$(get_erl_libs)" \
-		$(use_enable hipe) \
-		$(use_enable roster-gw roster-gateway-workaround) \
-		$(use_enable full-xml) \
-		$(use_enable mssql) \
-		$(use_enable odbc) \
-		$(use_enable mysql) \
-		$(use_enable postgres pgsql) \
-		$(use_enable sqlite) \
-		$(use_enable pam) \
-		$(use_enable zlib) \
-		$(use_enable riak) \
-		$(use_enable redis) \
-		$(use_enable nls iconv) \
+		--enable-user=jabber \
 		$(use_enable debug) \
-		--enable-user=jabber
+		$(use_enable full-xml) \
+		$(use_enable hipe) \
+		$(use_enable mssql) \
+		$(use_enable mysql) \
+		$(use_enable nls iconv) \
+		$(use_enable odbc) \
+		$(use_enable pam) \
+		$(use_enable postgres pgsql) \
+		$(use_enable redis) \
+		$(use_enable riak) \
+		$(use_enable roster-gw roster-gateway-workaround) \
+		$(use_enable sqlite) \
+		$(use_enable zlib)
 }
 
 src_compile() {
@@ -187,8 +188,8 @@ src_install() {
 		fowners root:jabber "${epam_path}"
 	fi
 
-	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
 	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
+	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
 	systemd_dounit "${FILESDIR}/${PN}.service"
 	systemd_dotmpfilesd "${FILESDIR}/${PN}.tmpfiles.conf"
 
