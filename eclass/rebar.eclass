@@ -56,10 +56,11 @@ export ERL_LIBS="${EPREFIX}$(get_erl_libs)"
 # awk.
 awk_i() {
 	local f="$1"; shift
+	local tmpf="$(emktemp)"
 
-	[[ -e ${f}.new ]] && return 1
-	awk "$@" "${f}" >"${f}.new" || return 1
-	mv "${f}.new" "${f}" || return 1
+	cat "${f}" >"${tmpf}" || return 1
+	awk "$@" "${tmpf}" >"${f}" || return 1
+	rm "${tmpf}"
 }
 
 # @FUNCTION: _find_dep_version
