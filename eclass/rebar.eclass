@@ -2,15 +2,43 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
+# @ECLASS: rebar.eclass
+# @MAINTAINER:
+# Amadeusz Żołnowski <aidecoe@gentoo.org>
+# @AUTHOR:
+# Amadeusz Żołnowski <aidecoe@gentoo.org>
+# @BLURB: Build Erlang/OTP projects using dev-util/rebar.
+# @DESCRIPTION:
+# An eclass providing functions to build Erlang/OTP projects using
+# dev-util/rebar.
 #
-# Original Author: Amadeusz Żołnowski <aidecoe@gentoo.org>
-# Purpose:
-#
+# rebar is a tool which tries to resolve dependencies itself which is by
+# cloning remote git repositories. Dependant projects are usually expected to
+# be in sub-directory 'deps' rather than looking at system Erlang lib
+# directory. Projects relying on rebar usually don't have 'install' make
+# targets. The eclass workarounds some of these problems. It handles
+# installation in a generic way for Erlang/OTP structured projects. As a
+# special thing it also builds documentation if 'doc' flag is present in IUSE
+# and enabled.
 
-inherit eutils
+case "${EAPI:-0}" in
+	0|1|2|3|4)
+		die "Unsupported EAPI=${EAPI:-0} (too old) for ${ECLASS}"
+		;;
+	5|6)
+		;;
+	*)
+		die "Unsupported EAPI=${EAPI} (unknown) for ${ECLASS}"
+		;;
+esac
+
+[[ ${EAPI} = 5 ]] && inherit eutils
 
 EXPORT_FUNCTIONS src_prepare src_compile src_install
 
+# @FUNCTION: get_erl_libs
+# @RETURN: the path to Erlang lib directory
+# @DESCRIPTION:
 get_erl_libs() {
 	echo "/usr/$(get_libdir)/erlang/lib"
 }
@@ -21,6 +49,11 @@ DEPEND="${RDEPEND}
 
 export ERL_LIBS="${EPREFIX}$(get_erl_libs)"
 
+# @FUNCTION: awk_i
+# @USAGE: <file> <args>
+# @DESCRIPTION:
+# Edit file <file> in place with awk. Pass all arguments following <file> to
+# awk.
 awk_i() {
 	local f="$1"; shift
 
@@ -29,7 +62,15 @@ awk_i() {
 	mv "${f}.new" "${f}" || return 1
 }
 
-find_dep_version() {
+# @FUNCTION: _find_dep_version
+# @INTERNAL
+# @USAGE: <project_name>
+# @RETURN: full path with EPREFIX to a Erlang package/project
+# @DESCRIPTION:
+# Find a Erlang package/project by name in Erlang lib directory. Project
+# directory is usually suffixed with version. First match to <project_name> or
+# <project_name>-* is returned.
+_find_dep_version() {
 	local pn="$1"
 	local p
 
@@ -45,11 +86,21 @@ find_dep_version() {
 	return 1
 }
 
+# @FUNCTION: rebar_fix_include_path
+# @USAGE: <project_name> [<rebar_config>]
+# @DESCRIPTION:
+# Fix path in rebar.config to 'include' directory of dependant project/package,
+# so it points to installation in system Erlang lib rather than relative 'deps'
+# directory.
+#
+# <rebar_config> is optional. Default is 'rebar.config'.
+#
+# The function dies on failure.
 rebar_fix_include_path() {
 	local pn="$1"
 	local rebar_config="${2:-rebar.config}"
 	local erl_libs="${EPREFIX}$(get_erl_libs)"
-	local pv="$(find_dep_version "${pn}")"
+	local pv="$(_find_dep_version "${pn}")"
 
 	awk_i "${rebar_config}" \
 		-v erl_libs="${erl_libs}" -v pn="${pn}" -v pv="${pv}" \
@@ -65,6 +116,16 @@ rebar_fix_include_path() {
 ' || die "failed to fix include paths in ${rebar_config}"
 }
 
+# @FUNCTION: rebar_remove_deps
+# @USAGE: [<rebar_config>]
+# @DESCRIPTION:
+# Remove dependencies list from rebar.config and deceive build rules that any
+# dependencies are already fetched and built. Otherwise rebar tries to fetch
+# dependencies and compile them.
+#
+# <rebar_config> is optional. Default is 'rebar.config'.
+#
+# The function dies on failure.
 rebar_remove_deps() {
 	local rebar_config="${1:-rebar.config}"
 
@@ -80,6 +141,14 @@ rebar_remove_deps() {
 ' || die "failed to remove deps from ${rebar_config}"
 }
 
+# @FUNCTION: rebar_set_vsn
+# @USAGE: [<version>]
+# @DESCRIPTION:
+# Set version in project description file if it's not set.
+#
+# <version> is optional. Default is PV stripped from version suffix.
+#
+# The function dies on failure.
 rebar_set_vsn() {
 	local version="${1:-${PV%_*}}"
 
@@ -88,6 +157,13 @@ rebar_set_vsn() {
 		|| die "failed to set version in src/${PN}.app.src"
 }
 
+# @FUNCTION: rebar_src_prepare
+# @DESCRIPTION:
+# Prevent rebar from fetching in compiling dependencies. Set version in project
+# description file if it's not set.
+#
+# Existence of rebar.config is optional, but file description file must exist
+# at 'src/${PN}.app.src'.
 rebar_src_prepare() {
 	debug-print-function ${FUNCNAME} "${@}"
 
@@ -95,6 +171,10 @@ rebar_src_prepare() {
 	[[ -f rebar.config ]] && rebar_remove_deps
 }
 
+# @FUNCTION: rebar_src_compile
+# @DESCRIPTION:
+# Compile project with rebar. Build documentation as well if 'doc' flag is
+# present in IUSE and enabled.
 rebar_src_compile() {
 	debug-print-function ${FUNCNAME} "${@}"
 
@@ -105,6 +185,13 @@ rebar_src_compile() {
 	fi
 }
 
+# @FUNCTION: rebar_src_install
+# @DESCRIPTION:
+# Install BEAM files, include headers, executables and native libraries.
+# Install standard docs like README or defined in DOCS variable. Optionally
+# install HTML docs if 'doc' flag is present in IUSE and enabled.
+#
+# Function expects that project conforms to Erlang/OTP structure.
 rebar_src_install() {
 	debug-print-function ${FUNCNAME} "${@}"
 
