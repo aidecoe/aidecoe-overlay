@@ -18,3 +18,5 @@ KEYWORDS="~amd64 ~x86"
 DEPEND=">=dev-erlang/protobuffs-0.8.2
 	>=dev-lang/erlang-17.1"
 RDEPEND="${DEPEND}"
+
+DOCS=( README.md )

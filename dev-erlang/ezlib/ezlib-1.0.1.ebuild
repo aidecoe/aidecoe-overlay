@@ -18,3 +18,5 @@ KEYWORDS="~amd64 ~x86"
 DEPEND=">=dev-lang/erlang-17.1
 	sys-libs/zlib"
 RDEPEND="${DEPEND}"
+
+DOCS=( CHANGELOG.md  README.md )

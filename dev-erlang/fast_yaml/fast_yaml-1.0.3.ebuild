@@ -19,3 +19,5 @@ DEPEND=">=dev-erlang/p1_utils-1.0.2
 	>=dev-lang/erlang-17.1
 	dev-libs/libyaml"
 RDEPEND="${DEPEND}"
+
+DOCS=( CHANGELOG.md  README.md )

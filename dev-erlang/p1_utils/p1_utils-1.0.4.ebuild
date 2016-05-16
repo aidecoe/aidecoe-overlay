@@ -18,3 +18,5 @@ IUSE="doc"
 
 DEPEND=">=dev-lang/erlang-17.1"
 RDEPEND="${DEPEND}"
+
+DOCS=( CHANGELOG.md  README.md )

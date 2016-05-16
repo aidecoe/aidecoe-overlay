@@ -18,3 +18,5 @@ KEYWORDS="~amd64 ~x86"
 DEPEND=">=dev-lang/erlang-17.1
 	virtual/libiconv"
 RDEPEND="${DEPEND}"
+
+DOCS=( README.md )

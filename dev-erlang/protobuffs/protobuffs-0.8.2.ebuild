@@ -21,4 +21,6 @@ KEYWORDS="~amd64 ~x86"
 DEPEND=">=dev-lang/erlang-17.1"
 RDEPEND="${DEPEND}"
 
+DOCS=( AUTHORS  ChangeLog  CONTRIBUTING.md README.md )
+
 S="${WORKDIR}/${MY_P}"

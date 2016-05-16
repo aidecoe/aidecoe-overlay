@@ -17,3 +17,5 @@ KEYWORDS="~amd64 ~x86"
 
 DEPEND=">=dev-lang/erlang-17.1"
 RDEPEND="${DEPEND}"
+
+DOCS=( README.md )

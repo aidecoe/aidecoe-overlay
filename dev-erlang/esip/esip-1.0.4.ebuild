@@ -21,6 +21,8 @@ DEPEND=">=dev-erlang/fast_tls-1.0.0
 	>=dev-lang/erlang-17.1"
 RDEPEND="${DEPEND}"
 
+DOCS=( CHANGELOG.md  README.md )
+
 src_prepare() {
 	rebar_src_prepare
 	rebar_fix_include_path stun
