@@ -6,7 +6,7 @@ EAPI=5
 
 inherit rebar
 
-DESCRIPTION="Riak Protocol Buffers Messages"
+DESCRIPTION="Riak Protocol Buffers messages"
 HOMEPAGE="https://github.com/basho/riak_pb"
 SRC_URI="https://github.com/basho/${PN}/archive/${PV}.tar.gz
 	-> ${P}.tar.gz"

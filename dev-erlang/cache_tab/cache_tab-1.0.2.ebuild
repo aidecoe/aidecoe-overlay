@@ -6,7 +6,7 @@ EAPI=5
 
 inherit rebar
 
-DESCRIPTION="In-memory cache Erlang / Elixir library"
+DESCRIPTION="In-memory cache Erlang and Elixir library"
 HOMEPAGE="https://github.com/processone/cache_tab"
 SRC_URI="https://github.com/processone/${PN}/archive/${PV}.tar.gz
 	-> ${P}.tar.gz"

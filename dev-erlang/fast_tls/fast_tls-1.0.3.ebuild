@@ -6,7 +6,7 @@ EAPI=5
 
 inherit rebar
 
-DESCRIPTION="TLS / SSL native driver for Erlang / Elixir"
+DESCRIPTION="TLS/SSL native driver for Erlang and Elixir"
 HOMEPAGE="https://github.com/processone/fast_tls"
 SRC_URI="https://github.com/processone/${PN}/archive/${PV}.tar.gz
 	-> ${P}.tar.gz"

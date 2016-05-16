@@ -6,7 +6,7 @@ EAPI=5
 
 inherit rebar
 
-DESCRIPTION="Erlang Utility Modules from ProcessOne"
+DESCRIPTION="Erlang utility modules from ProcessOne"
 HOMEPAGE="https://github.com/processone/p1_utils"
 SRC_URI="https://github.com/processone/${PN}/archive/${PV}.tar.gz
 	-> ${P}.tar.gz"

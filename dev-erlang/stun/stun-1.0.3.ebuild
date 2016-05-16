@@ -6,7 +6,7 @@ EAPI=5
 
 inherit rebar
 
-DESCRIPTION="STUN and TURN library for Erlang / Elixir"
+DESCRIPTION="STUN and TURN library for Erlang and Elixir"
 HOMEPAGE="https://github.com/processone/stun"
 SRC_URI="https://github.com/processone/${PN}/archive/${PV}.tar.gz
 	-> ${P}.tar.gz"

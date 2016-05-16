@@ -6,7 +6,7 @@ EAPI=5
 
 inherit rebar
 
-DESCRIPTION="Erlang XMLRPC implementation with SSL, cookies, Authentication"
+DESCRIPTION="Erlang XMLRPC implementation with SSL, cookies, authentication"
 HOMEPAGE="https://github.com/processone/p1_xmlrpc"
 SRC_URI="https://github.com/processone/${PN}/archive/${PV}.tar.gz
 	-> ${P}.tar.gz"

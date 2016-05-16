@@ -6,7 +6,7 @@ EAPI=5
 
 inherit rebar
 
-DESCRIPTION="Native zlib driver for Erlang / Elixir"
+DESCRIPTION="Native zlib driver for Erlang and Elixir"
 HOMEPAGE="https://github.com/processone/ezlib"
 SRC_URI="https://github.com/processone/${PN}/archive/${PV}.tar.gz
 	-> ${P}.tar.gz"

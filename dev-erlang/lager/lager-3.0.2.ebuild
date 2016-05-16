@@ -6,7 +6,7 @@ EAPI=5
 
 inherit rebar
 
-DESCRIPTION="A logging framework for Erlang/OTP"
+DESCRIPTION="Logging framework for Erlang/OTP"
 HOMEPAGE="https://github.com/basho/lager"
 SRC_URI="https://github.com/basho/${PN}/archive/${PV}.tar.gz
 	-> ${P}.tar.gz"
