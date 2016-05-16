@@ -11,7 +11,7 @@ HOMEPAGE="https://github.com/processone/stringprep"
 SRC_URI="https://github.com/processone/${PN}/archive/${PV}.tar.gz
 	-> ${P}.tar.gz"
 
-LICENSE="Apache-2.0"
+LICENSE="Apache-2.0 tcltk"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 
