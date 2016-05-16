@@ -19,6 +19,8 @@ RDEPEND="${DEPEND}"
 
 DOCS=( NOTES  README.markdown TODO.md )
 
+# Override with noop because it's missing hamcrest.app.src and doesn't have any
+# deps.
 src_prepare() {
 	:
 }
