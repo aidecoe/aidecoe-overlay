@@ -19,3 +19,8 @@ DEPEND=">=dev-lang/erlang-17.1"
 RDEPEND="${DEPEND}"
 
 DOCS=( README.org )
+
+src_prepare() {
+	# 'priv' directory contains only edoc.css, but doc isn't going to be built.
+	rm -r "${S}/priv"
+}
