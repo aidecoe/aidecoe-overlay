@@ -97,6 +97,8 @@ eawk() {
 #
 # The function dies on failure.
 rebar_fix_include_path() {
+	debug-print-function ${FUNCNAME} "${@}"
+
 	local pn="$1"
 	local rebar_config="${2:-rebar.config}"
 	local erl_libs="${EPREFIX}$(get_erl_libs)"
@@ -127,6 +129,8 @@ rebar_fix_include_path() {
 #
 # The function dies on failure.
 rebar_remove_deps() {
+	debug-print-function ${FUNCNAME} "${@}"
+
 	local rebar_config="${1:-rebar.config}"
 
 	mkdir -p "${S}/deps" && :>"${S}/deps/.got" && :>"${S}/deps/.built" || die
@@ -150,6 +154,8 @@ rebar_remove_deps() {
 #
 # The function dies on failure.
 rebar_set_vsn() {
+	debug-print-function ${FUNCNAME} "${@}"
+
 	local version="${1:-${PV%_*}}"
 
 	sed -e "s/vsn, git/vsn, \"${version}\"/" \
