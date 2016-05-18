@@ -36,6 +36,10 @@ esac
 
 EXPORT_FUNCTIONS src_prepare src_compile src_install
 
+RDEPEND="dev-lang/erlang"
+DEPEND="${RDEPEND}
+	dev-util/rebar"
+
 # @FUNCTION: get_erl_libs
 # @RETURN: the path to Erlang lib directory
 # @DESCRIPTION:
@@ -43,25 +47,7 @@ get_erl_libs() {
 	echo "/usr/$(get_libdir)/erlang/lib"
 }
 
-RDEPEND="dev-lang/erlang"
-DEPEND="${RDEPEND}
-	dev-util/rebar"
-
 export ERL_LIBS="${EPREFIX}$(get_erl_libs)"
-
-# @FUNCTION: awk_i
-# @USAGE: <file> <args>
-# @DESCRIPTION:
-# Edit file <file> in place with awk. Pass all arguments following <file> to
-# awk.
-awk_i() {
-	local f="$1"; shift
-	local tmpf="$(emktemp)"
-
-	cat "${f}" >"${tmpf}" || return 1
-	awk "$@" "${tmpf}" >"${f}" || return 1
-	rm "${tmpf}"
-}
 
 # @FUNCTION: _find_dep_version
 # @INTERNAL
@@ -85,6 +71,20 @@ _find_dep_version() {
 	popd >/dev/null
 
 	return 1
+}
+
+# @FUNCTION: awk_i
+# @USAGE: <file> <args>
+# @DESCRIPTION:
+# Edit file <file> in place with awk. Pass all arguments following <file> to
+# awk.
+awk_i() {
+	local f="$1"; shift
+	local tmpf="$(emktemp)"
+
+	cat "${f}" >"${tmpf}" || return 1
+	awk "$@" "${tmpf}" >"${f}" || return 1
+	rm "${tmpf}"
 }
 
 # @FUNCTION: rebar_fix_include_path
