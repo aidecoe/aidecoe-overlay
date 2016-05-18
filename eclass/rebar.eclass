@@ -41,10 +41,14 @@ DEPEND="${RDEPEND}
 # @FUNCTION: get_erl_libs
 # @RETURN: the path to Erlang lib directory
 # @DESCRIPTION:
+# Get the full path without EPREFIX to Erlang lib directory.
 get_erl_libs() {
 	echo "/usr/$(get_libdir)/erlang/lib"
 }
 
+# @VARIABLE: ERL_LIBS
+# @DESCRIPTION:
+# Full path with EPREFIX to Erlang lib directory. Some rebar scripts expect it.
 export ERL_LIBS="${EPREFIX}$(get_erl_libs)"
 
 # @FUNCTION: _find_dep_version
