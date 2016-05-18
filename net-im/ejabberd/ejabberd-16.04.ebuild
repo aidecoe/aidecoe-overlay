@@ -123,7 +123,7 @@ set_jabberbase_paths() {
 
 # Skip installing docs because it's only COPYING that's installed by Makefile.
 skip_docs() {
-	awk_i "${S}/Makefile.in" \
+	eawk "${S}/Makefile.in" \
 		'/# Documentation/, /^[[:space:]]*#?[[:space:]]*$/ {
 	if ($0 ~ /^[[:space:]]*#?[[:space:]]*$/) {
 		print $0;

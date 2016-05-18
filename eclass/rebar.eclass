@@ -73,18 +73,17 @@ _find_dep_version() {
 	return 1
 }
 
-# @FUNCTION: awk_i
+# @FUNCTION: eawk
 # @USAGE: <file> <args>
 # @DESCRIPTION:
 # Edit file <file> in place with awk. Pass all arguments following <file> to
 # awk.
-awk_i() {
+eawk() {
 	local f="$1"; shift
 	local tmpf="$(emktemp)"
 
 	cat "${f}" >"${tmpf}" || return 1
-	awk "$@" "${tmpf}" >"${f}" || return 1
-	rm "${tmpf}"
+	awk "$@" "${tmpf}" >"${f}"
 }
 
 # @FUNCTION: rebar_fix_include_path
@@ -103,7 +102,7 @@ rebar_fix_include_path() {
 	local erl_libs="${EPREFIX}$(get_erl_libs)"
 	local pv="$(_find_dep_version "${pn}")"
 
-	awk_i "${rebar_config}" \
+	eawk "${rebar_config}" \
 		-v erl_libs="${erl_libs}" -v pn="${pn}" -v pv="${pv}" \
 		'/^{[[:space:]]*erl_opts[[:space:]]*,/, /}[[:space:]]*\.$/ {
 	pattern = "\"(./)?deps/" pn "/include\"";
@@ -131,7 +130,7 @@ rebar_remove_deps() {
 	local rebar_config="${1:-rebar.config}"
 
 	mkdir -p "${S}/deps" && :>"${S}/deps/.got" && :>"${S}/deps/.built" || die
-	awk_i "${rebar_config}" \
+	eawk "${rebar_config}" \
 		'/^{[[:space:]]*deps[[:space:]]*,/, /}[[:space:]]*\.$/ {
 	if ($0 ~ /}[[:space:]]*\.$/) {
 		print "{deps, []}.";
