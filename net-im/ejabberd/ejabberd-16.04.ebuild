@@ -170,7 +170,7 @@ src_configure() {
 }
 
 src_compile() {
-	emake src
+	emake REBAR='rebar -v' src
 }
 
 src_install() {
