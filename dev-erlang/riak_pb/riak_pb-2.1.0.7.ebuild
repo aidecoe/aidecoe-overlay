@@ -14,7 +14,6 @@ SRC_URI="https://github.com/basho/${PN}/archive/${PV}.tar.gz
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc"
 
 DEPEND=">=dev-erlang/protobuffs-0.8.2
 	>=dev-lang/erlang-17.1"

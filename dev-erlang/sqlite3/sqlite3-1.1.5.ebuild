@@ -17,7 +17,6 @@ SRC_URI="https://github.com/processone/${MY_PN}/archive/${PV}.tar.gz
 LICENSE="ErlPL-1.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="doc"
 
 DEPEND=">=dev-lang/erlang-17.1"
 RDEPEND="${DEPEND}"
