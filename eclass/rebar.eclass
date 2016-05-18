@@ -86,6 +86,16 @@ eawk() {
 	awk "$@" "${tmpf}" >"${f}"
 }
 
+# @FUNCTION: erebar
+# @USAGE: <target>
+# @DESCRIPTION:
+# Run rebar with verbose flag. Die on failure.
+erebar() {
+	debug-print-function ${FUNCNAME} "${@}"
+
+	rebar -v skip_deps=true "$1" || die "rebar $1 failed"
+}
+
 # @FUNCTION: rebar_fix_include_path
 # @USAGE: <project_name> [<rebar_config>]
 # @DESCRIPTION:
@@ -184,11 +194,8 @@ rebar_src_prepare() {
 rebar_src_compile() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	rebar -v compile || die 'rebar compile failed'
-
-	if use_if_iuse doc; then
-		rebar -v skip_deps=true doc || die 'rebar doc failed'
-	fi
+	erebar compile
+	use_if_iuse doc && erebar doc
 }
 
 # @FUNCTION: rebar_src_install
