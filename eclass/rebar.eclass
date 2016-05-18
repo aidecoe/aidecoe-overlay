@@ -17,9 +17,7 @@
 # be in sub-directory 'deps' rather than looking at system Erlang lib
 # directory. Projects relying on rebar usually don't have 'install' make
 # targets. The eclass workarounds some of these problems. It handles
-# installation in a generic way for Erlang/OTP structured projects. As a
-# special thing it also builds documentation if 'doc' flag is present in IUSE
-# and enabled.
+# installation in a generic way for Erlang/OTP structured projects.
 
 case "${EAPI:-0}" in
 	0|1|2|3|4)
@@ -189,20 +187,17 @@ rebar_src_prepare() {
 
 # @FUNCTION: rebar_src_compile
 # @DESCRIPTION:
-# Compile project with rebar. Build documentation as well if 'doc' flag is
-# present in IUSE and enabled.
+# Compile project with rebar.
 rebar_src_compile() {
 	debug-print-function ${FUNCNAME} "${@}"
 
 	erebar compile
-	use_if_iuse doc && erebar doc
 }
 
 # @FUNCTION: rebar_src_install
 # @DESCRIPTION:
 # Install BEAM files, include headers, executables and native libraries.
 # Install standard docs like README or defined in DOCS variable. Optionally
-# install HTML docs if 'doc' flag is present in IUSE and enabled.
 #
 # Function expects that project conforms to Erlang/OTP structure.
 rebar_src_install() {
@@ -218,5 +213,4 @@ rebar_src_install() {
 	[[ -d priv ]] && cp -pR priv "${ED}${dest}/"
 
 	einstalldocs
-	use_if_iuse doc && dohtml -r doc/*
 }
