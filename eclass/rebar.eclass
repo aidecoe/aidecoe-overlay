@@ -46,11 +46,6 @@ get_erl_libs() {
 	echo "/usr/$(get_libdir)/erlang/lib"
 }
 
-# @VARIABLE: ERL_LIBS
-# @DESCRIPTION:
-# Full path with EPREFIX to Erlang lib directory. Some rebar scripts expect it.
-export ERL_LIBS="${EPREFIX}$(get_erl_libs)"
-
 # @FUNCTION: _find_dep_version
 # @INTERNAL
 # @USAGE: <project_name>
@@ -95,7 +90,10 @@ eawk() {
 erebar() {
 	debug-print-function ${FUNCNAME} "${@}"
 
+	evar_push ERL_LIBS
+	export ERL_LIBS="${EPREFIX}$(get_erl_libs)"
 	rebar -v skip_deps=true "$1" || die "rebar $1 failed"
+	evar_pop
 }
 
 # @FUNCTION: rebar_fix_include_path
@@ -187,6 +185,18 @@ rebar_src_prepare() {
 
 	rebar_set_vsn
 	[[ -f rebar.config ]] && rebar_remove_deps
+}
+
+# @FUNCTION: rebar_src_configure
+# @DESCRIPTION:
+# Configure with ERL_LIBS set.
+rebar_src_configure() {
+	debug-print-function ${FUNCNAME} "${@}"
+
+	evar_push ERL_LIBS
+	export ERL_LIBS="${EPREFIX}$(get_erl_libs)"
+	default
+	evar_pop
 }
 
 # @FUNCTION: rebar_src_compile
