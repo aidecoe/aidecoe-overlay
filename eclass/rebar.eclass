@@ -211,7 +211,7 @@ rebar_src_compile() {
 # @FUNCTION: rebar_src_install
 # @DESCRIPTION:
 # Install BEAM files, include headers, executables and native libraries.
-# Install standard docs like README or defined in DOCS variable. Optionally
+# Install standard docs like README or defined in DOCS variable.
 #
 # Function expects that project conforms to Erlang/OTP structure.
 rebar_src_install() {
