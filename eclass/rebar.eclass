@@ -46,7 +46,7 @@ get_erl_libs() {
 	echo "/usr/$(get_libdir)/erlang/lib"
 }
 
-# @FUNCTION: _find_dep_version
+# @FUNCTION: _rebar_find_dep_version
 # @INTERNAL
 # @USAGE: <project_name>
 # @RETURN: full path with EPREFIX to a Erlang package/project
@@ -54,7 +54,7 @@ get_erl_libs() {
 # Find a Erlang package/project by name in Erlang lib directory. Project
 # directory is usually suffixed with version. First match to <project_name> or
 # <project_name>-* is returned.
-_find_dep_version() {
+_rebar_find_dep_version() {
 	local pn="$1"
 	local p
 
@@ -112,7 +112,7 @@ rebar_fix_include_path() {
 	local pn="$1"
 	local rebar_config="${2:-rebar.config}"
 	local erl_libs="${EPREFIX}$(get_erl_libs)"
-	local pv="$(_find_dep_version "${pn}")"
+	local pv="$(_rebar_find_dep_version "${pn}")"
 
 	eawk "${rebar_config}" \
 		-v erl_libs="${erl_libs}" -v pn="${pn}" -v pv="${pv}" \
