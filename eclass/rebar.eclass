@@ -30,7 +30,7 @@ case "${EAPI:-0}" in
 		;;
 esac
 
-[[ ${EAPI} = 5 ]] && inherit eutils
+inherit eutils
 
 EXPORT_FUNCTIONS src_prepare src_compile src_install
 
@@ -183,6 +183,7 @@ rebar_set_vsn() {
 rebar_src_prepare() {
 	debug-print-function ${FUNCNAME} "${@}"
 
+	default
 	rebar_set_vsn
 	[[ -f rebar.config ]] && rebar_remove_deps
 }
