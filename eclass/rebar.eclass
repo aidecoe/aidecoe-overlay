@@ -20,10 +20,10 @@
 # installation in a generic way for Erlang/OTP structured projects.
 
 case "${EAPI:-0}" in
-	0|1|2|3|4)
+	0|1|2|3|4|5)
 		die "Unsupported EAPI=${EAPI:-0} (too old) for ${ECLASS}"
 		;;
-	5|6)
+	6)
 		;;
 	*)
 		die "Unsupported EAPI=${EAPI} (unknown) for ${ECLASS}"
