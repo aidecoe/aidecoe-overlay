@@ -99,24 +99,21 @@ erebar() {
 }
 
 # @FUNCTION: rebar_fix_include_path
-# @USAGE: <project_name> [<rebar_config>]
+# @USAGE: <project_name>
 # @DESCRIPTION:
 # Fix path in rebar.config to 'include' directory of dependant project/package,
 # so it points to installation in system Erlang lib rather than relative 'deps'
 # directory.
-#
-# <rebar_config> is optional. Default is 'rebar.config'.
 #
 # The function dies on failure.
 rebar_fix_include_path() {
 	debug-print-function ${FUNCNAME} "${@}"
 
 	local pn="$1"
-	local rebar_config="${2:-rebar.config}"
 	local erl_libs="${EPREFIX}$(get_erl_libs)"
 	local pv="$(_rebar_find_dep_version "${pn}")"
 
-	eawk "${rebar_config}" \
+	eawk rebar.config \
 		-v erl_libs="${erl_libs}" -v pn="${pn}" -v pv="${pv}" \
 		'/^{[[:space:]]*erl_opts[[:space:]]*,/, /}[[:space:]]*\.$/ {
 	pattern = "\"(./)?deps/" pn "/include\"";
@@ -127,26 +124,21 @@ rebar_fix_include_path() {
 	next;
 }
 1
-' || die "failed to fix include paths in ${rebar_config}"
+' || die "failed to fix include paths in rebar.config"
 }
 
 # @FUNCTION: rebar_remove_deps
-# @USAGE: [<rebar_config>]
 # @DESCRIPTION:
 # Remove dependencies list from rebar.config and deceive build rules that any
 # dependencies are already fetched and built. Otherwise rebar tries to fetch
 # dependencies and compile them.
 #
-# <rebar_config> is optional. Default is 'rebar.config'.
-#
 # The function dies on failure.
 rebar_remove_deps() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	local rebar_config="${1:-rebar.config}"
-
 	mkdir -p "${S}/deps" && :>"${S}/deps/.got" && :>"${S}/deps/.built" || die
-	eawk "${rebar_config}" \
+	eawk rebar.config \
 		'/^{[[:space:]]*deps[[:space:]]*,/, /}[[:space:]]*\.$/ {
 	if ($0 ~ /}[[:space:]]*\.$/) {
 		print "{deps, []}.";
@@ -154,7 +146,7 @@ rebar_remove_deps() {
 	next;
 }
 1
-' || die "failed to remove deps from ${rebar_config}"
+' || die "failed to remove deps from rebar.config"
 }
 
 # @FUNCTION: rebar_set_vsn
