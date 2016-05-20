@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 SSL_CERT_MANDATORY=1
 
@@ -59,6 +59,8 @@ DEPEND="
 	zlib? ( >=dev-erlang/ezlib-1.0.1 )"
 RDEPEND="${DEPEND}
 	captcha? ( media-gfx/imagemagick[truetype,png] )"
+
+PATCHES=( "${FILESDIR}/${P}-ejabberdctl.patch" )
 
 # Paths in net-im/jabber-base
 JABBER_ETC="${EPREFIX}/etc/jabber"
@@ -136,7 +138,7 @@ skip_docs() {
 }
 
 src_prepare() {
-	epatch "${FILESDIR}/${P}-ejabberdctl.patch"
+	default
 
 	rebar_remove_deps
 	correct_ejabberd_paths
@@ -144,8 +146,6 @@ src_prepare() {
 	skip_docs
 	adjust_config
 	customize_epam_wrapper "${FILESDIR}/epam-wrapper"
-
-	epatch_user
 }
 
 src_configure() {

@@ -6,8 +6,8 @@ a valid shell.
 Also, workaround the assumption that jabber's $HOME is a directory when instead
 it defaults to /dev/null on Gentoo.
 
---- ejabberdctl.template	2016-01-12 11:07:58.000000000 +0000
-+++ ejabberdctl.template.new	2016-02-15 21:36:27.508297627 +0000
+--- a/ejabberdctl.template	2016-01-12 11:07:58.000000000 +0000
++++ b/ejabberdctl.template	2016-02-15 21:36:27.508297627 +0000
 @@ -16,6 +16,7 @@
  EPMD={{bindir}}/epmd
  INSTALLUSER={{installuser}}
