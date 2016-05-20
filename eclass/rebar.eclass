@@ -84,15 +84,17 @@ eawk() {
 }
 
 # @FUNCTION: erebar
-# @USAGE: <target>
+# @USAGE: <targets>
 # @DESCRIPTION:
 # Run rebar with verbose flag. Die on failure.
 erebar() {
 	debug-print-function ${FUNCNAME} "${@}"
 
+	(( $# > 0 )) || die 'erebar: at least one target is required'
+
 	evar_push ERL_LIBS
 	export ERL_LIBS="${EPREFIX}$(get_erl_libs)"
-	rebar -v skip_deps=true "$1" || die "rebar $1 failed"
+	rebar -v skip_deps=true "$@" || die "rebar $@ failed"
 	evar_pop
 }
 
