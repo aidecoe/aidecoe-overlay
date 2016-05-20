@@ -58,16 +58,16 @@ _rebar_find_dep_version() {
 	local pn="$1"
 	local p
 
-	pushd "${EPREFIX}$(get_erl_libs)" >/dev/null
+	pushd "${EPREFIX}$(get_erl_libs)" >/dev/null || die
 	for p in ${pn} ${pn}-*; do
 		if [[ -d ${p} ]]; then
 			echo "${p#${pn}-}"
-			return 0
+			break
 		fi
 	done
-	popd >/dev/null
+	popd >/dev/null || die
 
-	return 1
+	[[ -d ${p} ]]
 }
 
 # @FUNCTION: eawk
