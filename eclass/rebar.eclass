@@ -38,6 +38,11 @@ RDEPEND="dev-lang/erlang"
 DEPEND="${RDEPEND}
 	dev-util/rebar"
 
+# @ECLASS-VARIABLE: REBAR_APP_SRC
+# @DESCRIPTION:
+# Relative path to .app.src description file.
+REBAR_APP_SRC="${REBAR_APP_SRC-src/${PN}.app.src}"
+
 # @FUNCTION: get_erl_libs
 # @RETURN: the path to Erlang lib directory
 # @DESCRIPTION:
@@ -163,7 +168,7 @@ rebar_set_vsn() {
 	local version="${1:-${PV%_*}}"
 
 	sed -e "s/vsn, git/vsn, \"${version}\"/" \
-		-i "${S}/src/${PN}.app.src" \
+		-i "${S}/${REBAR_APP_SRC}" \
 		|| die "failed to set version in src/${PN}.app.src"
 }
 
