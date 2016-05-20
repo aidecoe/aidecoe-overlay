@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 inherit rebar
 
@@ -19,8 +19,8 @@ RDEPEND="${DEPEND}"
 
 DOCS=( NOTES  README.markdown TODO.md )
 
-# Override with noop because it's missing hamcrest.app.src and doesn't have any
-# deps.
+# Override with EAPI default because it's missing hamcrest.app.src and doesn't
+# have any deps.
 src_prepare() {
-	:
+	default
 }
