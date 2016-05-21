@@ -217,19 +217,14 @@ rebar_src_compile() {
 rebar_src_install() {
 	debug-print-function ${FUNCNAME} "${@}"
 
+	local bin
 	local dest="$(get_erl_libs)/${P}"
 
 	insinto "${dest}"
 	doins -r ebin
 	[[ -d include ]] && doins -r include
+	[[ -d bin ]] && for bin in bin/*; do dobin "$bin"; done
 	[[ -d priv ]] && cp -pR priv "${ED}${dest}/"
-
-	if [[ -d bin ]]; then
-		local bin
-		for bin in bin/*; do
-			dobin "$bin"
-		done
-	fi
 
 	einstalldocs
 }
