@@ -28,7 +28,7 @@ RESTRICT="test"
 # TODO: 	>=dev-erlang/meck-0.8.4
 # TODO: 	>=dev-erlang/moka-1.0.5b
 # TODO: )
-DEPEND="
+CDEPEND="
 	>=dev-erlang/cache_tab-1.0.2
 	>=dev-erlang/esip-1.0.4
 	>=dev-erlang/fast_tls-1.0.3
@@ -57,7 +57,9 @@ DEPEND="
 	)
 	sqlite? ( >=dev-erlang/sqlite3-1.1.5 )
 	zlib? ( >=dev-erlang/ezlib-1.0.1 )"
-RDEPEND="${DEPEND}
+DEPEND="${CDEPEND}
+	>=sys-apps/gawk-4.1"
+RDEPEND="${CDEPEND}
 	captcha? ( media-gfx/imagemagick[truetype,png] )"
 
 PATCHES=( "${FILESDIR}/${P}-ejabberdctl.patch" )
@@ -125,8 +127,8 @@ set_jabberbase_paths() {
 
 # Skip installing docs because it's only COPYING that's installed by Makefile.
 skip_docs() {
-	eawk "${S}/Makefile.in" \
-		'/# Documentation/, /^[[:space:]]*#?[[:space:]]*$/ {
+	gawk -i inplace '
+/# Documentation/, /^[[:space:]]*#?[[:space:]]*$/ {
 	if ($0 ~ /^[[:space:]]*#?[[:space:]]*$/) {
 		print $0;
 	} else {
@@ -134,7 +136,7 @@ skip_docs() {
 	}
 }
 1
-' || die 'failed to remove docs section from Makefile.in'
+' "${S}/Makefile.in" || die 'failed to remove docs section from Makefile.in'
 }
 
 src_prepare() {
