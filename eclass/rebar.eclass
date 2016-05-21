@@ -30,8 +30,6 @@ case "${EAPI:-0}" in
 		;;
 esac
 
-inherit eutils
-
 EXPORT_FUNCTIONS src_prepare src_compile src_install
 
 RDEPEND="dev-lang/erlang"
