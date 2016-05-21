@@ -36,7 +36,8 @@ EXPORT_FUNCTIONS src_prepare src_compile src_install
 
 RDEPEND="dev-lang/erlang"
 DEPEND="${RDEPEND}
-	dev-util/rebar"
+	dev-util/rebar
+	>=sys-apps/gawk-4.1"
 
 # @ECLASS-VARIABLE: REBAR_APP_SRC
 # @DESCRIPTION:
@@ -51,41 +52,33 @@ get_erl_libs() {
 	echo "/usr/$(get_libdir)/erlang/lib"
 }
 
-# @FUNCTION: _rebar_find_dep_version
+# @FUNCTION: _rebar_find_dep
 # @INTERNAL
 # @USAGE: <project_name>
-# @RETURN: full path with EPREFIX to a Erlang package/project
+# @RETURN: full path with EPREFIX to a Erlang package/project on success,
+# code 1 when dependency is not found and code 2 if multiple versions of
+# dependency are found.
 # @DESCRIPTION:
 # Find a Erlang package/project by name in Erlang lib directory. Project
-# directory is usually suffixed with version. First match to <project_name> or
-# <project_name>-* is returned.
-_rebar_find_dep_version() {
+# directory is usually suffixed with version. It is matched to '<project_name>'
+# or '<project_name>-*'.
+_rebar_find_dep() {
 	local pn="$1"
 	local p
+	local result
 
-	pushd "${EPREFIX}$(get_erl_libs)" >/dev/null || die
+	pushd "${EPREFIX}$(get_erl_libs)" >/dev/null || return 1
 	for p in ${pn} ${pn}-*; do
 		if [[ -d ${p} ]]; then
-			echo "${p#${pn}-}"
-			break
+			# Ensure there's at most one matching.
+			[[ ${result} ]] && return 2
+			result="${p}"
 		fi
 	done
 	popd >/dev/null || die
 
-	[[ -d ${p} ]]
-}
-
-# @FUNCTION: eawk
-# @USAGE: <file> <args>
-# @DESCRIPTION:
-# Edit file <file> in place with awk. Pass all arguments following <file> to
-# awk.
-eawk() {
-	local f="$1"; shift
-	local tmpf="$(emktemp)"
-
-	cat "${f}" >"${tmpf}" || return 1
-	awk "$@" "${tmpf}" >"${f}"
+	[[ ${result} ]] || return 1
+	echo "${result}"
 }
 
 # @FUNCTION: erebar
@@ -95,12 +88,10 @@ eawk() {
 erebar() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	(( $# > 0 )) || die 'erebar: at least one target is required'
+	(( $# > 0 )) || die "erebar: at least one target is required"
 
-	evar_push ERL_LIBS
-	export ERL_LIBS="${EPREFIX}$(get_erl_libs)"
+	local -x ERL_LIBS="${EPREFIX}$(get_erl_libs)"
 	rebar -v skip_deps=true "$@" || die "rebar $@ failed"
-	evar_pop
 }
 
 # @FUNCTION: rebar_fix_include_path
@@ -116,20 +107,23 @@ rebar_fix_include_path() {
 
 	local pn="$1"
 	local erl_libs="${EPREFIX}$(get_erl_libs)"
-	local pv="$(_rebar_find_dep_version "${pn}")"
+	local p
 
-	eawk rebar.config \
-		-v erl_libs="${erl_libs}" -v pn="${pn}" -v pv="${pv}" \
-		'/^{[[:space:]]*erl_opts[[:space:]]*,/, /}[[:space:]]*\.$/ {
+	p="$(_rebar_find_dep "${pn}")" \
+		|| die "failed to unambiguously resolve dependency of '${pn}'"
+
+	gawk -i inplace \
+		-v erl_libs="${erl_libs}" -v pn="${pn}" -v p="${p}" '
+/^{[[:space:]]*erl_opts[[:space:]]*,/, /}[[:space:]]*\.$/ {
 	pattern = "\"(./)?deps/" pn "/include\"";
 	if (match($0, "{i,[[:space:]]*" pattern "[[:space:]]*}")) {
-		sub(pattern, "\"" erl_libs "/" pn "-" pv "/include\"");
+		sub(pattern, "\"" erl_libs "/" p "/include\"");
 	}
 	print $0;
 	next;
 }
 1
-' || die "failed to fix include paths in rebar.config"
+' rebar.config || die "failed to fix include paths in rebar.config for '${pn}'"
 }
 
 # @FUNCTION: rebar_remove_deps
@@ -143,15 +137,15 @@ rebar_remove_deps() {
 	debug-print-function ${FUNCNAME} "${@}"
 
 	mkdir -p "${S}/deps" && :>"${S}/deps/.got" && :>"${S}/deps/.built" || die
-	eawk rebar.config \
-		'/^{[[:space:]]*deps[[:space:]]*,/, /}[[:space:]]*\.$/ {
+	gawk -i inplace '
+/^{[[:space:]]*deps[[:space:]]*,/, /}[[:space:]]*\.$/ {
 	if ($0 ~ /}[[:space:]]*\.$/) {
 		print "{deps, []}.";
 	}
 	next;
 }
 1
-' || die "failed to remove deps from rebar.config"
+' rebar.config || die "failed to remove deps from rebar.config"
 }
 
 # @FUNCTION: rebar_set_vsn
@@ -193,10 +187,8 @@ rebar_src_prepare() {
 rebar_src_configure() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	evar_push ERL_LIBS
-	export ERL_LIBS="${EPREFIX}$(get_erl_libs)"
+	local -x ERL_LIBS="${EPREFIX}$(get_erl_libs)"
 	default
-	evar_pop
 }
 
 # @FUNCTION: rebar_src_compile
@@ -224,7 +216,10 @@ rebar_src_install() {
 	doins -r ebin
 	[[ -d include ]] && doins -r include
 	[[ -d bin ]] && for bin in bin/*; do dobin "$bin"; done
-	[[ -d priv ]] && cp -pR priv "${ED}${dest}/"
+
+	if [[ -d priv ]]; then
+		cp -pR priv "${ED}${dest}/" || die "failed to install priv/"
+	fi
 
 	einstalldocs
 }
