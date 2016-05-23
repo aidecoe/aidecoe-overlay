@@ -89,7 +89,7 @@ erebar() {
 	(( $# > 0 )) || die "erebar: at least one target is required"
 
 	local -x ERL_LIBS="${EPREFIX}$(get_erl_libs)"
-	rebar -v skip_deps=true "$@" || die "rebar $@ failed"
+	rebar -v skip_deps=true "$@" || die -n "rebar $@ failed"
 }
 
 # @FUNCTION: rebar_fix_include_path
@@ -166,8 +166,8 @@ rebar_set_vsn() {
 
 # @FUNCTION: rebar_src_prepare
 # @DESCRIPTION:
-# Prevent rebar from fetching in compiling dependencies. Set version in project
-# description file if it's not set.
+# Prevent rebar from fetching and compiling dependencies. Set version in
+# project description file if it's not set.
 #
 # Existence of rebar.config is optional, but file description file must exist
 # at 'src/${PN}.app.src'.
