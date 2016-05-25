@@ -14,10 +14,12 @@ SRC_URI="https://github.com/processone/${PN}/archive/${PV}.tar.gz
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE="test"
 
 DEPEND=">=dev-erlang/p1_utils-1.0.0
 	>=dev-lang/erlang-17.1
-	dev-libs/expat"
+	dev-libs/expat
+	test? ( dev-lang/elixir )"
 RDEPEND="${DEPEND}"
 
 DOCS=( CHANGELOG.md  README.md )
