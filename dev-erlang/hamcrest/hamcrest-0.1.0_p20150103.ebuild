@@ -13,9 +13,12 @@ SRC_URI="https://dev.gentoo.org/~aidecoe/distfiles/${CATEGORY}/${PN}/${P}.tar.gz
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE="test"
 
-DEPEND=">=dev-lang/erlang-17.1"
-RDEPEND="${DEPEND}"
+CDEPEND=">=dev-lang/erlang-17.1"
+DEPEND="${CDEPEND}
+	test? ( >=dev-erlang/proper-1.1 )"
+RDEPEND="${CDEPEND}"
 
 DOCS=( NOTES  README.markdown TODO.md )
 
