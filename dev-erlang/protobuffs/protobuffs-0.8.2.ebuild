@@ -17,10 +17,24 @@ SRC_URI="https://github.com/basho/${MY_PN}/archive/${PV}.tar.gz
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE="test"
 
-DEPEND=">=dev-lang/erlang-17.1"
-RDEPEND="${DEPEND}"
+CDEPEND=">=dev-lang/erlang-17.1"
+DEPEND="${CDEPEND}
+	test? (
+		>=dev-erlang/meck-0.8.2
+		>=dev-erlang/proper-1.1
+	)"
+RDEPEND="${CDEPEND}"
 
 DOCS=( AUTHORS  ChangeLog  README.markdown )
 
 S="${WORKDIR}/${MY_P}"
+
+src_test() {
+	./scripts/generate_emakefile.escript || die
+	erebar ct
+	# FIXME: 1 test fails, reported upstream:
+	# FIXME: https://github.com/basho/erlang_protobuffs/issues/100
+	# FIXME: erebar eunit
+}
