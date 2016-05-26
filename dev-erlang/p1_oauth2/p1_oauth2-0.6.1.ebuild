@@ -14,8 +14,23 @@ SRC_URI="https://github.com/processone/${PN}/archive/${PV}.tar.gz
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+IUSE="test"
 
-DEPEND=">=dev-lang/erlang-17.1"
-RDEPEND="${DEPEND}"
+CDEPEND=">=dev-lang/erlang-17.1"
+DEPEND="${CDEPEND}
+	test? (
+		>=dev-erlang/meck-0.8.3
+		>=dev-erlang/proper-1.1_p20150814
+	)"
+RDEPEND="${CDEPEND}"
 
 DOCS=( CHANGELOG.md  README.md )
+
+src_prepare() {
+	rebar_src_prepare
+	rebar_remove_deps rebar.test.config
+}
+
+src_test() {
+	erebar -C rebar.test.config compile eunit
+}
