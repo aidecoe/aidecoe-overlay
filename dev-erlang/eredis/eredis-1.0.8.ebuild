@@ -19,3 +19,6 @@ DEPEND=">=dev-lang/erlang-17.1"
 RDEPEND="${DEPEND}"
 
 DOCS=( AUTHORS  CHANGELOG.md  README.md )
+
+# Needs running redis instance at 127.0.0.1:6379.
+RESTRICT=test
