@@ -22,8 +22,17 @@ RDEPEND="${CDEPEND}"
 
 DOCS=( NOTES  README.markdown TODO.md )
 
+# FIXME: Fails, reported upstream:
+# FIXME: https://github.com/hyperthunk/hamcrest-erlang/issues/21
+RESTRICT="test"
+
 # Override with EAPI default because it's missing hamcrest.app.src and doesn't
 # have any deps.
 src_prepare() {
 	default
+}
+
+src_test() {
+	rebar_remove_deps test.config
+	erebar -C test.config compile ct
 }
