@@ -88,7 +88,7 @@ correct_ejabberd_paths() {
 	sed -e "/EJABBERD_BIN_PATH=/{s:ejabberd:${P}:}" \
 		-i "${S}/ejabberdctl.template" \
 		|| die 'failed to set ejabberd path in ejabberdctl.template'
-	sed -e 's|\({captcha_cmd,[[:space:]]*"\).\+"}|\1'$(get_ejabberd_path)'/priv/bin/captcha.sh"}|' \
+	sed -e 's|\(captcha_cmd:[[:space:]]*"\).\+"|\1'$(get_ejabberd_path)'/priv/bin/captcha.sh"|' \
 		-i "${S}/ejabberd.yml.example" \
 		|| die 'failed to correct path to captcha.sh in example config'
 }
