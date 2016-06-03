@@ -29,11 +29,12 @@ IUSE="crypt debug doc emacs mutt nmbug python test"
 CDEPEND="
 	>=app-shells/bash-completion-1.9
 	>=dev-libs/glib-2.22:2
-	>=dev-libs/gmime-2.6.20:2.6
+	>=dev-libs/gmime-2.6.20-r2:2.6
 	>=dev-libs/xapian-1.2.7-r2:=
 	dev-python/sphinx[${PYTHON_USEDEP}]
 	>=sys-libs/zlib-1.2.5.2
 	sys-libs/talloc
+	crypt? ( >=dev-libs/gmime-2.6.20-r2:2.6[smime] )
 	debug? ( dev-util/valgrind )
 	emacs? ( >=virtual/emacs-23 )
 	python? ( ${PYTHON_DEPS} )
@@ -42,7 +43,8 @@ DEPEND="${CDEPEND}
 	virtual/pkgconfig
 	doc? ( app-doc/doxygen )
 	test? ( app-misc/dtach || ( >=app-editors/emacs-23[libxml2]
-		>=app-editors/emacs-vcs-23[libxml2] ) sys-devel/gdb )
+		>=app-editors/emacs-vcs-23[libxml2] ) sys-devel/gdb
+		crypt? ( app-crypt/gnupg dev-libs/openssl ) )
 	"
 RDEPEND="${CDEPEND}
 	crypt? ( app-crypt/gnupg )
@@ -50,8 +52,7 @@ RDEPEND="${CDEPEND}
 	mutt? ( dev-perl/File-Which dev-perl/Mail-Box dev-perl/MailTools
 		dev-perl/String-ShellQuote dev-perl/Term-ReadLine-Gnu
 		virtual/perl-Digest-SHA virtual/perl-File-Path virtual/perl-Getopt-Long
-		virtual/perl-Pod-Parser
-		)
+		virtual/perl-Pod-Parser )
 	"
 
 DOCS=( AUTHORS NEWS README )
