@@ -16,10 +16,10 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="test"
 
-DEPEND=">=dev-erlang/p1_utils-1.0.0
+RDEPEND=">=dev-erlang/p1_utils-1.0.0
 	>=dev-lang/erlang-17.1
-	dev-libs/expat
+	dev-libs/expat"
+DEPEND="${RDEPEND}
 	test? ( dev-lang/elixir )"
-RDEPEND="${DEPEND}"
 
 DOCS=( CHANGELOG.md  README.md )
