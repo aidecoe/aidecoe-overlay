@@ -1,0 +1,27 @@
+From 78841735eff2e508d7f25df6692530761074efcc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Amadeusz=20Piotr=20=C5=BBo=C5=82nowski?=
+ <aidecoe@aidecoe.name>
+Date: Sat, 19 Jan 2019 12:14:17 +0000
+Subject: [PATCH] Don't include postlogin in pam file
+
+---
+ qrexec.pam | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/qrexec.pam b/qrexec.pam
+index c6896bc..d38c9a1 100644
+--- a/qrexec.pam
++++ b/qrexec.pam
+@@ -1,9 +1,7 @@
+ #%PAM-1.0
+ auth		sufficient	pam_rootok.so
+ auth		substack	system-auth
+-auth		include		postlogin
+ account		sufficient	pam_succeed_if.so uid = 0 use_uid quiet
+ account		include		system-auth
+ password	include		system-auth
+ session		include		system-auth
+-session		include		postlogin
+-- 
+2.17.2
+

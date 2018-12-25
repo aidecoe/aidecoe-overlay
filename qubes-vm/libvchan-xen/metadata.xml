@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>aidecoe@gentoo.org</email>
+	</maintainer>
+	<upstream>
+		<bugs-to>https://github.com/QubesOS/qubes-issues</bugs-to>
+		<remote-id type="github">QubesOS/qubes-core-vchan-xen</remote-id>
+	</upstream>
+</pkgmetadata>
