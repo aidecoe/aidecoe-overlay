@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <layman>
   <overlay name="aidecoe" quality="experimental" status="official" type="git"
-    src="git://github.com/aidecoe/aidecoe-overlay.git"
+    src="https://github.com/aidecoe/aidecoe-overlay.git"
     contact="aidecoe@aidecoe.name">
     <link>http://github.com/aidecoe/aidecoe-overlay/tree/master</link>
     <description>aidecoe's experimental overlay</description>
