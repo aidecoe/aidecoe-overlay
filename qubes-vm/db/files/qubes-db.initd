@@ -1,0 +1,23 @@
+#!/sbin/openrc-run
+# Copyright 2019 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="qubesdb"
+description="Qubes DB agent"
+command=/usr/sbin/qubesdb-daemon
+command_args="0"
+command_background=0
+
+depend() { 
+	need localmount 
+	after bootmisc
+}
+
+pre_start() {
+	checkpath -d -m0775 -o qubes:qubes  /var/run/qubes
+	checkpath -d -m0775 -o qubes:qubes /var/log/qubes
+	logger -t wat ls -lha /var/run
+	logger -t wat ls -lha /run
+	logger -t wat $(grep /run /proc/mounts)
+}
+
