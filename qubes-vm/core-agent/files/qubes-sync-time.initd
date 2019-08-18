@@ -1,0 +1,19 @@
+#!/sbin/openrc-run
+# Copyright 2019 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="qubes sync-time"
+description="Update time from ClockVM"
+command=/usr/bin/qvm-sync-clock
+command_user=root
+
+depend() {
+	need qubes-services
+}
+
+start_pre() {
+	if [ -e /var/run/qubes-service/clocksync ]; then
+		einfo /var/run/qubes-service/clocksync exists, not starting ${RC_SVCNAME}
+		return 0
+	fi
+}

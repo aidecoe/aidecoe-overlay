@@ -1,0 +1,42 @@
+#!/sbin/openrc-run
+# Copyright 2019 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="resize rootfs on qubes template"
+description="Adjust root filesystem size"
+
+depend() {
+	after sysfs
+	before localmount
+}
+
+_resize_needed() {
+	# if underlying root device is read-only, don't do anything
+	if [ "$(blockdev --getro /dev/xvda)" -eq "1" ]; then
+	    einfo "xvda is read-only, not resizing"
+	    return 0
+	fi
+
+	local sysfs_xvda="/sys/class/block/xvda"
+
+	# if root filesystem use already (almost) the whole dis
+	local non_rootfs_data=$(( 250 * 1024 * 2 ))
+	local rootfs_size=$(df --output=size / | tail -n 1)
+	# convert to 512-byte blocks
+	local rootfs_size=$(( rootfs_size * 2 ))
+	if [ "$(cat "$sysfs_xvda/size")" -lt \
+	       $(( non_rootfs_data + rootfs_size )) ]; then
+	   einfo "root filesystem already at $rootfs_size blocks"
+	   return 0
+	fi
+
+	return 1
+}
+
+start() {
+	if _resize_needed; then
+		ebegin "Resizing rootfs"
+		/usr/lib/qubes/resize-rootfs >/dev/null 2>&1
+		eend $?
+	fi
+}

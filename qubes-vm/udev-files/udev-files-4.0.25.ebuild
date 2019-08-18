@@ -6,7 +6,7 @@ EAPI=7
 MY_PN="qubes-linux-utils"
 MY_P="${MY_PN}-${PV}"
 
-DESCRIPTION="Qubes..."
+DESCRIPTION="Qubes VM udev rules and scripts"
 HOMEPAGE="https://www.qubes-os.org/"
 SRC_URI="https://github.com/QubesOS/${MY_PN}/archive/v${PV}.tar.gz -> ${MY_P}.tar.gz"
 
@@ -15,18 +15,14 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-S="${WORKDIR}/${MY_P}/qrexec-lib"
+S="${WORKDIR}/${MY_P}/udev"
 
-CDEPEND=">=app-emulation/xen-tools-4.8
-	qubes-vm/libvchan-xen:="
-DEPEND="${CDEPEND}
-	virtual/pkgconfig"
-RDEPEND="${CDEPEND}"
-
-src_compile() {
-	BACKEND_VMM=xen default
-}
+DEPEND=""
+RDEPEND="sys-fs/lvm2
+	qubes-vm/db
+	virtual/libiconv
+	virtual/udev"
 
 src_install() {
-	INCLUDEDIR="/usr/include" LIBDIR="/usr/$(get_libdir)" default
+	SCRIPTSDIR=/usr/lib/qubes SYSLIBDIR=/lib default
 }

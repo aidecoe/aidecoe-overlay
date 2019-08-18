@@ -1,0 +1,14 @@
+#!/sbin/openrc-run
+# Copyright 2019 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="qubes-meminfo-writer"
+description="Qubes memory information reporter"
+command=/usr/sbin/meminfo-writer
+required_files=/var/run/qubes-service/meminfo-writer
+pidfile=/var/run/meminfo-writer.pid
+command_args="${MEM_CHANGE_THRESHOLD_KB} ${MEMINFO_DELAY_USEC} ${pidfile}"
+
+depend() {
+	need qubes-db
+}
