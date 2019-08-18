@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 )
+PYTHON_COMPAT=( python3_6 )
 
 inherit python-single-r1 systemd tmpfiles
 
@@ -26,6 +26,7 @@ CDEPEND="gnome-extra/zenity
 	qubes-vm/db
 	qubes-vm/gui-common
 	qubes-vm/libvchan-xen:=
+	virtual/pam
 	x11-base/xorg-server
 	x11-libs/libX11
 	x11-libs/libXcomposite
@@ -56,8 +57,15 @@ make_session_wrapper() {
 	doexe "${T}/${session_name}"
 }
 
+src_prepare() {
+	default
+	sed -e /postlogin/d \
+		-i ../appvm-scripts/etc/pam.d/qubes-gui-agent
+}
+
 src_compile() {
 	BACKEND_VMM=xen default
+	emake -C ../gui-common
 }
 
 src_install() {
@@ -69,7 +77,6 @@ src_install() {
 	make_session_wrapper /usr/bin/qubes-session Qubes
 
 	insinto /etc/X11
-	doins ../appvm-scripts/etc/X11/Xwrapper.config  # rh
 	doins ../appvm-scripts/etc/X11/xorg-qubes.conf.template
 
 	# TODO: Install only to one of Xsession.d or xinitrc.d
@@ -94,6 +101,9 @@ src_install() {
 	insinto /etc/security/limits.d
 	doins ../appvm-scripts/etc/securitylimits.d/90-qubes-gui.conf
 
+	insinto /etc/pam.d
+	doins ../appvm-scripts/etc/pam.d/qubes-gui-agent
+
 	insinto /etc/xdg
 	doins ../appvm-scripts/etc/xdg/Trolltech.conf
 
@@ -113,11 +123,16 @@ src_install() {
 	doins ../appvm-scripts/qubes-gui-vm.gschema.override
 
 	dotmpfiles ../appvm-scripts/etc/tmpfiles.d/qubes-session.conf
+
 	install_systemd_units "${SYSTEMD_UNITS[@]}"
+	doinitd ../appvm-scripts/etc/init.d/qubes-gui-agent
 
 	keepdir /var/log/qubes
 
 	python_fix_shebang "${ED}"usr/bin
+
+	# gui-common
+	dobin ../gui-common/qubes-gui-runuser
 }
 
 pkg_postinst() {

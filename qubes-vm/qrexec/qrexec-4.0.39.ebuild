@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -23,7 +23,8 @@ CDEPEND="qubes-vm/libvchan-xen:=
 	qubes-vm/libqrexec"
 DEPEND="${CDEPEND}
 	virtual/pkgconfig"
-RDEPEND="${CDEPEND}"
+RDEPEND="${CDEPEND}
+	acct-group/qubes"
 
 PATCHES=( ${FILESDIR}/0001-Don-t-include-postlogin-in-pam-file.patch )
 
@@ -37,10 +38,6 @@ install_systemd_units() {
 		systemd_dounit "${unit}"
 	done
 
-}
-
-pkg_setup() {
-	enewgroup qubes 98
 }
 
 src_compile() {

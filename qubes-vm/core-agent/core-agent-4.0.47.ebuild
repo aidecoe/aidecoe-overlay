@@ -26,19 +26,19 @@ CDEPEND="app-emulation/xen-tools
 	virtual/pam"
 DEPEND="${CDEPEND}
 	systemd? ( sys-apps/systemd[-resolvconf] )
+	app-text/pandoc
 	dev-python/setuptools
 	virtual/pkgconfig"
 RDEPEND="${CDEPEND}
+	network? ( sys-apps/ethtool )
 	dev-python/python-daemon[${PYTHON_USEDEP}]
 	dev-python/dbus-python[${PYTHON_USEDEP}]
 	dev-python/pygobject:3[${PYTHON_USEDEP}]
 	dev-python/pyxdg[${PYTHON_USEDEP}]
-	app-portage/eix
 	gnome-base/dconf
 	gnome-base/librsvg[tools]
 	gnome-extra/zenity
 	media-gfx/imagemagick
-	sys-apps/ethtool
 	sys-auth/polkit
 	sys-block/parted
 	qubes-vm/db[python,${PYTHON_USEDEP}]
@@ -47,6 +47,10 @@ RDEPEND="${CDEPEND}
 	qubes-vm/qrexec
 	x11-misc/xdg-utils
 	x11-terms/xterm"
+
+PATCHES=(
+	"${FILESDIR}"/${PV}-manpages-no-gzip.patch
+)
 
 SYSTEMD_SERVICES_COMMON=(
 	vm-systemd/qubes-early-vm-config.service
@@ -74,6 +78,17 @@ SYSTEMD_UNITS_COMMON=(
 SYSTEMD_UNITS_NETWORK=(
 	"${SYSTEMD_SERVICES_NETWORK[@]}"
 )
+SYSVINIT_SCRIPTS_COMMON=(
+	vm-init.d/qubes-core
+	vm-init.d/qubes-core-early
+	vm-init.d/qubes-sysinit
+	vm-init.d/qubes-updates-proxy-forwarder
+)
+SYSVINIT_SCRIPTS_NETWORK=(
+	vm-init.d/qubes-firewall
+	vm-init.d/qubes-core-netvm
+	vm-init.d/qubes-updates-proxy
+)
 
 sudoers_newins() (
 	insopts -m 0440
@@ -94,26 +109,32 @@ install_systemd_units() {
 	for unit in "${@}"; do
 		systemd_dounit "${unit}"
 	done
+}
 
+install_sysvinit_scripts() {
+	local script
+	for script in "${@}"; do
+		doinitd "${script}"
+	done
 }
 
 src_prepare() {
 	default
 
-	eapply "${FILESDIR}"/upgrades-check.patch
-
-	sed -e 's:/sbin/ifconfig:ifconfig:g' \
-		-e 's:/sbin/route:route:g' \
-		-e 's:/sbin/ethtool:ethtool:g' \
-		-e 's:/sbin/ip:ip:g' \
-		-e 's:/bin/grep:grep:g' \
-		-e 's:/usr/sbin/qubes-firewall:/usr/bin/qubes-firewall:g' \
-		-i network/* vm-systemd/*
+	find network vm-systemd vm-init.d -type f -exec \
+		sed -e 's:/sbin/ifconfig:ifconfig:g' \
+			-e 's:/sbin/route:route:g' \
+			-e 's:/sbin/ethtool:ethtool:g' \
+			-e 's:/sbin/ip:ip:g' \
+			-e 's:/bin/grep:grep:g' \
+			-e 's:/usr/sbin/qubes-firewall:/usr/bin/qubes-firewall:g' \
+			-i '{}' '+'
 }
 
 src_compile() {
 	distutils-r1_src_compile
 	emake -C misc xenstore-watch close-window
+	emake -C doc manpages
 }
 
 src_install() {
@@ -141,14 +162,6 @@ src_install() {
 	doexe misc/upgrades-installed-check
 	doexe misc/upgrades-status-notify
 
-	dosym "${qubeslibdir}"/upgrades-status-notify \
-		/etc/portage/postsync.d/20-qubes-upgrades-notify
-
-	exeinto /etc/portage/env
-	doexe "${FILESDIR}"/portage-sync-appmenus
-	insinto /etc/portage/package.env
-	doins "${FILESDIR}"/all-sync-appmenus
-
 	exeinto "${qubeslibdir}/init"
 	doexe init/*.sh
 	doexe vm-systemd/*.sh
@@ -156,14 +169,7 @@ src_install() {
 	doins init/functions
 	systemd_dopreset vm-systemd/75-qubes-vm.preset
 	install_systemd_units "${SYSTEMD_UNITS_COMMON[@]}"
-
-	if use !systemd; then
-		local svc
-		for svc in core core-early core-netvm firewall sysinit \
-			updates-proxy updates-proxy-forwarder; do
-			newinitd vm-init.d/"qubes-${svc}" "qubes-${svc}"
-		done
-	fi
+	install_sysvinit_scripts "${SYSVINIT_SCRIPTS_COMMON[@]}"
 
 	insinto /etc/polkit-1/rules.d
 	newins misc/polkit-1-qubes-allow-all.rules 00-qubes-allow-all.rules
@@ -201,8 +207,11 @@ src_install() {
 	keepdir /rw
 	keepdir /var/lib/qubes
 
+	doman doc/vm-tools/*.1
+
 	if use network; then
 		install_systemd_units "${SYSTEMD_UNITS_NETWORK[@]}"
+		install_sysvinit_scripts "${SYSVINIT_SCRIPTS_NETWORK[@]}"
 		udev_newrules network/udev-qubes-network.rules 99-qubes-network.rules
 
 		exeinto "${qubeslibdir}"
@@ -212,6 +221,6 @@ src_install() {
 	newbin "${FILESDIR}"/with-qubes-proxy.sh with-qubes-proxy
 }
 
-pkg_postint() {
+pkg_postinst() {
 	udev_reload
 }

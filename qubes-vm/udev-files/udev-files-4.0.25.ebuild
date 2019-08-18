@@ -3,10 +3,10 @@
 
 EAPI=7
 
-MY_PN=qubes-gui-common
-MY_P=${MY_PN}-${PV}
+MY_PN="qubes-linux-utils"
+MY_P="${MY_PN}-${PV}"
 
-DESCRIPTION="Common files for Qubes GUI - protocol headers"
+DESCRIPTION="Qubes VM udev rules and scripts"
 HOMEPAGE="https://www.qubes-os.org/"
 SRC_URI="https://github.com/QubesOS/${MY_PN}/archive/v${PV}.tar.gz -> ${MY_P}.tar.gz"
 
@@ -15,14 +15,14 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-S="${WORKDIR}/${MY_P}"
+S="${WORKDIR}/${MY_P}/udev"
 
 DEPEND=""
-RDEPEND="${DEPEND}"
-BDEPEND="virtual/pkgconfig"
+RDEPEND="sys-fs/lvm2
+	qubes-vm/db
+	virtual/libiconv
+	virtual/udev"
 
 src_install() {
-	doheader include/qubes-gui-protocol.h
-	doheader include/qubes-xorg-tray-defs.h
-	dobin qubes-gui-runuser
+	SCRIPTSDIR=/usr/lib/qubes SYSLIBDIR=/lib default
 }

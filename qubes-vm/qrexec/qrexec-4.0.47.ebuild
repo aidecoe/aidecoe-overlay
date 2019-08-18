@@ -3,12 +3,12 @@
 
 EAPI=7
 
-inherit systemd
+inherit systemd tmpfiles user
 
-MY_PN="qubes-linux-utils"
+MY_PN="qubes-core-agent-linux"
 MY_P="${MY_PN}-${PV}"
 
-DESCRIPTION="Qubes memory information reporter"
+DESCRIPTION="Qubes VM qrexec"
 HOMEPAGE="https://www.qubes-os.org/"
 SRC_URI="https://github.com/QubesOS/${MY_PN}/archive/v${PV}.tar.gz -> ${MY_P}.tar.gz"
 
@@ -17,16 +17,19 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-S="${WORKDIR}/${MY_P}/qmemman"
+S="${WORKDIR}/${MY_P}/qrexec"
 
-CDEPEND="qubes-vm/libvchan-xen:="
+CDEPEND="qubes-vm/libvchan-xen:=
+	qubes-vm/libqrexec"
 DEPEND="${CDEPEND}
 	virtual/pkgconfig"
-RDEPEND="${CDEPEND}"
+RDEPEND="${CDEPEND}
+	acct-group/qubes"
+
+PATCHES=( ${FILESDIR}/0001-Don-t-include-postlogin-in-pam-file.patch )
 
 SYSTEMD_UNITS=(
-	qubes-meminfo-writer.service
-	qubes-meminfo-writer-dom0.service
+	../vm-systemd/qubes-qrexec-agent.service
 )
 
 install_systemd_units() {
@@ -34,11 +37,19 @@ install_systemd_units() {
 	for unit in "${@}"; do
 		systemd_dounit "${unit}"
 	done
+}
 
+src_compile() {
+	BACKEND_VMM=xen default
 }
 
 src_install() {
-	dosbin meminfo-writer
+	default
+	dotmpfiles "${FILESDIR}"/qubes-vm-qrexec.conf
 	install_systemd_units "${SYSTEMD_UNITS[@]}"
-	newinitd "${FILESDIR}"/qubes-meminfo-writer.initd qubes-meminfo-writer
+	doinitd ../vm-init.d/qubes-qrexec-agent
+}
+
+pkg_postinst() {
+	tmpfiles_process qubes-vm-qrexec.conf
 }

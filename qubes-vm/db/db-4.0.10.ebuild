@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -18,28 +18,16 @@ SRC_URI="https://github.com/QubesOS/${MY_PN}/archive/v${PV}.tar.gz -> ${MY_P}.ta
 LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="python"
+IUSE="python systemd"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 S="${WORKDIR}/${MY_P}"
 
-DEPEND="sys-apps/systemd
+DEPEND="systemd? ( sys-apps/systemd )
 	qubes-vm/libvchan-xen:=
 	python? ( ${PYTHON_DEPS} )"
 RDEPEND="${DEPEND}"
 BDEPEND="virtual/pkgconfig"
-
-SYSTEMD_UNITS=(
-	daemon/qubes-db.service
-)
-
-install_systemd_units() {
-	local unit
-	for unit in "${@}"; do
-		systemd_dounit "${unit}"
-	done
-
-}
 
 bindings() {
 	local ret=0
@@ -57,19 +45,24 @@ bindings() {
 
 src_prepare() {
 	default
+
+	if use !systemd; then
+		epatch "${FILESDIR}/${PV}-no-systemd-deps.patch"
+	fi
+
 	bindings python distutils-r1_src_prepare
 }
 
 src_compile() {
 	BACKEND_VMM=xen emake -C daemon
 	BACKEND_VMM=xen emake -C client
-
 	BACKEND_VMM=xen bindings python distutils-r1_src_compile
 }
 
 src_install() {
 	default
-	install_systemd_units "${SYSTEMD_UNITS[@]}"
+	systemd_dounit daemon/qubes-db.service
+	newinitd "${FILESDIR}/qubes-db.initd" qubes-db
 
 	bindings python distutils-r1_src_install
 }
