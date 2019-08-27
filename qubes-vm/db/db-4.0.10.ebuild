@@ -24,6 +24,7 @@ REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 S="${WORKDIR}/${MY_P}"
 
 DEPEND="qubes-vm/libvchan-xen:=
+	systemd? ( sys-apps/systemd )
 	python? ( ${PYTHON_DEPS} )"
 RDEPEND="${DEPEND}"
 BDEPEND="virtual/pkgconfig"
@@ -56,7 +57,8 @@ bindings() {
 
 src_prepare() {
 	default
-	if use systemd; then
+
+	if use !systemd; then
 		epatch "${FILESDIR}/no-systemd-deps.patch"
 	fi
 	bindings python distutils-r1_src_prepare
@@ -65,7 +67,6 @@ src_prepare() {
 src_compile() {
 	BACKEND_VMM=xen emake -C daemon
 	BACKEND_VMM=xen emake -C client
-
 	BACKEND_VMM=xen bindings python distutils-r1_src_compile
 }
 
