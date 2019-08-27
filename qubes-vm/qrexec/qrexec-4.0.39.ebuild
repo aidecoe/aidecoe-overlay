@@ -23,7 +23,8 @@ CDEPEND="qubes-vm/libvchan-xen:=
 	qubes-vm/libqrexec"
 DEPEND="${CDEPEND}
 	virtual/pkgconfig"
-RDEPEND="${CDEPEND}"
+RDEPEND="${CDEPEND}
+	acct-group/qubes"
 
 PATCHES=( ${FILESDIR}/0001-Don-t-include-postlogin-in-pam-file.patch )
 
@@ -37,10 +38,6 @@ install_systemd_units() {
 		systemd_dounit "${unit}"
 	done
 
-}
-
-pkg_setup() {
-	enewgroup qubes 98
 }
 
 src_compile() {
