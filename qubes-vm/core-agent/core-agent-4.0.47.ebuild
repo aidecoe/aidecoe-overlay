@@ -17,7 +17,7 @@ SRC_URI="https://github.com/QubesOS/${MY_PN}/archive/v${PV}.tar.gz -> ${MY_P}.ta
 LICENSE="GPL-2+"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="+network"
+IUSE="+network systemd"
 
 S="${WORKDIR}/${MY_P}"
 
@@ -25,6 +25,7 @@ CDEPEND="app-emulation/xen-tools
 	x11-libs/libX11
 	virtual/pam"
 DEPEND="${CDEPEND}
+	systemd? ( sys-apps/systemd[-resolvconf] )
 	dev-python/setuptools
 	virtual/pkgconfig"
 RDEPEND="${CDEPEND}
