@@ -146,10 +146,13 @@ src_install() {
 	systemd_dopreset vm-systemd/75-qubes-vm.preset
 	install_systemd_units "${SYSTEMD_UNITS_COMMON[@]}"
 
-	local svc
-	for svc in early-config rootfs-resize services sync-time; do
-		newinitd "${FILESDIR}/qubes-${svc}.initd" "qubes-${svc}"
-	done
+	if use !systemd; then
+		local svc
+		for svc in core core-early core-netvm firewall sysinit \
+			updates-proxy updates-proxy-forwarder; do
+			newinitd vm-init.d/"qubes-${svc}" "qubes-${svc}"
+		done
+	fi
 
 	insinto /etc/polkit-1/rules.d
 	newins misc/polkit-1-qubes-allow-all.rules 00-qubes-allow-all.rules
