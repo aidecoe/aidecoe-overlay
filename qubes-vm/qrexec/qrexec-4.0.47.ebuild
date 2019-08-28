@@ -1,7 +1,7 @@
 # Copyright 2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit systemd tmpfiles user
 
@@ -47,7 +47,7 @@ src_install() {
 	default
 	dotmpfiles "${FILESDIR}"/qubes-vm-qrexec.conf
 	install_systemd_units "${SYSTEMD_UNITS[@]}"
-	newinitd vm-init.d/qubes-qrexec-agent
+	doinitd ../vm-init.d/qubes-qrexec-agent
 }
 
 pkg_postinst() {

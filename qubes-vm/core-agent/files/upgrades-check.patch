@@ -1,0 +1,20 @@
+--- a/misc/upgrades-installed-check	2019-08-28 05:43:13.255999658 +0300
++++ b/misc/upgrades-installed-check	2019-08-28 05:47:05.403005556 +0300
+@@ -35,6 +35,17 @@
+     checkupdates_output="$(checkupdates 2>&1)"
+     exit_code="$?"
+     echo "$checkupdates_output" | grep -qF -- '->' && echo "false" || echo "true"
++elif [ -e /etc/gentoo-release ]; then
++    ## gentoo
++    set -e
++    set -o pipefail
++    if [[ "$(/usr/bin/eix '-*uc'|wc -l)" -eq 0 ]]; then
++        exit_code=1
++        echo "false"
++    else
++        exit_code=0
++        echo "true"
++    fi
+ else
+     echo "Check not implemented for this distribution" >&2
+     exit 1

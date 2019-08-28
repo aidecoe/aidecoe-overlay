@@ -33,6 +33,7 @@ RDEPEND="${CDEPEND}
 	dev-python/dbus-python[${PYTHON_USEDEP}]
 	dev-python/pygobject:3[${PYTHON_USEDEP}]
 	dev-python/pyxdg[${PYTHON_USEDEP}]
+	app-portage/eix
 	gnome-base/dconf
 	gnome-base/librsvg[tools]
 	gnome-extra/zenity
@@ -99,6 +100,8 @@ install_systemd_units() {
 src_prepare() {
 	default
 
+	eapply "${FILESDIR}"/upgrades-check.patch
+
 	sed -e 's:/sbin/ifconfig:ifconfig:g' \
 		-e 's:/sbin/route:route:g' \
 		-e 's:/sbin/ethtool:ethtool:g' \
@@ -137,6 +140,9 @@ src_install() {
 	doexe misc/close-window
 	doexe misc/upgrades-installed-check
 	doexe misc/upgrades-status-notify
+
+	dosym "${qubeslibdir}"/upgrades-status-notify \
+		/etc/portage/postsync.d/20-qubes-upgrades-notify
 
 	exeinto /etc/portage/env
 	doexe "${FILESDIR}"/portage-sync-appmenus

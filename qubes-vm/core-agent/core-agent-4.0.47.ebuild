@@ -33,6 +33,7 @@ RDEPEND="${CDEPEND}
 	dev-python/dbus-python[${PYTHON_USEDEP}]
 	dev-python/pygobject:3[${PYTHON_USEDEP}]
 	dev-python/pyxdg[${PYTHON_USEDEP}]
+	app-portage/eix
 	gnome-base/dconf
 	gnome-base/librsvg[tools]
 	gnome-extra/zenity
@@ -99,6 +100,8 @@ install_systemd_units() {
 src_prepare() {
 	default
 
+	eapply "${FILESDIR}"/upgrades-check.patch
+
 	{
 		find network -type f;
 		find vm-systemd -type f;
@@ -143,10 +146,8 @@ src_install() {
 	doexe misc/upgrades-installed-check
 	doexe misc/upgrades-status-notify
 
-	exeinto /etc/portage/env
-	doexe "${FILESDIR}"/portage-sync-appmenus
-	insinto /etc/portage/package.env
-	doins "${FILESDIR}"/all-sync-appmenus
+	dosym "${qubeslibdir}"/upgrades-status-notify \
+		/etc/portage/postsync.d/qubes-upgrades-notify
 
 	exeinto "${qubeslibdir}/init"
 	doexe init/*.sh
@@ -212,6 +213,6 @@ src_install() {
 	newbin "${FILESDIR}"/with-qubes-proxy.sh with-qubes-proxy
 }
 
-pkg_postint() {
+pkg_postinst() {
 	udev_reload
 }
