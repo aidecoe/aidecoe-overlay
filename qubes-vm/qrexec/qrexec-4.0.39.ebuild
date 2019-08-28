@@ -48,7 +48,7 @@ src_install() {
 	default
 	dotmpfiles "${FILESDIR}"/qubes-vm-qrexec.conf
 	install_systemd_units "${SYSTEMD_UNITS[@]}"
-	newinitd "${FILESDIR}"/qubes-qrexec-agent.initd qubes-qrexec-agent
+	newinitd vm-init.d/qubes-qrexec-agent
 }
 
 pkg_postinst() {
