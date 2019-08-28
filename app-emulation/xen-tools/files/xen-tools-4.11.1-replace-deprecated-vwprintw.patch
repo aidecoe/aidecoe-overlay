@@ -1,0 +1,11 @@
+--- a/tools/xenstat/xentop/xentop.c	2018-11-29 15:04:11.000000000 +0100
++++ b/tools/xenstat/xentop/xentop.c	2019-07-18 20:49:52.720450459 +0200
+@@ -301,7 +301,7 @@
+ 	if (!batch) {
+ 		if((current_row() < lines()-1)) {
+ 			va_start(args, fmt);
+-			vwprintw(stdscr, (curses_str_t)fmt, args);
++			vw_printw(stdscr, (curses_str_t)fmt, args);
+ 			va_end(args);
+ 		}
+ 	} else {

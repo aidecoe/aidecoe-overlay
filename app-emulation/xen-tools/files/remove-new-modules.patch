@@ -1,0 +1,40 @@
+diff -Naur ./xen-4.10.2.old/tools/configure ./xen-4.10.2.new/tools/configure
+--- a/tools/configure	2018-09-25 15:02:25.000000000 +0100
++++ b/tools/configure	2019-01-11 23:40:15.743000000 +0000
+@@ -4187,16 +4187,6 @@
+ xen-gntalloc
+ xen-blkback
+ xen-netback
+-xen-pciback
+-evtchn
+-gntdev
+-netbk
+-blkbk
+-xen-scsibk
+-usbbk
+-pciback
+-xen-acpi-processor
+-blktap2
+ "
+ ;;
+ *)
+diff -Naur ./xen-4.10.2.old/tools/configure.ac ./xen-4.10.2.new/tools/configure.ac
+--- a/tools/configure.ac	2018-09-25 15:02:25.000000000 +0100
++++ b/tools/configure.ac	2019-01-11 23:40:30.365000000 +0000
+@@ -97,16 +97,6 @@
+ xen-gntalloc
+ xen-blkback
+ xen-netback
+-xen-pciback
+-evtchn
+-gntdev
+-netbk
+-blkbk
+-xen-scsibk
+-usbbk
+-pciback
+-xen-acpi-processor
+-blktap2
+ "
+ ;;
+ *)
