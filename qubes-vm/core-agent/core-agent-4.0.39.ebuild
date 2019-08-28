@@ -138,6 +138,11 @@ src_install() {
 	doexe misc/upgrades-installed-check
 	doexe misc/upgrades-status-notify
 
+	exeinto /etc/portage/env
+	doexe "${FILESDIR}"/portage-sync-appmenus
+	insinto /etc/portage/package.env
+	doins "${FILESDIR}"/all-sync-appmenus
+
 	exeinto "${qubeslibdir}/init"
 	doexe init/*.sh
 	doexe vm-systemd/*.sh
