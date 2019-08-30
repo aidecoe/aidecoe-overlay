@@ -149,9 +149,9 @@ src_install() {
 	dosym "${qubeslibdir}"/upgrades-status-notify \
 		/etc/portage/postsync.d/20-qubes-upgrades-notify
 
-	exeinto /etc/portage/env
+	exeinto /etc/portage/profile/bashrc
 	doexe "${FILESDIR}"/portage-sync-appmenus
-	insinto /etc/portage/package.env
+	insinto /etc/portage/profile/package.bashrc
 	doins "${FILESDIR}"/all-sync-appmenus
 
 	exeinto "${qubeslibdir}/init"
