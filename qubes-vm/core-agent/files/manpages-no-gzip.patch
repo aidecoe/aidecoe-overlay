@@ -1,0 +1,21 @@
+--- a/doc/Makefile	2019-09-02 07:08:01.340837233 +0300
++++ b/doc/Makefile	2019-09-02 07:08:33.167518657 +0300
+@@ -2,7 +2,7 @@
+ PANDOC=pandoc -s -f rst -t man
+ RPMS_DIR=rpm/
+ 
+-VM_DOCS=$(patsubst %.rst,%.1.gz,$(wildcard $(VM_DIR)/*.rst))
++VM_DOCS=$(patsubst %.rst,%.1,$(wildcard $(VM_DIR)/*.rst))
+ 
+ help:
+ 	@echo "make rpms			-- generate manpages and create RPM package"
+@@ -17,9 +17,6 @@
+ %.1: %.rst
+ 	$(PANDOC) $< > $@
+ 
+-%.1.gz: %.1
+-	gzip -f $<
+-
+ manpages: $(QVM_DOCS) $(QUBES_DOCS) $(VM_DOCS)
+ 
+ preview:	$(rst)

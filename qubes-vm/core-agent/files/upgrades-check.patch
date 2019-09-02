@@ -9,11 +9,11 @@
 +    set -e
 +    set -o pipefail
 +    if [[ "$(/usr/bin/eix '-*uc'|wc -l)" -eq 0 ]]; then
-+        exit_code=1
-+        echo "false"
-+    else
 +        exit_code=0
 +        echo "true"
++    else
++        exit_code=1
++        echo "false"
 +    fi
  else
      echo "Check not implemented for this distribution" >&2

@@ -10,5 +10,6 @@
 	</upstream>
 	<use>
 		<flag name="network">Enable networking in VM</flag>
+		<flag name="man">Generate and install manpages</flag>
 	</use>
 </pkgmetadata>
