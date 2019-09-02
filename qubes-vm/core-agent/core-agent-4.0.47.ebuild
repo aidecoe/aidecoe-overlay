@@ -123,18 +123,14 @@ install_sysvinit_scripts() {
 src_prepare() {
 	default
 
-	{
-		find network -type f;
-		find vm-systemd -type f;
-	} | while read -r fn; do
-	sed -e 's:/sbin/ifconfig:ifconfig:g' \
-		-e 's:/sbin/route:route:g' \
-		-e 's:/sbin/ethtool:ethtool:g' \
-		-e 's:/sbin/ip:ip:g' \
-		-e 's:/bin/grep:grep:g' \
-		-e 's:/usr/sbin/qubes-firewall:/usr/bin/qubes-firewall:g' \
-		-i "$fn"
-	done
+	find network vm-systemd vm-init.d -type f -exec \
+		sed -e 's:/sbin/ifconfig:ifconfig:g' \
+			-e 's:/sbin/route:route:g' \
+			-e 's:/sbin/ethtool:ethtool:g' \
+			-e 's:/sbin/ip:ip:g' \
+			-e 's:/bin/grep:grep:g' \
+			-e 's:/usr/sbin/qubes-firewall:/usr/bin/qubes-firewall:g' \
+			-i '{}' '+'
 }
 
 src_compile() {
