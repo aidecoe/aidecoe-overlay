@@ -147,12 +147,7 @@ src_install() {
 	doexe misc/upgrades-status-notify
 
 	dosym "${qubeslibdir}"/upgrades-status-notify \
-		/etc/portage/postsync.d/20-qubes-upgrades-notify
-
-	exeinto /etc/portage/profile/bashrc
-	doexe "${FILESDIR}"/portage-sync-appmenus
-	insinto /etc/portage/profile/package.bashrc
-	doins "${FILESDIR}"/all-sync-appmenus
+		/etc/portage/postsync.d/qubes-upgrades-notify
 
 	exeinto "${qubeslibdir}/init"
 	doexe init/*.sh
@@ -218,6 +213,6 @@ src_install() {
 	newbin "${FILESDIR}"/with-qubes-proxy.sh with-qubes-proxy
 }
 
-pkg_postint() {
+pkg_postinst() {
 	udev_reload
 }
