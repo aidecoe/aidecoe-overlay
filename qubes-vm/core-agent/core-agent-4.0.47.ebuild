@@ -84,12 +84,12 @@ SYSVINIT_SCRIPTS_COMMON=(
 	vm-init.d/qubes-core
 	vm-init.d/qubes-core-early
 	vm-init.d/qubes-sysinit
+	vm-init.d/qubes-updates-proxy-forwarder
 )
 SYSVINIT_SCRIPTS_NETWORK=(
 	vm-init.d/qubes-firewall
 	vm-init.d/qubes-core-netvm
 	vm-init.d/qubes-updates-proxy
-	vm-init.d/qubes-updates-proxy-forwarder
 )
 
 sudoers_newins() (
