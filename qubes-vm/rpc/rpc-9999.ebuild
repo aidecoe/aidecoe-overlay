@@ -25,6 +25,10 @@ DEPEND="${CDEPEND}"
 RDEPEND="${CDEPEND}"
 
 
+src_compile() {
+	emake DEBUG=0
+}
+
 src_install() {
 	default
 
