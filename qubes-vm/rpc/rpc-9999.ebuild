@@ -28,7 +28,7 @@ RDEPEND="${CDEPEND}"
 src_install() {
 	default
 
-	use kde && emake -C kde install
-	use nautilus && emake -C nautilus install
-	use thunar && emake -C thunar install
+	for flag in kde nautilus thunar; do
+		use "${flag}" &&  emake -C "${flag}" DESTDIR="${D}" install
+	done
 }
